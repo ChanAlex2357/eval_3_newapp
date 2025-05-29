@@ -6,18 +6,15 @@
     <title>Footer Fragment</title>
 </head>
 <body>
-    <div th:fragment="footer">
-        <footer>
-            <p>&copy; 2023 Newapp. All rights reserved.</p>
-            <nav>
-                <ul>
-                    <li><a href="/privacy">Privacy Policy</a></li>
-                    <li><a href="/terms">Terms of Service</a></li>
-                    <li><a href="/contact">Contact Us</a></li>
-                </ul>
-            </nav>
-        </footer>
-        <script th:src="@{js/bootstrap.bundle.min.js}"></script>
-    </div>
+    <footer th:fragment="footer">
+        <p>&copy; 2023 Newapp. All rights reserved.</p>
+        <nav>
+            <ul>
+                <li><a href="/privacy">Privacy Policy</a></li>
+                <li><a href="/terms">Terms of Service</a></li>
+                <li><a href="/contact">Contact Us</a></li>
+            </ul>
+        </nav>
+    </footer>
 </body>
 </html>
