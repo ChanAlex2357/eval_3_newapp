@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div 
+        th:replace="layouts/default :: defaultLayout (title='Home Page', content=~{::content})">
+
+        <th:block th:fragment="content">
+            <h2>Welcome to Newapp</h2>
+            <p>This is the home page of your new application.</p>
+            <p>Feel free to customize it as per your requirements.</p>
+        </th:block>
+    </div>
+</body>
+</html>

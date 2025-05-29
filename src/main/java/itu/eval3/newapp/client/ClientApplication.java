@@ -1,4 +1,4 @@
-package itu.e3.newapp.client;
+package itu.eval3.newapp.client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
