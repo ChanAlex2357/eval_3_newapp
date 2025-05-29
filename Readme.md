@@ -17,3 +17,5 @@ npm install
 - `src/`: Source code of the application.
 - `src/main/resources`: Contients les ressources de l'application , config,html dan templates, css et js dans static.
 - `src/main/java`: Contient le code java de l'application.
+
+## Fonctionalites
