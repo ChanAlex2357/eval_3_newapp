@@ -1,4 +1,4 @@
-package itu.e3.newapp.client.controller;
+package itu.eval3.newapp.client.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
     @GetMapping("/")
     public String home(){
-        return "error/index";
+        return "home"; // must match home.html under templates/
     }
 }

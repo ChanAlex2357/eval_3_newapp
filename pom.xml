@@ -8,11 +8,11 @@
 		<version>3.5.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>itu.e3.newapp</groupId>
+	<groupId>itu.eval3.newapp</groupId>
 	<artifactId>client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>client</name>
-	<description>Application client pour erpnext dans le contexte de l'evaluation 3 a l'itu</description>
+	<description>Application client pour erpnext dans le contexte de l&apos;evaluation 3 a l&apos;itu</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -32,7 +32,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-core</artifactId>
 		</dependency>
 
 		<dependency>
