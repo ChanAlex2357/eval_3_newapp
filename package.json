@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/ChanAlex2357/eval_3_newapp#readme",
   "devDependencies": {
-    "sass": "^1.89.0"
+    "sass": "^1.89.0",
+    "tailwindcss": "^4.1.8"
   }
 }
