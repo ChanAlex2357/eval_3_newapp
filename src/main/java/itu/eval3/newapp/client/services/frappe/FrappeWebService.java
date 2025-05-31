@@ -14,10 +14,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.http.HttpHeaders;
 
-
+import itu.eval3.newapp.client.builder.ERPNextExceptionBuilder;
 import itu.eval3.newapp.client.config.ApiConfig;
-import itu.eval3.newapp.client.exceptions.ERPNextIntegrationException;
+import itu.eval3.newapp.client.enums.ErpCallExceptionType;
+import itu.eval3.newapp.client.exceptions.ERPNexException;
+import itu.eval3.newapp.client.exceptions.ErpNextCallException;
+import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.user.UserErpNext;
+import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -75,14 +79,43 @@ public class FrappeWebService {
     * @return le Model T format de la reponse
     * @throws ERPNexException
     */
-    public ResponseEntity<String> callMethod(UserErpNext user, String methodPath, HttpMethod method, Object body) throws ERPNextIntegrationException {
+    public ResponseEntity<String> callMethod(UserErpNext user, String methodPath, HttpMethod method, Object body) throws ERPNexException {
         ResponseEntity<String> response = null;
+        String url = apiConfig.getMethodUrl(methodPath);
         try {
-            String url = apiConfig.getMethodUrl(methodPath);
             response = frappeCall(user, url, method, body);
         } catch (Exception e) {
-            throw new ERPNextIntegrationException("Error while calling the method \""+methodPath+"\" : "+e.getMessage(), response);
+            ErpNextCallException callException = new ErpNextCallException("Error while calling the method \""+methodPath+"\" : "+e.getMessage(),url, method, ErpCallExceptionType.METH, e);
+            throw new ERPNexException(callException, response);
         }
+        return response;
+    }
+
+
+    /**
+     * Fait un appel a ERP Next en utilisant l'endpoit d'appel de ressource
+     *
+     * @param id identification specifique d'une ressorce
+     * @param user l'utilisateur connecter qui veut faire l'appel
+     * @param document est le document qui represente la ressource desirer
+     * @param fields la liste des attributs a recuperer pour limiter la reponse
+     * @param method la method http a utiliser lors de l'envoie de la requete
+     * @param body le corps de la requette http pour envoyer les donnees
+     * @param filter un filtre pour definir la contrainte des donnees a recuperer
+     *
+     * */
+    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpMethod method, String[] fields, FrappeFilter filter) throws ERPNexException {
+
+        String url = apiConfig.getResourceUrl(document.getDoctype(), id, fields, filter != null ? filter.getFilters().getFilters() : null);
+        log.info("Targeting api {} document at URL: {}", document.getDoctype(), url);
+        ResponseEntity <String> response = null;
+        try {
+            response = frappeCall(user, url, method, body);
+        } catch (Exception e) {
+            ErpNextCallException callException = new ErpNextCallException("Error while calling ressource to "+document.getDoctype(), url, method,ErpCallExceptionType.SRC, e);
+            throw  ERPNextExceptionBuilder.handle(callException, response);
+        }
+
         return response;
     }
 
