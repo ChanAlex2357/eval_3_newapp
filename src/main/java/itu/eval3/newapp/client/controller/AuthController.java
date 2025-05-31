@@ -29,7 +29,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginForm(RedirectAttributes redirectAttributes, HttpSession session, Model model){
-        model.addAttribute("err", redirectAttributes);
+
         return "/auth/login";
     }
 
@@ -47,7 +47,7 @@ public class AuthController {
 
             return "redirect:/";
         } catch (ERPNextIntegrationException er) {
-            redirectAttributes.addAttribute("err",er.getMessage());
+            redirectAttributes.addFlashAttribute("err",er.getMessage());
             return "redirect:/auth/login";
         } catch (Exception e) {
             redirectAttributes.addAttribute("err",e.getMessage());

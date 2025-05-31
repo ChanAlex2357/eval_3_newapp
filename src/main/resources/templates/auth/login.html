@@ -1,13 +1,13 @@
 
 <div th:replace="~{layouts/vanilla :: layout(title='Newapp | Login', content=~{::content})}">
     <th:block th:fragment="content">
-        <div class="container">
+        <div class="bg-light">
             <div class="card w-50 mx-auto mt-5">
                 <div class="card-body">
                     <form th:action="@{/auth/login}" method="post">
                         <div>
                             <h2 class="text-center">Login to Newapp</h2>
-                            <div th:if="${err}">
+                            <div th:if="${err != null}" class="alert alert-danger">
                                 <p th:text="${err}"></p>
                             </div>
                         </div>
