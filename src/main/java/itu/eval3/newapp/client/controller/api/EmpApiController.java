@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/employees")
-public class EmpController {
+public class EmpApiController {
     @Autowired
     private EmpService empService;
     @GetMapping
