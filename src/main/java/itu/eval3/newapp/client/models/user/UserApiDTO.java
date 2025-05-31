@@ -1,0 +1,16 @@
+package itu.eval3.newapp.client.models.user;
+
+import itu.eval3.newapp.client.models.api.responses.ResponseModel;
+
+public class UserApiDTO implements ResponseModel{
+    private String sid;
+    private String api_key;
+    private String api_secret;
+    private String username;
+    private String full_name;
+    private String email;
+
+    public UserErpNext getUser() {
+        return new UserErpNext(sid, api_key, api_secret, username, email, full_name);
+    }
+}
