@@ -1,4 +1,4 @@
-package itu.eval3.newapp.client.config;
+package itu.eval3.newapp.client.utils.filters;
 
 import lombok.Data;
 
@@ -16,6 +16,5 @@ public class FrappApiFilter {
 
     public String getFilterStr(){
         return "[\""+getFieldname()+"\", \""+getOperator()+"\", \""+getVaule()+"\" ]";
-         // "+get+"
     }
 }

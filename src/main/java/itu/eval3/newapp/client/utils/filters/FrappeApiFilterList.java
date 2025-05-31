@@ -1,4 +1,4 @@
-package itu.eval3.newapp.client.config;
+package itu.eval3.newapp.client.utils.filters;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import itu.eval3.newapp.client.utils.filters.FrappApiFilter;
 import lombok.Data;
 
 @Configuration
@@ -17,17 +18,11 @@ public class ApiConfig {
     private int timeout;
     public static String[] ALL_FIELDS = new String[]{"*"};
 
-    public String getResourceBaseUrl() {
-        return baseUrl + ressource;
-    }
+    public String getResourceBaseUrl() { return baseUrl + ressource; }
 
-    public String getMethodBaseUrl() {
-        return baseUrl + method;
-    }
+    public String getMethodBaseUrl() { return baseUrl + method; }
 
-    public String getMethodUrl(String methodPath) {
-        return baseUrl + method + "/" + methodPath;
-    }
+    public String getMethodUrl(String methodPath) { return getMethodBaseUrl() + "/" + methodPath; }
 
     private String makeRessourceFiters(FrappApiFilter[] filters) {
         if (filters == null || filters.length == 0) {
@@ -86,7 +81,7 @@ public class ApiConfig {
         if (filters != null || filterSrt  != "" ) {
             uriComponentsBuilder.queryParam("filters", filterSrt);
         }
-        
+
         uri = uriComponentsBuilder.build().toUriString();
 
         return uri;
