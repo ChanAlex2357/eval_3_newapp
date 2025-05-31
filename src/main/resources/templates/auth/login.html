@@ -8,20 +8,28 @@
 <body>
     <div th:replace="../layouts/vanilla :: layout(title='Newapp | Login')">
         <th:block th:fragment="content">
-            <h2>Login</h2>
-            <form th:action="@{/login}" method="post">
-                <div>
-                    <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required>
+            <div class="container">
+                <div class="card w-50 mx-auto mt-5">
+                    <div class="card-header">
+                        <h2>Login to Newapp</h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/auth/login}" method="post">
+                            <div>
+                                <label for="username">Username:</label>
+                                <input type="text" id="username" name="username" required>
+                            </div>
+                            <div>
+                                <label for="password">Password:</label>
+                                <input type="password" id="password" name="password" required>
+                            </div>
+                            <button type="submit">Login</button>
+                        </form>
+                        <p th:if="${param.error}">Invalid username or password.</p>
+                        <p th:if="${param.logout}">You have been logged out.</p>
+                    </div>
                 </div>
-                <div>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            <p th:if="${param.error}">Invalid username or password.</p>
-            <p th:if="${param.logout}">You have been logged out.</p>
+            </div>
     </div>
 </body>
 </html>
