@@ -2,7 +2,6 @@ package itu.eval3.newapp.client.builder;
 
 import org.springframework.http.ResponseEntity;
 
-import itu.eval3.newapp.client.enums.ErpCallExceptionType;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.exceptions.ErpNextCallException;
 
