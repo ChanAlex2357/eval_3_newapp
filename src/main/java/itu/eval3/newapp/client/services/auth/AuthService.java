@@ -24,6 +24,10 @@ public class AuthService {
 
         ApiResponse<UserApiDTO> userResponse = userParser.parseApiResponse(respone, UserApiDTO.class);  // parser la reponse obtenu
 
+        if (userResponse.isSuccess() == false) {
+            throw new ERPNextIntegrationException("Invalid Credentials. Please check it and try again", respone);
+        }
+
         return userResponse.getData();
     }
 }
