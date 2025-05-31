@@ -1,4 +1,4 @@
-package itu.e3.newapp.client;
+package itu.eval3.newapp.client;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
