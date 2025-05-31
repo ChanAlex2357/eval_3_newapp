@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import itu.eval3.newapp.client.exceptions.ERPNextIntegrationException;
 import itu.eval3.newapp.client.models.api.requests.LoginRequest;
-import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
+import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.user.UserApiDTO;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeWebService;
@@ -22,9 +22,9 @@ public class AuthService {
 
         ResponseEntity<String> respone = frappeService.callMethod(UserErpNext.GUEST, "eval_app.api.login", HttpMethod.POST, loginRequest);  // Faire appel au method login par web service 
 
-        ApiResponse<UserApiDTO> userResponse = userParser.parseApiResponse(respone, UserApiDTO.class);  // parser la reponse obtenu
+        MethodApiResponse<UserApiDTO> userResponse = userParser.parseMethodApiResponse(respone, UserApiDTO.class);  // parser la reponse obtenu
 
-        if (userResponse.isSuccess() == false) {
+        if (userResponse.getMessage().isSuccess() == false) {
             throw new ERPNextIntegrationException("Invalid Credentials. Please check it and try again", respone);
         }
 

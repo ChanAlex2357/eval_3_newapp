@@ -13,7 +13,7 @@ public class UserErpNext {
     private String fullName;
     private UserRole[] roles ;
 
-    public UserErpNext(String sid, String apiKey, String apiSecret, String username, String email, String fullName, UserRole[] roles) {
+    protected UserErpNext(String sid, String apiKey, String apiSecret, String username, String email, String fullName, UserRole[] roles) {
         this.sid = sid;
         this.keys = new UserKeys(apiKey, apiSecret);
         this.username = username;
