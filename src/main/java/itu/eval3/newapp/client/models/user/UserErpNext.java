@@ -4,6 +4,9 @@ import lombok.Data;
 
 @Data
 public class UserErpNext {
+
+    public static UserErpNext GUEST = new UserErpNext(null, null, null, "guest", null, null);
+
     private String sid;
     private UserKeys keys;
     private String username;
