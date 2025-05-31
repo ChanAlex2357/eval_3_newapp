@@ -1,35 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div th:replace="../layouts/vanilla :: layout(title='Newapp | Login')">
-        <th:block th:fragment="content">
-            <div class="container">
-                <div class="card w-50 mx-auto mt-5">
-                    <div class="card-header">
-                        <h2>Login to Newapp</h2>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/auth/login}" method="post">
-                            <div>
-                                <label for="username">Username:</label>
-                                <input type="text" id="username" name="username" required>
-                            </div>
-                            <div>
-                                <label for="password">Password:</label>
-                                <input type="password" id="password" name="password" required>
-                            </div>
-                            <button type="submit">Login</button>
-                        </form>
-                        <p th:if="${param.error}">Invalid username or password.</p>
-                        <p th:if="${param.logout}">You have been logged out.</p>
-                    </div>
+
+<div th:replace="layouts/vanilla :: layout(title='Newapp | Login', content=~{::content})">
+    <th:block th:fragment="content">
+        <div class="container">
+            <div class="card w-50 mx-auto mt-5">
+                <div class="card-header">
+                    <h2>Login to Newapp</h2>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/auth/login}" method="post">
+                        <div class="form-group mt-3">
+                            <label class="form-label" for="username">Username:</label>
+                            <input class="form-control" type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label" for="password">Password:</label>
+                            <input class="form-control" type="password" id="password" name="password" required>
+                        </div>
+
+                        <div class=" form-group mt-4">
+                            <button class="btn btn-primary form-control" type="submit">Login</button>
+                        </div>
+                    </form>
+                    <p th:if="${param.error}">Invalid username or password.</p>
+                    <p th:if="${param.logout}">You have been logged out.</p>
                 </div>
             </div>
-    </div>
-</body>
-</html>
+        </div>
+</div>
