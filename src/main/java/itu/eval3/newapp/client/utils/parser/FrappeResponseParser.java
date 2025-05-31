@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import itu.eval3.newapp.client.exceptions.ERPNextIntegrationException;
 import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
+import itu.eval3.newapp.client.models.api.responses.method.MethodResponse;
 
 public class FrappeResponseParser<T> {
     private final ObjectMapper objectMapper;
@@ -29,7 +30,26 @@ public class FrappeResponseParser<T> {
 
     public MethodApiResponse<T> parseMethodApiResponse(ResponseEntity<String> response, Class<T> modelClass) throws ERPNextIntegrationException {
         try {
-            return objectMapper.readValue(response.getBody(), objectMapper.getTypeFactory().constructParametricType(MethodApiResponse.class, modelClass));
+            return objectMapper.readValue(
+                response.getBody(), 
+                objectMapper.getTypeFactory().constructParametricType(
+                    MethodApiResponse.class, 
+                    modelClass
+                )
+            );
+        } catch (Exception e) {
+            throw new ERPNextIntegrationException("Error while parsing result into response api with T = '"+modelClass.getName()+"'  : "+e.getMessage(), response);
+        }
+    }
+
+    public MethodResponse<T> parseMehtodeResponse(ResponseEntity<String> response, Class<T> modelClass) throws ERPNextIntegrationException {
+        try {
+            return objectMapper.readValue(
+                response.getBody(), 
+                objectMapper.getTypeFactory().constructParametricType(
+                    MethodResponse.class,modelClass
+                )
+            );
         } catch (Exception e) {
             throw new ERPNextIntegrationException("Error while parsing result into response api with T = '"+modelClass.getName()+"'  : "+e.getMessage(), response);
         }
