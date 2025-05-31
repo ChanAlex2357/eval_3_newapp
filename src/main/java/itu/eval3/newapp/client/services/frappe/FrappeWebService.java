@@ -1,6 +1,5 @@
 package itu.eval3.newapp.client.services.frappe;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class FrappeWebService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public FrappeWebService(ApiConfig apiConfig, RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public FrappeWebService(ApiConfig apiConfig, RestTemplate restTemplate) {
         this.apiConfig = apiConfig;
         this.restTemplate = restTemplate;
         this.objectMapper = new ObjectMapper()

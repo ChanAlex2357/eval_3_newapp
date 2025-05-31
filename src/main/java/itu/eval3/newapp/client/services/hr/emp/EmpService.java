@@ -12,11 +12,9 @@ import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 
 @Service
-public class EmpService {
+public class EmpService extends FrappeCrudService<Employee>{
 
     public List<Employee> getAll(UserErpNext user, FrappeFilter filter ) throws ERPNexException{
-        FrappeCrudService<Employee> crudService = new FrappeCrudService<>();
-        return crudService.getAllDocuments(user, new Employee(), null, filter, Employee.class);
-    }
-    
+        return getAllDocuments(user, new Employee(), null, filter, Employee.class);
+    }    
 }
