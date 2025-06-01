@@ -7,12 +7,12 @@
         <title th:text="${title}">ERPNext Newapp</title>
         <link rel="stylesheet" th:href="@{/css/style.css}">
     </head>
-    <body>
+    <body class="bg-light">
         <!-- HEADER -->
         <div th:replace="fragments/header :: header"></div>
         
         <!-- Contenu -->
-        <main id="main-content" class="container mt-3">
+        <main id="main-content" class="container mt-3 ">
             <div th:replace="${content}">Default content</div>
         </main>
 

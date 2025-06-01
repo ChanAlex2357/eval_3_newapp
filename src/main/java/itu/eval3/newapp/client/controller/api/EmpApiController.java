@@ -50,6 +50,9 @@ public class EmpApiController {
         catch (AuthenticationException authEx){
             return ResponseEntity.badRequest().body(authEx.getAsApiResponse());
         }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(responseBuilder.error(e));
+        }
     }
     
 }
