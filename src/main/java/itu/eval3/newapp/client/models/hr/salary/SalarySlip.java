@@ -1,6 +1,8 @@
 package itu.eval3.newapp.client.models.hr.salary;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.List;
 
@@ -15,6 +17,8 @@ import lombok.EqualsAndHashCode;
 public class SalarySlip extends FrappeDocument{
 
     private String employee;
+    private String company;
+    private String designation;
 
     @JsonProperty("employee_name")
     private String employeeName;

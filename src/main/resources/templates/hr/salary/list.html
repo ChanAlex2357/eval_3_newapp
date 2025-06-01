@@ -16,6 +16,7 @@
                             <th scope="col">Gain</th>
                             <th scope="col">Deductions</th>
                             <th scope="col">Total</th>
+                            <th scope="col">Actions</th>
                         </thead>
                         <tbody id="salariesBody">
 
@@ -37,6 +38,8 @@
                     
                     salaries.forEach(salary => {
                         const row = document.createElement('tr');
+                        const id = salary.name.replaceAll("/", "__"); // "Sal Slip__HR-EMP-00001__00001" // encode le nom dynamiquement côté JS
+
                         row.innerHTML = `
                             <td>${salary.name}</td>
                             <td>${salary.employee_name}</td>
@@ -45,6 +48,7 @@
                             <td>${salary.gross_pay.toFixed(2)}</td>
                             <td>${salary.total_deduction.toFixed(2)}</td>
                             <td>${salary.net_pay.toFixed(2)}</td>
+                            <td><a href="/api/pdf/salary-slip/${id}" target="_blank">PDF</a></td>
                         `;
                         salariesBody.appendChild(row);
                     });
