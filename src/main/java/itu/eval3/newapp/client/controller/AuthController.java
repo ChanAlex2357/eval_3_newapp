@@ -5,10 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import itu.eval3.newapp.client.exceptions.ERPNextIntegrationException;
+import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.api.requests.LoginRequest;
 import itu.eval3.newapp.client.models.user.UserApiDTO;
 import itu.eval3.newapp.client.models.user.UserErpNext;
@@ -46,7 +45,7 @@ public class AuthController {
             session.setAttribute("user", user);
 
             return "redirect:/";
-        } catch (ERPNextIntegrationException er) {
+        } catch (ERPNexException er) {
             redirectAttributes.addFlashAttribute("err",er.getMessage());
             return "redirect:/auth/login";
         } catch (Exception e) {

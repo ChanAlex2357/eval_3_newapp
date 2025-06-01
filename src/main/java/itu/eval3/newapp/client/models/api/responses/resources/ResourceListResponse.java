@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class ApiResourceResponse<T> {
+public class ResourceListResponse<T> {
     private List<T> data;
     private String message;
     private String exc_type;

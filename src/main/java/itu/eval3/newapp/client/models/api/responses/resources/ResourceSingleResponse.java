@@ -3,7 +3,7 @@ package itu.eval3.newapp.client.models.api.responses.resources;
 import lombok.Data;
 
 @Data
-public class SingletonApiResourceResponse<T> {
+public class ResourceSingleResponse<T> {
     private T data;
     private String exception;
     private String exc_type;

@@ -5,8 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
-    @GetMapping("/")
+    @GetMapping("/home")
     public String home(){
         return "home"; // must match home.html under templates/
+    }
+
+    @GetMapping("/")
+    public String root(){
+        return "redirect:/home"; // must match home.html under templates/
     }
 }
