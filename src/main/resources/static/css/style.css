@@ -11856,3 +11856,15 @@ textarea.form-control-lg {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.download-btn {
+    position: relative;
+    padding: 5px 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.download-btn .spinner {
+    margin-left: 5px;
+    font-size: 14px;
+}

@@ -167,4 +167,8 @@ public class SalarySlip extends FrappeDocument{
         // TODO Auto-generated method stub
         
     }
+
+    public String getUriName(){
+        return this.getName().replaceAll("/", "__");
+    }
 }
