@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceListResponse;
+import itu.eval3.newapp.client.models.api.responses.resources.ResourceSingleResponse;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
@@ -31,6 +32,18 @@ public class FrappeCrudService<D extends FrappeDocument>{
         data = listResponse.getData();
 
         return data;
+    }
+
+
+    public D getDocumentById(UserErpNext user, D document, String id, String[] fields, Class<D> modelClass) throws ERPNexException {
+        FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
+        D doc = null;
+        
+        ResponseEntity<String> response = frappeWebService.callResource(user, document, id, null, HttpMethod.GET, fields, null);
+        ResourceSingleResponse<D> singleResponse = responseParser.parseSingleResourceResponse(response, modelClass);
+        doc = singleResponse.getData();
+        
+        return doc;
     }
     
 }

@@ -20,5 +20,13 @@ public class EmpService extends FrappeCrudService<Employee>{
 
     public List<Employee> getAll(UserErpNext user, String[] fields, FrappeFilter filter ) throws ERPNexException{
         return getAllDocuments(user, new Employee(), fields, filter, Employee.class);
+    }
+
+    public Employee getById(UserErpNext user, String id) throws ERPNexException{
+        return getById(user, id, ApiConfig.ALL_FIELDS);
+    }    
+
+    public Employee getById(UserErpNext user, String id, String[] fields) throws ERPNexException{
+        return getDocumentById(user, new Employee(), id, fields, Employee.class);
     }    
 }

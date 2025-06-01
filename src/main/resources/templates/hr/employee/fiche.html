@@ -1,0 +1,32 @@
+<div th:replace="~{layouts/default :: layout(title='Newapp | Employees list', content=~{::content})}">
+    <th:block th:fragment="content">
+        <div class="bg-light">
+            <div class="container">
+
+                <div th:if="${employee == null}">
+                    <div class="card ">
+                        <div class="card-body">
+                            <p th:text="${error_msg}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div th:unless="${employee == null}">
+                    <table class="table">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Employee</th>
+                            <th scope="col">Genre</th>
+                        </tr>
+                        <tr>
+                            <td th:text="${employee.getName()}"></td>
+                            <td th:text="${employee.getFirstname()}"></td>
+                            <td th:text="${employee.getGender()}"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>    
+        <script>
+        </script>
+    </th:block>
+</div>
