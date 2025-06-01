@@ -1,7 +1,10 @@
 package itu.eval3.newapp.client.models.hr.salary;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,6 +18,8 @@ import lombok.EqualsAndHashCode;
 public class SalarySlip extends FrappeDocument{
 
     private String employee;
+    private String company;
+    private String designation;
 
     @JsonProperty("employee_name")
     private String employeeName;
@@ -161,5 +166,9 @@ public class SalarySlip extends FrappeDocument{
     public void update_cotnrole() {
         // TODO Auto-generated method stub
         
+    }
+
+    public String getUriName(){
+        return this.getName().replaceAll("/", "__");
     }
 }

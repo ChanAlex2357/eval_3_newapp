@@ -1,5 +1,6 @@
 package itu.eval3.newapp.client.controller.api;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.context.Context;
+
+import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import itu.eval3.newapp.client.builder.ApiResponseBuilder;
 import itu.eval3.newapp.client.exceptions.AuthenticationException;
@@ -54,4 +58,5 @@ public class SalaryApiController {
             return ResponseEntity.badRequest().body(ApiResponseBuilder.DFAULT_BUILDER.error(exc));
         }
     }
+
 }
