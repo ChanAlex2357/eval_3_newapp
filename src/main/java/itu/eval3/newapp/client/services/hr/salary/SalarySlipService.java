@@ -36,4 +36,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         return getAllByEmployee(user, emp,ApiConfig.ALL_FIELDS);
     }
 
+    public List<SalarySlip> getAll(UserErpNext user, FrappeFilter filter) throws ERPNexException {
+        return getAllDocuments(user, new SalarySlip(),ApiConfig.ALL_FIELDS, filter, SalarySlip.class);
+    }
+
 }

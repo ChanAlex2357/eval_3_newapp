@@ -13,4 +13,8 @@ public class ApiResponseBuilder<T> {
     public ApiResponse<T> error(String message, Object errors){
         return new ApiResponse<>(false,message,null,errors);
     }
+
+    public ApiResponse<T> error(Exception e){
+        return new ApiResponse<>(false,e.getMessage(),null,e);
+    }
 }

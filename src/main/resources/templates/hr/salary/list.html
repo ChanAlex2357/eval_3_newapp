@@ -1,0 +1,57 @@
+<div th:replace="~{layouts/default :: layout ( title='Newapp | Global Salary', content=~{::content} )}">
+    <th:block th:fragment="content">
+        <div>
+            <div class="container">
+                <h1>Salary Report</h1>
+                <section class="row">
+                    <!-- Filter Section -->
+                </section>
+                <section class="row">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <th scope="col">Sr.No</th>
+                            <th scope="col">Employee</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">End Date</th>
+                            <th scope="col">Gain</th>
+                            <th scope="col">Deductions</th>
+                            <th scope="col">Total</th>
+                        </thead>
+                        <tbody id="salariesBody">
+
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log("Document loaded, fetching salaries...");
+            
+            fetch('/api/salaries')
+                .then(response => response.json())
+                .then(body => {
+                    console.log("Fetched salaries:", body);
+                    const data = body.data;
+                    const salaries = data.salaries || [];
+                    const salariesBody = document.getElementById('salariesBody');
+                    
+                    salaries.forEach(salary => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${salary.name}</td>
+                            <td>${salary.employee_name}</td>
+                            <td>${new Date(salary.start_date).toLocaleDateString()}</td>
+                            <td>${new Date(salary.end_date).toLocaleDateString()}</td>
+                            <td>${salary.gross_pay.toFixed(2)}</td>
+                            <td>${salary.total_deduction.toFixed(2)}</td>
+                            <td>${salary.net_pay.toFixed(2)}</td>
+                        `;
+                        salariesBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching salaries:', error));
+            });
+    </script>
+    </th:block>
+
+</div>
