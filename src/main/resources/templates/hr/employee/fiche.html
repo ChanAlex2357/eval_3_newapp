@@ -24,6 +24,30 @@
                         </tr>
                     </table>
                 </div>
+
+                <h2>Salaires</h2>
+                <div th:unless="${salaries == null}">
+                    <table class="table">
+                        <thead>
+                            <th scope="col">#</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">End Date</th>
+                            <th scope="col">Salary</th>
+                            <th scope="col">Brut</th>
+                            <th scope="col">Net</th>
+                        </thead>
+                        <tbody>
+                            <tr th:each=" salary : ${salaries}">
+                                <td th:text="${salary.getName()}"></td>
+                                <td th:text="${salary.getStartDate()}"></td>
+                                <td th:text="${salary.getEndDate()}"></td>
+                                <td th:text="${salary.getSalaryStructure()}"></td>
+                                <td th:text="${salary.getGrossPay()}"></td>
+                                <td th:text="${salary.getNetPay()}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>    
         <script>

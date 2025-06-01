@@ -13,8 +13,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SalarySlip extends FrappeDocument{
-    private String month;
-    private String year;
 
     private String employee;
 
