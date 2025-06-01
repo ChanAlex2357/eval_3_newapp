@@ -1,11 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Login page</h1>
-</body>
-</html>
+
+<div th:replace="~{layouts/vanilla :: layout(title='Newapp | Login', content=~{::content})}">
+    <th:block th:fragment="content">
+        <div class="bg-light">
+            <div class="card w-50 mx-auto mt-5">
+                <div class="card-body">
+                    <form th:action="@{/auth/login}" method="post">
+                        <div>
+                            <h2 class="text-center">Login to Newapp</h2>
+                            <div th:if="${err != null}" class="alert alert-danger">
+                                <p th:text="${err}"></p>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label" for="username">Username:</label>
+                            <input class="form-control" type="text" id="username" name="usr" required>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label" for="password">Password:</label>
+                            <input class="form-control" type="password" id="password" name="pwd" required>
+                        </div>
+
+                        <div class=" form-group mt-4">
+                            <button class="btn btn-primary form-control" type="submit">Login</button>
+                        </div>
+                    </form>
+                    <p th:if="${param.error}">Invalid username or password.</p>
+                    <p th:if="${param.logout}">You have been logged out.</p>
+                </div>
+            </div>
+        </div>
+</div>

@@ -1,43 +1,33 @@
 package itu.eval3.newapp.client.services.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import itu.eval3.newapp.client.config.ApiConfig;
+import itu.eval3.newapp.client.exceptions.ERPNextIntegrationException;
 import itu.eval3.newapp.client.models.api.requests.LoginRequest;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.user.UserApiDTO;
-
+import itu.eval3.newapp.client.models.user.UserErpNext;
+import itu.eval3.newapp.client.services.frappe.FrappeWebService;
+import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 
 @Service
 public class AuthService {
     @Autowired
-    private RestTemplate restTemplate;
+    private FrappeWebService frappeService;
 
-    @Autowired
-    private ApiConfig apiConfig;
+    public UserApiDTO callLogin(LoginRequest loginRequest) throws ERPNextIntegrationException {
+        FrappeResponseParser<UserApiDTO> userParser = new FrappeResponseParser<>(); // Cree un parser de UserApiDto
 
-    public ResponseEntity<MethodApiResponse<UserApiDTO>> callLogin(LoginRequest loginRequest) {
-        // 1. Prepare headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        
-        // 3. Create request entity
-        HttpEntity<LoginRequest> requestEntity = new HttpEntity<>(loginRequest, headers);
-        ParameterizedTypeReference<MethodApiResponse<UserApiDTO>> responseType = new ParameterizedTypeReference<MethodApiResponse<UserApiDTO>>(){};
-        // 4. Make the request and return response
-        return restTemplate.exchange(
-            apiConfig.getMethodUrl("/eval_app.api.login"),
-            HttpMethod.POST,
-            requestEntity,
-            responseType
-        );
+        ResponseEntity<String> respone = frappeService.callMethod(UserErpNext.GUEST, "eval_app.api.login", HttpMethod.POST, loginRequest);  // Faire appel au method login par web service 
+
+        MethodApiResponse<UserApiDTO> userResponse = userParser.parseMethodApiResponse(respone, UserApiDTO.class);  // parser la reponse obtenu
+
+        if (userResponse.getMessage().isSuccess() == false) {
+            throw new ERPNextIntegrationException("Invalid Credentials. Please check it and try again", respone);
+        }
+
+        return userResponse.getData();
     }
 }

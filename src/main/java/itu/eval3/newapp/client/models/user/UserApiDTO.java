@@ -9,8 +9,9 @@ public class UserApiDTO implements ResponseModel{
     private String username;
     private String full_name;
     private String email;
+    private UserRole[] roles;
 
     public UserErpNext getUser() {
-        return new UserErpNext(sid, api_key, api_secret, username, email, full_name);
+        return new UserErpNext(sid, api_key, api_secret, username, email, full_name, roles);
     }
 }

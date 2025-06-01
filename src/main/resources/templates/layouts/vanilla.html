@@ -8,16 +8,11 @@
         <link rel="stylesheet" th:href="@{/css/style.css}">
     </head>
     <body>
-        <!-- HEADER -->
-        <div th:replace="fragments/header :: header"></div>
-        
         <!-- Contenu -->
         <main id="main-content" class="container mt-3">
             <div th:replace="${content}">Default content</div>
         </main>
 
-        <!-- Footer -->
-        <div th:insert="fragments/footer :: footer"></div>
         <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
     </body>
 </html>
