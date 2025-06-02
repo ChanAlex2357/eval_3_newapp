@@ -8,6 +8,7 @@ echo "Recherche des branches locales orphelines..."
 
 # Lister les branches locales avec détails, filtrer celles marquées 'gone'
 for branch in $(git branch -vv | grep ": gone]" | awk '{print $1}'); do
+    echo "- - - - - - - - - - - - - - - - -"
     echo "Suppression de la branche locale orpheline: $branch"
     git branch -D "$branch"
 done
