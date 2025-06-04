@@ -2,7 +2,7 @@
     <th:block th:fragment="content">
         <div class="container">
             <h1>Import CSV</h1>
-            <form th:action="@{/import/v3}" method="post" th:object="${importer}" enctype="multipart/form-data">
+            <form th:action="@{/import/v3}" method="post" th:object="${importer}" id="import-form" enctype="multipart/form-data">
                 <div class="form-group mb-3">
                     <label for="emp-file" class="form-label">Fichier 1 - Employee</label>
                     <input type="file" class="form-control" id="emp-file" th:field="*{employeeFile}" accept=".csv" required>
@@ -18,5 +18,11 @@
                 <button type="submit" class="btn btn-primary">Import</button>
             </form>
         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded",function(){
+                const import_form = document.getElementById("import-form")
+                import_form.addEventListener("submit") 
+            })
+        </script>
     </th:block>
 </div>

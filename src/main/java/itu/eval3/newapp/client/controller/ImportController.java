@@ -27,14 +27,4 @@ public class ImportController {
         return "import/v3/form";
     }
 
-    @PostMapping
-    public String doImport(@ModelAttribute ImportCsvEval3 importer, HttpSession session) {
-        try {
-            UserErpNext user = (UserErpNext) session.getAttribute("user");
-            importService.importDataV3(user, importer);
-        } catch (ERPNexException e) {
-            return "redirect:/import/v3";
-        }
-        return "redirect:/";
-    }
 }
