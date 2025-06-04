@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import itu.eval3.newapp.client.utils.http.MultipartInputStreamFileResource;
 import lombok.Data;
 
 @Data
@@ -26,6 +29,14 @@ public class ImportCsvEval3 {
         filesMap.put("emp_file", getEmployeeFile());
         filesMap.put("structure_file", getSalaryStructureFile());
         filesMap.put("salary_file", getSalarySlipFile());
+
+        MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
+        parts.add("emp_file", new MultipartInputStreamFileResource(getEmployeeFile().getInputStream(), getEmployeeFile().getOriginalFilename()));
+
+        parts.add("structure_file", new MultipartInputStreamFileResource(getSalaryStructureFile().getInputStream(), getSalaryStructureFile().getOriginalFilename()));
+
+        parts.add("salary_file", new MultipartInputStreamFileResource(getSalarySlipFile().getInputStream(), getSalarySlipFile().getOriginalFilename()));
+        
         return filesMap;
     }
 }
