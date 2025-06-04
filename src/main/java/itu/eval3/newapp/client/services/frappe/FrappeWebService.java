@@ -49,9 +49,7 @@ public class FrappeWebService {
      * @throws JsonProcessingException
      * @throws RestClientException
      */
-    private ResponseEntity<String> frappeCall(UserErpNext user, String url, HttpMethod method,Object body) throws JsonProcessingException , RestClientException  {
-        HttpHeaders headers =  HeadersUtils.createHeaders(user);
-
+    private ResponseEntity<String> frappeCall(UserErpNext user, String url,HttpHeaders headers, HttpMethod method,Object body) throws JsonProcessingException , RestClientException  {
         HttpEntity<?> httpEntity = null;
         if (body != null) {
             httpEntity = new HttpEntity<>(objectMapper.writeValueAsString(body),headers);
@@ -78,11 +76,11 @@ public class FrappeWebService {
     * @return le Model T format de la reponse
     * @throws ERPNexException
     */
-    public ResponseEntity<String> callMethod(UserErpNext user, String methodPath, HttpMethod method, Object body) throws ERPNexException {
+    public ResponseEntity<String> callMethod(UserErpNext user, String methodPath,HttpHeaders headers, HttpMethod method, Object body) throws ERPNexException {
         ResponseEntity<String> response = null;
         String url = apiConfig.getMethodUrl(methodPath);
         try {
-            response = frappeCall(user, url, method, body);
+            response = frappeCall(user, url,headers, method, body);
         } catch (Exception e) {
             ErpNextCallException callException = new ErpNextCallException("Error while calling the method \""+methodPath+"\" : "+e.getMessage(),url, method, ErpCallExceptionType.METH, e);
             throw new ERPNexException(callException, response);
@@ -103,13 +101,13 @@ public class FrappeWebService {
      * @param filter un filtre pour definir la contrainte des donnees a recuperer
      *
      * */
-    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpMethod method, String[] fields, FrappeFilter filter) throws ERPNexException {
+    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpHeaders headers,HttpMethod method, String[] fields, FrappeFilter filter) throws ERPNexException {
 
         String url = apiConfig.getResourceUrl(document.getDoctype(), id, fields, filter != null ? filter.getFilters().getFilters() : null);
         log.info("Targeting api {} document at URL: {}", document.getDoctype(), url);
         ResponseEntity <String> response = null;
         try {
-            response = frappeCall(user, url, method, body);
+            response = frappeCall(user, url,headers ,method, body);
         } catch (Exception e) {
             ErpNextCallException callException = new ErpNextCallException("Error while calling ressource to "+document.getDoctype(), url, method,ErpCallExceptionType.SRC, e);
             throw  ERPNextExceptionBuilder.handle(callException, response);

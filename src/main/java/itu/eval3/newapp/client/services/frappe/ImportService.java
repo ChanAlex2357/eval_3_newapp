@@ -16,6 +16,7 @@ import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.models.v3.ImportStackResponse;
+import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 
 @Service
@@ -30,7 +31,8 @@ public class ImportService {
             Map<String, MultipartFile> body = importCsvEval3.getBodyMap();
             ResponseEntity<String> response = frappeWebService.callMethod(
                 user, 
-                method, 
+                method,
+                HeadersUtils.buildMultipartHeader(user),
                 HttpMethod.POST,
                 body
             );

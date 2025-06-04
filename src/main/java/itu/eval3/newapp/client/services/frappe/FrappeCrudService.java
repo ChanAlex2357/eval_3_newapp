@@ -13,6 +13,7 @@ import itu.eval3.newapp.client.models.api.responses.resources.ResourceListRespon
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceSingleResponse;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 
 @Service
@@ -25,7 +26,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
         List<D> data = null;
 
-        ResponseEntity<String> response = frappeWebService.callResource(user, document, null, null, HttpMethod.GET, fields, filter);
+        ResponseEntity<String> response = frappeWebService.callResource(user, document, null, null, HeadersUtils.buildJsonHeader(user), HttpMethod.GET, fields, filter);
         
         ResourceListResponse<D> listResponse = responseParser.parseResourceListResponse(response, modelClass);
 
@@ -39,7 +40,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
         D doc = null;
         
-        ResponseEntity<String> response = frappeWebService.callResource(user, document, id, null, HttpMethod.GET, fields, null);
+        ResponseEntity<String> response = frappeWebService.callResource(user, document, id, null, HeadersUtils.buildJsonHeader(user), HttpMethod.GET, fields, null);
         ResourceSingleResponse<D> singleResponse = responseParser.parseSingleResourceResponse(response, modelClass);
         doc = singleResponse.getData();
         
