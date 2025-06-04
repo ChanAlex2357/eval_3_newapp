@@ -24,12 +24,7 @@ public class ImportCsvEval3 {
     @JsonProperty("salary_file")
     MultipartFile salarySlipFile;
 
-    public Map<String,MultipartFile> getBodyMap() throws IOException {
-        Map<String, MultipartFile> filesMap = new HashMap<>();
-        filesMap.put("emp_file", getEmployeeFile());
-        filesMap.put("structure_file", getSalaryStructureFile());
-        filesMap.put("salary_file", getSalarySlipFile());
-
+    public  MultiValueMap<String, Object> getBodyMap() throws IOException {
         MultiValueMap<String, Object> parts = new LinkedMultiValueMap<>();
         parts.add("emp_file", new MultipartInputStreamFileResource(getEmployeeFile().getInputStream(), getEmployeeFile().getOriginalFilename()));
 
@@ -37,6 +32,6 @@ public class ImportCsvEval3 {
 
         parts.add("salary_file", new MultipartInputStreamFileResource(getSalarySlipFile().getInputStream(), getSalarySlipFile().getOriginalFilename()));
         
-        return filesMap;
+        return parts;
     }
 }

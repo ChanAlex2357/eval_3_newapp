@@ -1,9 +1,12 @@
 package itu.eval3.newapp.client.services.frappe;
 
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -85,6 +88,38 @@ public class FrappeWebService {
             throw new ERPNexException(callException, response);
         }
         return response;
+    }
+
+    public ResponseEntity<String> callMethodMultipart(
+        UserErpNext user,
+        String method,
+        MultiValueMap<String, Object> multipartBody,
+        HttpHeaders headers
+    ) {
+        try {
+            // 1. Construire l’URL de la méthode (ex: /api/method/eval_app.api.remote_import)
+            String url = apiConfig.getMethodUrl(method);
+
+            // 2. Construire l’entité HTTP
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(multipartBody, headers);
+
+            // 3. Envoyer la requête
+            ResponseEntity<byte[]> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                byte[].class
+            );
+
+            // 4. Lire le corps de réponse
+            String responseJson = new String(response.getBody(), StandardCharsets.UTF_8);
+
+            // 5. Retourner la réponse sous forme textuelle
+            return new ResponseEntity<>(responseJson, response.getHeaders(), response.getStatusCode());
+
+        } catch (RestClientException e) {
+            throw new RuntimeException("Frappe API multipart call failed: " + e.getMessage(), e);
+        }
     }
 
 

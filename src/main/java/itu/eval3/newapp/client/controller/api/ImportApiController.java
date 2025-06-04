@@ -24,7 +24,6 @@ public class ImportApiController {
 
     @PostMapping
     public ResponseEntity<?> doImport(@ModelAttribute ImportCsvEval3 importer, HttpSession session) {
-        ApiResponseBuilder<Object> responseBuilder = new ApiResponseBuilder<>();
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
             MethodApiResponse<ImportStackResponse> stackResponse = importService.importDataV3(user, importer);

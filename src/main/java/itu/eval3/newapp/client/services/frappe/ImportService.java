@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 
 import itu.eval3.newapp.client.exceptions.ERPNexException;
@@ -26,14 +28,16 @@ public class ImportService {
         String method = "eval_app.api.remote_import";
         FrappeResponseParser<ImportStackResponse> responseParser = new FrappeResponseParser<>();
         try {
-            Map<String, MultipartFile> body = importCsvEval3.getBodyMap();
-            ResponseEntity<String> response = frappeWebService.callMethod(
-                user, 
+            MultiValueMap<String, Object> body = importCsvEval3.getBodyMap();
+            HttpHeaders headers = HeadersUtils.buildMultipartHeader(user);
+
+            ResponseEntity<String> response = frappeWebService.callMethodMultipart(
+                user,
                 method,
-                HeadersUtils.buildMultipartHeader(user),
-                HttpMethod.POST,
-                body
+                body,
+                headers
             );
+
             MethodApiResponse<ImportStackResponse> importResponse = responseParser.parseMethodApiResponse(response, ImportStackResponse.class);
             return importResponse;
         } catch (IOException e) {
