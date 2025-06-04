@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import itu.eval3.newapp.client.builder.ApiResponseBuilder;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.action.ImportCsvEval3;
+import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.models.v3.ImportStackResponse;
 import itu.eval3.newapp.client.services.frappe.ImportService;
@@ -23,11 +24,11 @@ public class ImportApiController {
 
     @PostMapping
     public ResponseEntity<?> doImport(@ModelAttribute ImportCsvEval3 importer, HttpSession session) {
-        ApiResponseBuilder<ImportStackResponse> responseBuilder = new ApiResponseBuilder<>();
+        ApiResponseBuilder<Object> responseBuilder = new ApiResponseBuilder<>();
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
-            importService.importDataV3(user, importer);
-            return ResponseEntity.ok(responseBuilder.success("Import Process", null));
+            MethodApiResponse<ImportStackResponse> stackResponse = importService.importDataV3(user, importer);
+            return ResponseEntity.ok(stackResponse.getApiResponse());
         } catch (ERPNexException e) {
             return ResponseEntity.badRequest().body(e.getAsApiResponse());
         }

@@ -21,11 +21,11 @@ public class ImportCsvEval3 {
     @JsonProperty("salary_file")
     MultipartFile salarySlipFile;
 
-    public Map<String,byte[]> getBodyMap() throws IOException {
-        Map<String, byte[]> filesMap = new HashMap<>();
-        filesMap.put("emp_file", getEmployeeFile().getBytes());
-        filesMap.put("structure_file", getSalaryStructureFile().getBytes());
-        filesMap.put("salary_file", getSalarySlipFile().getBytes());
+    public Map<String,MultipartFile> getBodyMap() throws IOException {
+        Map<String, MultipartFile> filesMap = new HashMap<>();
+        filesMap.put("emp_file", getEmployeeFile());
+        filesMap.put("structure_file", getSalaryStructureFile());
+        filesMap.put("salary_file", getSalarySlipFile());
         return filesMap;
     }
 }

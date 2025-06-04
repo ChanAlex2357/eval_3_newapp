@@ -21,7 +21,22 @@
         <script>
             document.addEventListener("DOMContentLoaded",function(){
                 const import_form = document.getElementById("import-form")
-                import_form.addEventListener("submit") 
+                import_form.addEventListener("submit",function(e){
+                    e.preventDefault()
+                    fetch("/api/import/v3",{
+                        method:'POST',
+                        body: new FormData(this)
+                    })
+                    .then((response)=>{
+                        return response.json()
+                    })
+                    .then((body) => {
+                        console.log(body)
+                    })
+                    .catch((error)=>{
+                        console.error("Error during import:", error)
+                    })
+                })
             })
         </script>
     </th:block>
