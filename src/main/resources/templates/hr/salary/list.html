@@ -36,28 +36,74 @@
                     const salaries = data.salaries || [];
                     const salariesBody = document.getElementById('salariesBody');
                     
-                    salaries.forEach(salary => {
-                        const row = document.createElement('tr');
-                        // "Sal Slip__HR-EMP-00001__00001" // encode le nom dynamiquement côté JS
+                    salaries.forEach((salary, index) => {
+                    const row = document.createElement('tr');
+                    const collapseId = `salary-details-${index}`;
 
-                        row.innerHTML = `
-                            <td>${salary.name}</td>
-                            <td>${salary.employee_name}</td>
-                            <td>${new Date(salary.start_date).toLocaleDateString()}</td>
-                            <td>${new Date(salary.end_date).toLocaleDateString()}</td>
-                            <td>${salary.gross_pay.toFixed(2)}</td>
-                            <td>${salary.total_deduction.toFixed(2)}</td>
-                            <td>${salary.net_pay.toFixed(2)}</td>
-                            <td>
-                                <button class="download-btn" onclick="downloadPdf(this, '${salary.name}')">
-                                    <span class="label">PDF</span>
-                                    <span class="spinner" style="display:none;">⏳</span>
-                                </button>
-                            </td>
+                    // ligne principale
+                    row.innerHTML = `
+                        <td><strong>${salary.name}</strong></td>
+                        <td>${salary.employee_name}</td>
+                        <td>${new Date(salary.start_date).toLocaleDateString()}</td>
+                        <td>${new Date(salary.end_date).toLocaleDateString()}</td>
+                        <td>${salary.gross_pay.toFixed(2)}</td>
+                        <td>${salary.total_deduction.toFixed(2)}</td>
+                        <td>${salary.net_pay.toFixed(2)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+                                🔽 Détails
+                            </button>
+                            <button class="btn btn-sm btn-primary" onclick="downloadPdf(this, '${salary.name}')">
+                                <span class="label">PDF</span>
+                                <span class="spinner" style="display:none;">⏳</span>
+                            </button>
+                        </td>
+                    `;
 
-                        `;
-                        salariesBody.appendChild(row);
-                    });
+                    const detailRow = document.createElement('tr');
+                    detailRow.innerHTML = `
+                        <td colspan="8" class="p-0 border-0">
+                            <div id="${collapseId}" class="collapse">
+                                <div class="card card-body border-0">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Gains (Earnings)</h6>
+                                            <table class="table table-sm table-bordered">
+                                                <thead><tr><th>Composant</th><th>Montant</th></tr></thead>
+                                                <tbody>
+                                                    ${salary.earnings.map(e => `
+                                                        <tr>
+                                                            <td>${e.salary_component}</td>
+                                                            <td>${e.amount.toFixed(2)}</td>
+                                                        </tr>
+                                                    `).join('')}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Déductions</h6>
+                                            <table class="table table-sm table-bordered">
+                                                <thead><tr><th>Composant</th><th>Montant</th></tr></thead>
+                                                <tbody>
+                                                    ${salary.deductions.map(d => `
+                                                        <tr>
+                                                            <td>${d.salary_component}</td>
+                                                            <td>${d.amount.toFixed(2)}</td>
+                                                        </tr>
+                                                    `).join('')}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    `;
+
+                    salariesBody.appendChild(row);
+                    salariesBody.appendChild(detailRow);
+                });
+
                 })
                 .catch(error => console.error('Error fetching salaries:', error));
             });

@@ -7,7 +7,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import itu.eval3.newapp.client.builder.ERPNextExceptionBuilder;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
+import itu.eval3.newapp.client.exceptions.ErpNextCallException;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceListResponse;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceSingleResponse;
@@ -37,6 +39,9 @@ public class FrappeCrudService<D extends FrappeDocument>{
 
 
     public D getDocumentById(UserErpNext user, D document, String id, String[] fields, Class<D> modelClass) throws ERPNexException {
+        if (id == null) {
+            throw new ERPNexException("The document id must be setted for fetching data whith getDocumetnById");
+        }
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
         D doc = null;
         

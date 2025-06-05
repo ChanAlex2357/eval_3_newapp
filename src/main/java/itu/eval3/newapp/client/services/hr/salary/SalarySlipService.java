@@ -29,7 +29,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     @Autowired
     private PdfExporterService pdfExporterService;
 
-    public List<SalarySlip> getAll(UserErpNext user, String idEmployee, String[] fields, FrappeFilter filter) throws ERPNexException{
+    public List<SalarySlip> getAllByEmployee(UserErpNext user, String idEmployee, String[] fields, FrappeFilter filter) throws ERPNexException{
         List<SalarySlip> data = getAllDocuments(
             user, 
             new SalarySlip(),
@@ -43,14 +43,18 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
     public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp, String[] fields) throws ERPNexException{
         FrappeFilter filter = new SalaryFilter(emp);
-        return getAll(user, emp.getName(),fields,filter);
+        return getAllByEmployee(user, emp.getName(),fields,filter);
     }
     public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp) throws ERPNexException{
         return getAllByEmployee(user, emp,ApiConfig.ALL_FIELDS);
     }
 
     public List<SalarySlip> getAll(UserErpNext user, FrappeFilter filter) throws ERPNexException {
-        return getAllDocuments(user, new SalarySlip(),ApiConfig.ALL_FIELDS, filter, SalarySlip.class);
+        return getAll(user,ApiConfig.ALL_FIELDS, filter);
+    }
+
+    public List<SalarySlip> getAll(UserErpNext user, String[] fields, FrappeFilter filter) throws ERPNexException {
+        return getAllDocuments(user, new SalarySlip(),fields, filter, SalarySlip.class);
     }
 
     public SalarySlip getById(UserErpNext user, String id) throws ERPNexException {
@@ -76,6 +80,11 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
     public ResponseEntity<byte[]> exportBulletinPaie(SalarySlip salarySlipInstance) throws Exception{
         return pdfExporterService.exportData(generateBulletinDePaiePdf(salarySlipInstance).toByteArray(),"bulletin-paie-"+salarySlipInstance.getName()+"-"+salarySlipInstance.getStartDate());
+    }
+
+    public SalarySlip getById(UserErpNext user, SalarySlip salary) throws ERPNexException{
+        SalarySlip s = getById(user, salary.getName());
+        return s;
     }
 
 }

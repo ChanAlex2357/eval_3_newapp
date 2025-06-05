@@ -29,11 +29,16 @@ public class ApiConfig {
             return "";
         }
         String filtersStr = "[";
+        int order = 0;
          for (int i = 0; i < filters.length; i++) {
             if (filters[i] == null) {
                 continue;
             }
-            filtersStr += filters[i].getFilterStr(i);    
+            String temp_str = filters[i].getFilterStr(order);
+            if (temp_str != "") {
+                order += 1;
+                filtersStr += temp_str;
+            }
         }
  
         filtersStr += "]";

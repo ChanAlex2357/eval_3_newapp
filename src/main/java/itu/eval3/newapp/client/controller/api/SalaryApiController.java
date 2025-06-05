@@ -1,10 +1,12 @@
 package itu.eval3.newapp.client.controller.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import itu.eval3.newapp.client.builder.ApiResponseBuilder;
@@ -16,6 +18,8 @@ import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/salaries")
@@ -35,7 +39,13 @@ public class SalaryApiController {
                 throw new AuthenticationException(); 
             }
 
-            List<SalarySlip> salaries = salarySlipService.getAll(user, filter);
+            List<SalarySlip> salaries_name = salarySlipService.getAll(user, new String[]{"name"}, filter);
+            List<SalarySlip> salaries = new ArrayList<>(salaries_name.size());
+
+            for (SalarySlip salary : salaries_name) {
+                salary = salarySlipService.getById(user, salary);
+                salaries.add(salary);
+            }
 
             salariesReport.setSalaries(salaries.toArray(new SalarySlip[0]));
 
@@ -52,5 +62,6 @@ public class SalaryApiController {
             return ResponseEntity.badRequest().body(ApiResponseBuilder.DFAULT_BUILDER.error(exc));
         }
     }
+
 
 }
