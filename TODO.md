@@ -3,12 +3,13 @@
 ## Employees filter
 
 - [ ] Metier
-  - [ ] cree model de filtre
-  - [ ] rajouter filtre dans le model pour liste des employee
+  - [x] cree model de filtre
+  - [x] rajouter filtre dans le model pour liste des employee
   - [ ] recuperation filtre dans controller d'api
   - [ ] envoyer le filtre dans la requete de la liste des employee
+  - [ ] recupere la liste des genres
 - [ ] affichage
-  - [ ] ajouter des champs de filtre
+  - [x] ajouter des champs de filtre
   - [ ] filtrer le tableau js directement
 
 ## Salary slip list

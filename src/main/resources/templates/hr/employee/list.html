@@ -2,6 +2,23 @@
     <th:block th:fragment="content">
         <div class="bg-light">
             <div class="container">
+                <div class="row">
+                    <form action="" th:object="${emp_filter}">
+                        <div class="form-group">
+                            <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <select name="" id="" title="Gender" th:field="*{gender}">
+                                <option value="">-- Choisir un genre</option>
+                                <option value="Male">Masculin</option>
+                                <option value="Female">Feminin</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
                 <table class="table">
     
                     <tr>
