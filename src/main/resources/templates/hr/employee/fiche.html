@@ -137,7 +137,7 @@
         </div>
 
         <script type="module">
-            import {downloadSalaryPdf, fetchSalaries, getSpinner, formatCurrency} from '/js/metier.js'
+            import {downloadSalaryPdf, fetchSalaries, getSpinner, formatCurrency, formatDate} from '/js/metier.js'
 
             async function fetchData() {
                 const emp_name = document.getElementById("emp_name").dataset.employeeId;
@@ -207,12 +207,6 @@
                 `;
             }
 
-            function formatDate(dateString) {
-                if (!dateString) return 'N/A';
-                const date = new Date(dateString);
-                return date.toLocaleDateString('fr-FR');
-            }
-
             function setSpinner() {
                 const spinner = getSpinner();
                 const tbody = document.getElementById("salariesBody");
@@ -221,6 +215,7 @@
             // Rendre downloadSalaryPdf disponible globalement
             window.downloadSalaryPdf = downloadSalaryPdf;
             window.formatCurrency = formatCurrency;
+            window.formatDate = formatDate;
 
             document.addEventListener("DOMContentLoaded", (e) => {
                 setSpinner();

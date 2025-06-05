@@ -40,6 +40,13 @@ export function formatCurrency(amount) {
     }).format(amount);
 }
 
+export function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-EN');
+}
+
+
 export async function fetchSalaries( queryParams = {}){
     const apiUrl="/api/salaries";
     const url = new URL(apiUrl, window.location.origin);
