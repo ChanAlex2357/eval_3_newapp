@@ -1,10 +1,7 @@
 package itu.eval3.newapp.client.models.hr.salary;
 
 import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.Date;
-import java.util.Calendar;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -158,13 +155,11 @@ public class SalarySlip extends FrappeDocument{
 
     @Override
     public void save_controle() {
-        // TODO Auto-generated method stub
         
     }
     
     @Override
     public void update_cotnrole() {
-        // TODO Auto-generated method stub
         
     }
 
