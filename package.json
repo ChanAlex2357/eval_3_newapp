@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.6",
+    "chart.js": "^4.4.9",
     "npx": "^10.2.2"
   }
 }
