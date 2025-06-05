@@ -1,0 +1,19 @@
+<div th:fragment="top-header" class="top-header">
+    <div class="container-fluid p-2 ">
+        <div class="header-brand">
+            <a th:href="@{/}" class="logo">
+                <img th:src="@{/img/logo.jpeg}" alt="NewApp Logo" class="logo-img">
+                <span class="logo-text">NewApp</span>
+            </a>
+        </div>
+        <div class="header-actions d-flex justify-content-end">
+            <i class="fab fa-twitter"></i>
+            <a th:href="@{/user/profile}" class="nav-link nav-section user-link">
+                <span th:text="${session.user.fullName}">User</span>
+            </a>
+            <a th:href="@{/auth/logout}" class="btn-logout">
+                <i class="fab fa-sign-out"></i>
+            </a>
+        </div>
+    </div>
+</div>

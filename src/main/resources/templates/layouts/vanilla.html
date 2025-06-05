@@ -1,0 +1,19 @@
+<th:block th:fragment="layout(title, content)">
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title th:text="${title}">ERPNext Newapp</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+    </head>
+    <body>
+        <!-- Contenu -->
+        <main id="main-content" class="container mt-3">
+            <div th:replace="${content}">Default content</div>
+        </main>
+
+        <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    </body>
+</html>
+</th:block>

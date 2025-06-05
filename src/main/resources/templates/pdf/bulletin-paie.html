@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #333;
+            margin: 40px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            width: 150px;
+            height: 80px;
+            border: 1px dashed #ccc;
+            text-align: center;
+            line-height: 80px;
+            font-size: 12px;
+            color: #aaa;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: left;
+        }
+        .no-border td {
+            border: none;
+            padding: 2px 4px;
+        }
+        .section-title {
+            background-color: #f2f2f2;
+            padding: 5px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .total-row {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        Logo
+    </div>
+    <div style="text-align:right;">
+        <div><strong>Entreprise :</strong> <span th:text="${salarySlip.company}">Itu Eval</span></div>
+        <div><strong>Période :</strong> <span th:text="${salarySlip.startDate}"></span> au <span th:text="${salarySlip.endDate}"></span></div>
+        <div><strong>Structure :</strong> <span th:text="${salarySlip.salaryStructure}"></span></div>
+    </div>
+</header>
+
+<h1>Bulletin de Paie</h1>
+
+<table class="no-border">
+    <tr>
+        <td><strong>Employé :</strong> <span th:text="${salarySlip.employeeName}"></span></td>
+        <td><strong>Code :</strong> <span th:text="${salarySlip.employee}"></span></td>
+    </tr>
+    <tr>
+        <td><strong>Poste :</strong> <span th:text="${salarySlip.designation}"></span></td>
+        <td><strong>Date :</strong> <span th:text="${salarySlip.postingDate}"></span></td>
+    </tr>
+</table>
+
+<div class="section-title">Détails de présence</div>
+<table>
+    <tr>
+        <th>Jours ouvrés</th>
+        <th>Absences</th>
+        <th>Congés sans solde</th>
+        <th>Jours payés</th>
+    </tr>
+    <tr>
+        <td th:text="${salarySlip.totalWorkingDays}">25</td>
+        <td th:text="${salarySlip.absentDays}">0</td>
+        <td th:text="${salarySlip.leaveWithoutPay}">3</td>
+        <td th:text="${salarySlip.paymentDays}">22</td>
+    </tr>
+</table>
+
+<div class="section-title">Gains</div>
+<table>
+    <tr>
+        <th>Composant</th>
+        <th>Montant (€)</th>
+        <th>Cumul Annuel (€)</th>
+    </tr>
+    <tr th:each="e : ${salarySlip.earnings}">
+        <td th:text="${e.salaryComponent}">Basic</td>
+        <td th:text="${#numbers.formatDecimal(e.amount, 1, 'COMMA', 2, 'POINT')}">4400.00</td>
+        <td th:text="${#numbers.formatDecimal(e.yearToDate, 1, 'COMMA', 2, 'POINT')}">4400.00</td>
+    </tr>
+</table>
+
+<div class="section-title">Déductions</div>
+<table>
+    <tr>
+        <th>Composant</th>
+        <th>Montant (€)</th>
+        <th>Cumul Annuel (€)</th>
+    </tr>
+    <tr th:each="d : ${salarySlip.deductions}">
+        <td th:text="${d.salaryComponent}">---</td>
+        <td th:text="${#numbers.formatDecimal(d.amount, 1, 'COMMA', 2, 'POINT')}">---</td>
+        <td th:text="${#numbers.formatDecimal(d.yearToDate, 1, 'COMMA', 2, 'POINT')}">---</td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(salarySlip.deductions)}">
+        <td colspan="3" style="text-align:center;">Aucune déduction</td>
+    </tr>
+</table>
+
+<div class="section-title">Résumé</div>
+<table>
+    <tr class="total-row">
+        <td>Salaire Brut</td>
+        <td colspan="2" th:text="${#numbers.formatDecimal(salarySlip.grossPay, 1, 'COMMA', 2, 'POINT')} + ' €'">4400.00 €</td>
+    </tr>
+    <tr class="total-row">
+        <td>Déductions</td>
+        <td colspan="2" th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
+    </tr>
+    <tr class="total-row">
+        <td>Net à Payer</td>
+        <td colspan="2" th:text="${#numbers.formatDecimal(salarySlip.netPay, 1, 'COMMA', 2, 'POINT')} + ' €'">4400.00 €</td>
+    </tr>
+</table>
+
+<p><strong>Montant en lettres :</strong> <span th:text="${salarySlip.totalInWords}">EUR Four Thousand, Four Hundred only.</span></p>
+
+</body>
+</html>
