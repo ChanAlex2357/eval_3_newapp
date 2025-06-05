@@ -26,30 +26,32 @@
                         </div>
                     </form>
                 </div>
-                <table class="table" id="empTable">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Nom complet</th>
-                            <th scope="col">Genre</th>
-                            <th scope="col">Date d'embauche</th>
-                            <th scope="col">Poste</th>
-                            <!-- <th scope="col">Actions</th> -->
-                        </tr>
-                    </thead>
-                    <tbody id="empTableBody">
-                        <tr>
-                            <td colspan="10">
-                                <div class="spinner-container">
-                                    <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">Chargement...</span>
+                <div class="card card-body p-0">
+                    <table class="table modern-table" id="empTable">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nom complet</th>
+                                <th scope="col">Genre</th>
+                                <th scope="col">Date d'embauche</th>
+                                <th scope="col">Poste</th>
+                                <!-- <th scope="col">Actions</th> -->
+                            </tr>
+                        </thead>
+                        <tbody id="empTableBody">
+                            <tr>
+                                <td colspan="10">
+                                    <div class="spinner-container">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">Chargement...</span>
+                                        </div>
+                                        <div class="mt-2 text-muted">Chargement des fiches de paie...</div>
                                     </div>
-                                    <div class="mt-2 text-muted">Chargement des fiches de paie...</div>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     

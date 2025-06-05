@@ -3,21 +3,13 @@
 // =============================================================================
 
 // Couleurs principales - Override des variables Bootstrap
-$primary: #2563eb;
-$secondary: #64748b;
-$success: #10b981;
-$danger: #ef4444;
-$light: #f8fafc;
-$dark: #1e293b;
+$primary: #344e41;
+$secondary: #dda15e;
+$success: #588157;
+$danger: #bc4749;
+$light: #f8f9fa;
+$dark: #283618;
 
-// Variables CSS custom
-:root {
-  --primary-color: #{$primary};
-  --secondary-color: #{$secondary};
-  --success-color: #{$success};
-  --danger-color: #{$danger};
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
 
 // Customisation des variables Bootstrap
 $border-radius: 15px;
@@ -35,20 +27,17 @@ $transition-base: all 0.3s ease;
 // =============================================================================
 // OVERRIDES BOOTSTRAP CLASSES
 // =============================================================================
-
+body {
+  height:100vdh;
+}
 // Cards customisées
 .card {
   border: none;
   box-shadow: $box-shadow;
-  border-radius: $border-radius;
+  border-radius: 0;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   background: white;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: $box-shadow-lg;
-  }
 
   &-header {
     background: var(--gradient-primary);
@@ -58,23 +47,11 @@ $transition-base: all 0.3s ease;
     position: relative;
     overflow: hidden;
     border-bottom: none;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 100%;
-      height: 200%;
-      background: rgba(255, 255, 255, 0.1);
-      transform: rotate(45deg);
-      pointer-events: none;
-    }
   }
 
-  &-body {
-    padding: 1.5rem;
-  }
+  // &-body {
+  //   // padding: 1.5rem;
+  // }
 }
 
 // Tables modernes
@@ -82,7 +59,7 @@ $transition-base: all 0.3s ease;
   margin: 0;
 
   thead th {
-    background: $light;
+    background: $white;
     border: none;
     font-weight: 600;
     color: var(--secondary-color);

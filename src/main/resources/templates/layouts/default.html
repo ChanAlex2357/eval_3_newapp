@@ -25,7 +25,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- MENU LATÉRAL -->
-            <aside class="col-md-2 bg-white text-white vh-100 position-fixed p-5">
+            <aside class="col-md-2 bg-white text-white vh-100 position-fixed py-5 px-0">
                 <nav class="nav flex-column">
                     <a class="nav-link text-dark" th:href="@{/home}">🏠 Accueil</a>
                     <a class="nav-link text-dark" th:href="@{/hr/employees}">👥 Employés</a>
@@ -35,9 +35,9 @@
             </aside>
 
             <!-- CONTENU PRINCIPAL -->
-            <main class="col-md-10 offset-md-2 py-4 mt-5" id="main-content">
+            <div class="col-md-10 offset-md-2 py-4 mt-5" >
                 <div th:replace="${content}">Contenu par défaut</div>
-            </main>
+            </div>
         </div>
     </div>
 

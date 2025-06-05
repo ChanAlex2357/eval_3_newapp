@@ -40,22 +40,24 @@
                     </div>
                 </section>
                 <section class="row">
-                    <div class="card card-body p-0">
-                        <table class="table table-sm table-bordered" style="position: relative;">
-                            <thead class="" style="position: sticky;top: 0;background-color: #fff;z-index: 2;">
-                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Sr.No</th>
-                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Employee</th>
-                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Start Date</th>
-                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">End Date</th>
-                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Total Gain</th>
-                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Total Deductions</th>
-                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Salaire</th>
-                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Actions</th>
+                    <div class="card card-body border-0 p-0">
+                                              
+                        <table class="table table-sm modern-table">
+                            <thead>
+                                <th scope="col">Sr.No</th>
+                                <th scope="col">Employee</th>
+                                <th scope="col">Start Date</th>
+                                <th scope="col">End Date</th>
+                                <th scope="col">Total Gain</th>
+                                <th scope="col">Total Deductions</th>
+                                <th scope="col">Salaire</th>
+                                <th scope="col">Actions</th>
                             </thead>
                             <tbody id="salariesBody">
 
                             </tbody>
                         </table>
+                    
                     </div>
             </div>
         </div>
@@ -135,7 +137,7 @@
                         detailRow.innerHTML = `
                             <td colspan="8" class="p-0 border-0">
                                 <div id="${collapseId}" class="collapse">
-                                    <div class="card card-body border-0">
+                                    <div class="card card-body border-0 bg-light">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <h6>Gains (Earnings)</h6>
