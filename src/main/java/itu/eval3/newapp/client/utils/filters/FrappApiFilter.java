@@ -21,6 +21,15 @@ public class FrappApiFilter {
         return "[\""+getFieldname()+"\", \""+getOperator()+"\", \""+getVaule()+"\" ]";
     }
 
+    public String getFilterStr(int order){
+        String prefix = ",";
+        String str = getFilterStr();
+        if (order == 0 || str == "") {
+            return str;
+        }
+        return prefix + str;
+    }
+
     public String getFieldname() {
         return fieldname;
     }

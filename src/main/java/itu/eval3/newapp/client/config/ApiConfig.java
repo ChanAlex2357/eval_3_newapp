@@ -35,10 +35,7 @@ public class ApiConfig {
             if (filters[i] == null) {
                 continue;
             }
-            if (i == filters.length - 1) {
-                suffix = "";
-            }
-            filtersStr += filters[i].getFilterStr()+suffix;    
+            filtersStr += filters[i].getFilterStr(i);    
         }
  
         filtersStr += "]";
