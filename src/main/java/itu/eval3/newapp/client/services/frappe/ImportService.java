@@ -1,16 +1,11 @@
 package itu.eval3.newapp.client.services.frappe;
 
 import java.io.IOException;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.multipart.MultipartFile;
-
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.action.ImportCsvEval3;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
