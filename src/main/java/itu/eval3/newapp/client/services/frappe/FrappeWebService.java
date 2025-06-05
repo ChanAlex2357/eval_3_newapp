@@ -1,9 +1,12 @@
 package itu.eval3.newapp.client.services.frappe;
 
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +24,6 @@ import itu.eval3.newapp.client.exceptions.ErpNextCallException;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -49,9 +51,7 @@ public class FrappeWebService {
      * @throws JsonProcessingException
      * @throws RestClientException
      */
-    private ResponseEntity<String> frappeCall(UserErpNext user, String url, HttpMethod method,Object body) throws JsonProcessingException , RestClientException  {
-        HttpHeaders headers =  HeadersUtils.createHeaders(user);
-
+    private ResponseEntity<String> frappeCall(UserErpNext user, String url,HttpHeaders headers, HttpMethod method,Object body) throws JsonProcessingException , RestClientException  {
         HttpEntity<?> httpEntity = null;
         if (body != null) {
             httpEntity = new HttpEntity<>(objectMapper.writeValueAsString(body),headers);
@@ -78,16 +78,48 @@ public class FrappeWebService {
     * @return le Model T format de la reponse
     * @throws ERPNexException
     */
-    public ResponseEntity<String> callMethod(UserErpNext user, String methodPath, HttpMethod method, Object body) throws ERPNexException {
+    public ResponseEntity<String> callMethod(UserErpNext user, String methodPath,HttpHeaders headers, HttpMethod method, Object body) throws ERPNexException {
         ResponseEntity<String> response = null;
         String url = apiConfig.getMethodUrl(methodPath);
         try {
-            response = frappeCall(user, url, method, body);
+            response = frappeCall(user, url,headers, method, body);
         } catch (Exception e) {
             ErpNextCallException callException = new ErpNextCallException("Error while calling the method \""+methodPath+"\" : "+e.getMessage(),url, method, ErpCallExceptionType.METH, e);
             throw new ERPNexException(callException, response);
         }
         return response;
+    }
+
+    public ResponseEntity<String> callMethodMultipart(
+        UserErpNext user,
+        String method,
+        MultiValueMap<String, Object> multipartBody,
+        HttpHeaders headers
+    ) {
+        try {
+            // 1. Construire l’URL de la méthode (ex: /api/method/eval_app.api.remote_import)
+            String url = apiConfig.getMethodUrl(method);
+
+            // 2. Construire l’entité HTTP
+            HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(multipartBody, headers);
+
+            // 3. Envoyer la requête
+            ResponseEntity<byte[]> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                byte[].class
+            );
+
+            // 4. Lire le corps de réponse
+            String responseJson = new String(response.getBody(), StandardCharsets.UTF_8);
+
+            // 5. Retourner la réponse sous forme textuelle
+            return new ResponseEntity<>(responseJson, response.getHeaders(), response.getStatusCode());
+
+        } catch (RestClientException e) {
+            throw new RuntimeException("Frappe API multipart call failed: " + e.getMessage(), e);
+        }
     }
 
 
@@ -103,13 +135,13 @@ public class FrappeWebService {
      * @param filter un filtre pour definir la contrainte des donnees a recuperer
      *
      * */
-    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpMethod method, String[] fields, FrappeFilter filter) throws ERPNexException {
+    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpHeaders headers,HttpMethod method, String[] fields, FrappeFilter filter) throws ERPNexException {
 
         String url = apiConfig.getResourceUrl(document.getDoctype(), id, fields, filter != null ? filter.getFilters().getFilters() : null);
         log.info("Targeting api {} document at URL: {}", document.getDoctype(), url);
         ResponseEntity <String> response = null;
         try {
-            response = frappeCall(user, url, method, body);
+            response = frappeCall(user, url,headers ,method, body);
         } catch (Exception e) {
             ErpNextCallException callException = new ErpNextCallException("Error while calling ressource to "+document.getDoctype(), url, method,ErpCallExceptionType.SRC, e);
             throw  ERPNextExceptionBuilder.handle(callException, response);

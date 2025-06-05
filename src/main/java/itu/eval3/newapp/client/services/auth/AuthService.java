@@ -11,6 +11,7 @@ import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.user.UserApiDTO;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeWebService;
+import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 
 @Service
@@ -21,7 +22,7 @@ public class AuthService {
     public UserApiDTO callLogin(LoginRequest loginRequest) throws ERPNexException {
         FrappeResponseParser<UserApiDTO> userParser = new FrappeResponseParser<>(); // Cree un parser de UserApiDto
 
-        ResponseEntity<String> respone = frappeService.callMethod(UserErpNext.GUEST, "eval_app.api.login", HttpMethod.POST, loginRequest);  // Faire appel au method login par web service 
+        ResponseEntity<String> respone = frappeService.callMethod(UserErpNext.GUEST, "eval_app.api.login",HeadersUtils.buildJsonHeader(null), HttpMethod.POST, loginRequest);  // Faire appel au method login par web service 
 
         MethodApiResponse<UserApiDTO> userResponse = userParser.parseMethodApiResponse(respone, UserApiDTO.class);  // parser la reponse obtenu
         
