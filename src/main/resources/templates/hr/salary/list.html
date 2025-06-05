@@ -40,21 +40,23 @@
                     </div>
                 </section>
                 <section class="row">
-                    <table class="table modern-table table-bordered" style="position: relative;">
-                        <thead class="" style="position: sticky;top: 0;background-color: #fff;z-index: 2;">
-                            <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Sr.No</th>
-                            <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Employee</th>
-                            <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Start Date</th>
-                            <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">End Date</th>
-                            <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Total Gain</th>
-                            <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Total Deductions</th>
-                            <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Salaire</th>
-                            <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Actions</th>
-                        </thead>
-                        <tbody id="salariesBody">
+                    <div class="card card-body p-0">
+                        <table class="table table-sm table-bordered" style="position: relative;">
+                            <thead class="" style="position: sticky;top: 0;background-color: #fff;z-index: 2;">
+                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Sr.No</th>
+                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Employee</th>
+                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Start Date</th>
+                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">End Date</th>
+                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Total Gain</th>
+                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Total Deductions</th>
+                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Salaire</th>
+                                <th style="position: sticky;top: 0;background-color: #fff;z-index: 2;" scope="col">Actions</th>
+                            </thead>
+                            <tbody id="salariesBody">
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
             </div>
         </div>
         <script type="module">
@@ -95,17 +97,16 @@
                     }
 
                     salaries.forEach((salary, index) => {
-                        const pdfButton = document.createElement('button');
-                        pdfButton.className = "btn btn-sm btn-primary";
-                        pdfButton.innerHTML = `
-                            <span class="label">PDF</span>
-                            <div class=" spinner spinner-container" style="display: none;">
-                                <div class="spinner-border text-primary"  role="status">
-                                    <span class="visually-hidden">Chargement...</span>
+                        const pdfButton = `
+                            <button class=" col-12 btn btn-sm btn-outline-primary" onclick="downloadSalaryPdf(this,${salary.name})">
+                                <span class="label">Telecharger</span>
+                                <div class=" spinner spinner-container" style="display: none;">
+                                    <div class="spinner-border text-primary"  role="status">
+                                        <span class="visually-hidden">Chargement...</span>
+                                    </div>
                                 </div>
-                            </div>
+                            </button>
                         `;
-                        pdfButton.addEventListener("click", () => downloadSalaryPdf(pdfButton, salary.name));
 
                         const row = document.createElement('tr');
                         const collapseId = `salary-details-${index}`;
@@ -114,17 +115,22 @@
                             <td>${salary.employee_name}</td>
                             <td>${formatDate(salary.start_date)}</td>
                             <td>${formatDate(salary.end_date)}</td>
-                            <td>${formatCurrency(salary.gross_pay.toFixed(2))}</td>
-                            <td>${formatCurrency(salary.total_deduction.toFixed(2))}</td>
-                            <td>${formatCurrency(salary.net_pay.toFixed(2))}</td>
+                            <td><span class="badge bg-secondary">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
+                            <td><span class="badge bg-secondary">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
+                            <td><span class="badge bg-success">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
+                            `;
+                        const btn_cont = `
                             <td>
-                                <button class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
-                                    🔽 Détails
-                                </button>
-                            </td>
-                        `;
-                        row.querySelector('td:last-child').appendChild(pdfButton);
+                                <div class="row g-2" id="btn-container">
 
+                                        <button col-12 class="btn btn-sm btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+                                            Détails
+                                        </button>
+                                        ${pdfButton}
+                                </div>
+                            </td>`;
+                        row.innerHTML += btn_cont;
+                            
                         const detailRow = document.createElement('tr');
                         detailRow.innerHTML = `
                             <td colspan="8" class="p-0 border-0">
@@ -139,7 +145,7 @@
                                                         ${salary.earnings.map(e => `
                                                             <tr>
                                                                 <td>${e.salary_component}</td>
-                                                                <td>${formatCurrency(e.amount.toFixed(2))}</td>
+                                                                <td><span class="badge bg-secondary">${formatCurrency(e.amount.toFixed(2))}</span></td>
                                                             </tr>`).join("")}
                                                     </tbody>
                                                 </table>
@@ -152,7 +158,7 @@
                                                         ${salary.deductions.map(d => `
                                                             <tr>
                                                                 <td>${d.salary_component}</td>
-                                                                <td>${formatCurrency(d.amount.toFixed(2))}</td>
+                                                                <td><span class="badge bg-secondary">${formatCurrency(d.amount.toFixed(2))}</span></td>
                                                             </tr>`).join("")}
                                                     </tbody>
                                                 </table>

@@ -8,37 +8,37 @@
 <body>
     <header th:fragment="header">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">MonSite</a>
-            <button title="navbar-toggler" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">MonSite</a>
+                <button title="navbar-toggler" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarMenu">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/home}">Home</a>
-                </li>
+                <div class="collapse navbar-collapse" id="navbarMenu">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/home}">Home</a>
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/user/profile}">Profile</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/profile}">Profile</a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/hr/employees}">Employees</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/hr/salaries}">Salaires</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/import/v3}">Import</a>
+                    </li>
+                </ul>
                 
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/hr/employees}">Employees</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/hr/salaries}">Salaires</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/import/v3}">Import</a>
-                </li>
-            </ul>
-            
+                </div>
             </div>
-        </div>
         </nav>
     </header>
 </body>
