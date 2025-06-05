@@ -15,12 +15,15 @@ public class SalaryFilter implements FrappeFilter {
     private int annee = 2025;
 
     private int integerMois;
+    private Date startDate;
+    private Date endDate;
 
     public SalaryFilter(){}
     public SalaryFilter(String employee, String mois, int annee){
         this.employee = employee;
         this.mois = mois;
         integerMois = Integer.parseInt(mois);
+        setDates();
     }
 
     public SalaryFilter(Employee employee){
@@ -38,18 +41,19 @@ public class SalaryFilter implements FrappeFilter {
         filters[0] = new EqualsFilter("employee", employee);
 
         convertMois();
+        setDates();
         if (integerMois != 0 && annee != 0) {
-            LocalDate startDateLocalDate = LocalDate.of(annee, integerMois, 1);
-            LocalDate endDateLocalDate = startDateLocalDate.withDayOfMonth(startDateLocalDate.lengthOfMonth());
-
-            Date start_date = Date.valueOf(startDateLocalDate);
-            Date end_date = Date.valueOf(endDateLocalDate);
-            
-            filters[1] = new FrappApiFilter("start_date",">=",start_date.toString());
-            filters[2] = new FrappApiFilter("end_date","<=",end_date.toString());
+            filters[1] = new FrappApiFilter("start_date",">=",getStartDate().toString());
+            filters[2] = new FrappApiFilter("end_date","<=",getEndDate().toString());
         }
 
         return new FrappeApiFilterList(filters);
+    }
+    public Date getEndDate() {
+        return endDate;
+    }
+    public Date getStartDate() {
+        return startDate;
     }
     public String getEmployee() {
         return employee;
@@ -75,6 +79,38 @@ public class SalaryFilter implements FrappeFilter {
     }
     public void setIntegerMois(int integerMois) {
         this.integerMois = integerMois;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setDates(){
+        if (this.startDate != null && this.endDate != null) {
+            return;
+        }
+        LocalDate startDateLocalDate = null;
+        convertMois();
+        if (integerMois == 0 && annee == 0 ) {
+            return;
+        }
+        else if (integerMois == 0 && annee != 0 ) {
+            startDateLocalDate = LocalDate.of(annee, 1, 1);
+        }
+        else if (integerMois != 0 && annee != 0) {
+            startDateLocalDate = LocalDate.of(annee, integerMois, 1);
+        }
+
+        Date start_date = Date.valueOf(startDateLocalDate);
+        setStartDate(start_date);
+        
+        LocalDate endDateLocalDate = startDateLocalDate.withDayOfMonth(startDateLocalDate.lengthOfMonth());
+        Date end_date = Date.valueOf(endDateLocalDate);
+        setEndDate(end_date);
     }
     
 }

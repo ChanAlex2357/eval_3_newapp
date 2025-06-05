@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
@@ -20,6 +21,7 @@ import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.exporter.PdfExporterService;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.http.HeadersUtils;
 
 @Service
 public class SalarySlipService extends FrappeCrudService<SalarySlip> {
@@ -53,7 +55,10 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         return getAll(user,ApiConfig.ALL_FIELDS, filter);
     }
 
-    public List<SalarySlip> getAll(UserErpNext user, String[] fields, FrappeFilter filter) throws ERPNexException {
+    public List<SalarySlip> getAll(UserErpNext user, String[] fields, SalaryFilter filter) throws ERPNexException {
+
+            frappeWebService.callMethod(user, "eval_app.api.get_salary_slip_with_details",HeadersUtils.buildJsonHeader(user),HttpMethod.GET, filter);
+
         return getAllDocuments(user, new SalarySlip(),fields, filter, SalarySlip.class);
     }
 

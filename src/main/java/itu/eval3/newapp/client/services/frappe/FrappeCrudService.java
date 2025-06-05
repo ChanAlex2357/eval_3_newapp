@@ -7,9 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import itu.eval3.newapp.client.builder.ERPNextExceptionBuilder;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
-import itu.eval3.newapp.client.exceptions.ErpNextCallException;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceListResponse;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceSingleResponse;
@@ -22,7 +20,7 @@ import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 public class FrappeCrudService<D extends FrappeDocument>{
 
     @Autowired
-    private FrappeWebService frappeWebService;
+    protected FrappeWebService frappeWebService;
 
     public List<D> getAllDocuments(UserErpNext user, D document, String[] fields, FrappeFilter filter, Class<D> modelClass) throws ERPNexException {
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();

@@ -12,6 +12,19 @@ export async function fetchEmployees(queryParams = {}) {
 
 }
 
+export function setSprinner(spinnerContainer,label = "Chargement...") {
+    const spinner = document.getElementById(spinnerContainer);
+    if (!spinner) return;
+    const htmlSpin = `
+        <div class="spinner-container">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </div>
+            <div class="mt-2 text-muted">${label}</div>
+        </div>`;
+    spinner.innerHTML = htmlSpin;
+}
+
 export async function fetchSalaries( queryParams = {}){
     const apiUrl="/api/salaries";
     const url = new URL(apiUrl, window.location.origin);

@@ -1,109 +1,243 @@
-<div th:replace="~{layouts/default :: layout(title='Newapp | Employees list', content=~{::content})}">
+<div th:replace="~{layouts/default :: layout(title='Newapp | Fiche Employé', content=~{::content})}">
     <th:block th:fragment="content">
-        <div class="bg-light">
-            <div class="container">
-
-                <div th:if="${employee == null}">
-                    <div class="card ">
-                        <div class="card-body">
-                            <p th:text="${error_msg}"></p>
-                        </div>
-                    </div>
-                </div>
-                <div th:unless="${employee == null}">
-                    <table class="table">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Employee</th>
-                            <th scope="col">Genre</th>
-                            <th scope="col">Date d'embauche</th>
-                        </tr>
-                        <tr>
-                            <td id="emp_name" th:attr="data-employee-id=${employee.name}" th:text="${employee.getName()}"></td>
-                            <td th:text="${employee.getFirstname()}"></td>
-                            <td th:text="${employee.getGender()}"></td>
-                            <td th:text="${employee.getJoinDate()}"></td>
-                        </tr>
-                    </table>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-6">
-                        <h2 class="text-center">Fiches de paies</h2>
-                        <table class="table table-striped" id="salaryTable">
-                            <thead>
-                                <th scope="col">#</th>
-                                <th scope="col">Period</th>
-                                <th scope="col">Salary</th>
-                            </thead>
-                            <tbody id="salariesBody">
-                                <tr>
-                                    <td colspan="8">      
-                                        <div class="d-flex justify-content-center">
-                                            <div class="spinner-border" role="status">
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-6">
-                        <h2 class="text-center">Historique de salaires</h2>
-                        <table class="table table-striped">
-                            <thead>
-                                <th scope="col">#</th>
-                                <th scope="col">Date debut</th>
-                                <th scope="col">Salaire</th>
-                            </thead>
-                        </table>
+        <div class="container py-4">
+            <!-- Gestion des erreurs -->
+            <div th:if="${employee == null}" class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <div th:text="${error_msg}">Employé non trouvé</div>
                     </div>
                 </div>
             </div>
-        </div>    
+
+            <!-- Contenu principal -->
+            <div th:unless="${employee == null}" class="row g-4">
+                <!-- Colonne 1: Informations de l'employé -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="modern-card">
+                        <!-- En-tête du profil -->
+                        <div class="profile-header text-center">
+                            <div class="profile-avatar mx-auto">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 class="mb-1" th:text="${employee.getFirstname() + ' ' + employee.getName()}">Nom Prénom</h3>
+                            <p class="mb-0 opacity-75" th:text="${employee.getName()}" id="emp_name" th:attr="data-employee-id=${employee.name}">ID Employé</p>
+                        </div>
+
+                        <!-- Informations détaillées -->
+                        <div class="info-card">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="info-label">Identifiant</div>
+                                    <div class="info-value" th:text="${employee.getName()}">EMP001</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-venus-mars"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="info-label">Genre</div>
+                                    <div class="info-value" th:text="${employee.getGender()}">Masculin</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="info-label">Date d'embauche</div>
+                                    <div class="info-value" th:text="${employee.getJoinDate()}">01/01/2023</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-briefcase"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="info-label">Statut</div>
+                                    <div class="info-value">
+                                        <span class="badge-status bg-success text-white">Actif</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Colonne 2: Fiches de paie et historique -->
+                <div class="col-lg-8 col-md-12">
+                    <div class="row g-4">
+                        <!-- Fiches de paie -->
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="section-header">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                    Fiches de paie
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table modern-table" id="salaryTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Référence</th>
+                                                <th scope="col">Période</th>
+                                                <th scope="col">Salaire net</th>
+                                                <th scope="col">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="salariesBody">
+                                            <tr>
+                                                <td colspan="4">
+                                                    <div class="spinner-container">
+                                                        <div class="spinner-border text-primary" role="status">
+                                                            <span class="visually-hidden">Chargement...</span>
+                                                        </div>
+                                                        <div class="mt-2 text-muted">Chargement des fiches de paie...</div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Historique des salaires
+                        <div class="col-12">
+                            <div class="modern-card">
+                                <div class="section-header">
+                                    <i class="fas fa-chart-line"></i>
+                                    Historique des salaires
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table modern-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Référence</th>
+                                                <th scope="col">Date début</th>
+                                                <th scope="col">Salaire</th>
+                                                <th scope="col">Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="4">
+                                                    <div class="empty-state">
+                                                        <i class="fas fa-history"></i>
+                                                        <p class="mb-0">Aucun historique disponible</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script type="module">
-            import {downloadSalaryPdf, fetchSalaries} from '/js/metier.js'
+            import {downloadSalaryPdf, fetchSalaries, setSpinner} from '/js/metier.js'
 
             async function fetchData() {
                 const emp_name = document.getElementById("emp_name").dataset.employeeId;
-                const data = await fetchSalaries({"employee":emp_name});
-                console.log(data);
-                renderSalariesTable(data.salaries);
-
+                try {
+                    const data = await fetchSalaries({"employee": emp_name});
+                    console.log(data);
+                    renderSalariesTable(data.salaries);
+                } catch (error) {
+                    console.error('Erreur lors du chargement des salaires:', error);
+                    renderErrorState();
+                }
             }
 
-            function renderSalariesTable(data){
+            function renderSalariesTable(data) {
                 const tbody = document.getElementById("salariesBody");
-                tbody.innerHTML =""
-                if(data.length == 0){
+                setSpinner(tbody);
+                
+                if (!data || data.length == 0) {
                     tbody.innerHTML = `
                         <tr>
-                            <td colspan="8">      
-                                <div class="d-flex justify-content-center">
-                                    <span class="m-5">Aucun salaire trouvee</span>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <i class="fas fa-file-invoice"></i>
+                                    <p class="mb-0">Aucune fiche de paie trouvée</p>
                                 </div>
                             </td>
                         </tr>
                     `;
-                    return
+                    return;
                 }
 
-                data.forEach((salary) => {
+                data.forEach((salary, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <tr>
-                            <td>${salary.name}</td>
-                            <td>${salary.start_date}</td>
-                            <td>${salary.net_pay}</td>
-                        </tr>
-                    `
+                        <td>
+                            <strong>${salary.name}</strong>
+                        </td>
+                        <td>
+                            <i class="fas fa-calendar-alt text-muted me-1"></i>
+                            ${formatDate(salary.start_date)}
+                        </td>
+                        <td>
+                            <span class="badge bg-success">
+                                ${formatCurrency(salary.net_pay)}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="downloadSalaryPdf('${salary.name}')">
+                                <i class="fas fa-download me-1"></i>
+                                Télécharger
+                            </button>
+                        </td>
+                    `;
                     tbody.appendChild(row);
                 });
             }
-            document.addEventListener("DOMContentLoaded",(e)=>{
-                fetchData()
-            })
-        </script>
 
+            function renderErrorState() {
+                const tbody = document.getElementById("salariesBody");
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <i class="fas fa-exclamation-triangle text-warning"></i>
+                                <p class="mb-0">Erreur lors du chargement des données</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            function formatDate(dateString) {
+                if (!dateString) return 'N/A';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('fr-FR');
+            }
+
+            function formatCurrency(amount) {
+                if (!amount) return '0 €';
+                return new Intl.NumberFormat('fr-FR', {
+                    style: 'currency',
+                    currency: 'EUR'
+                }).format(amount);
+            }
+
+            // Rendre downloadSalaryPdf disponible globalement
+            window.downloadSalaryPdf = downloadSalaryPdf;
+
+            document.addEventListener("DOMContentLoaded", (e) => {
+                fetchData();
+            });
+        </script>
     </th:block>
 </div>
