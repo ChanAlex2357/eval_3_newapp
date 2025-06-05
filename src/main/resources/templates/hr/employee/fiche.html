@@ -26,29 +26,38 @@
                         </tr>
                     </table>
                 </div>
-
-                <h2>Salaires</h2>
-                <div th:unless="${salaries == null}">
-                    <table class="table" id="salaryTable">
-                        <thead>
-                            <th scope="col">#</th>
-                            <th scope="col">Start Date</th>
-                            <th scope="col">End Date</th>
-                            <th scope="col">Salary</th>
-                            <th scope="col">Brut</th>
-                            <th scope="col">Net</th>
-                        </thead>
-                        <tbody>
-                            <tr th:each=" salary : ${salaries}">
-                                <td th:text="${salary.getName()}"></td>
-                                <td th:text="${salary.getStartDate()}"></td>
-                                <td th:text="${salary.getEndDate()}"></td>
-                                <td th:text="${salary.getSalaryStructure()}"></td>
-                                <td th:text="${salary.getGrossPay()}"></td>
-                                <td th:text="${salary.getNetPay()}"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <hr>
+                <div class="row">
+                    <div class="col-6">
+                        <h2 class="text-center">Fiches de paies</h2>
+                        <table class="table table-striped" id="salaryTable">
+                            <thead>
+                                <th scope="col">#</th>
+                                <th scope="col">Period</th>
+                                <th scope="col">Salary</th>
+                            </thead>
+                            <tbody id="salariesBody">
+                                <tr>
+                                    <td colspan="8">      
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-border" role="status">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-6">
+                        <h2 class="text-center">Historique de salaires</h2>
+                        <table class="table table-striped">
+                            <thead>
+                                <th scope="col">#</th>
+                                <th scope="col">Date debut</th>
+                                <th scope="col">Salaire</th>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>    
@@ -57,12 +66,44 @@
 
             async function fetchData() {
                 const emp_name = document.getElementById("emp_name").dataset.employeeId;
-                const salaries = await fetchSalaries({"employee":emp_name});
-                console.log(salaries);
+                const data = await fetchSalaries({"employee":emp_name});
+                console.log(data);
+                renderSalariesTable(data.salaries);
+
+            }
+
+            function renderSalariesTable(data){
+                const tbody = document.getElementById("salariesBody");
+                tbody.innerHTML =""
+                if(data.length == 0){
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8">      
+                                <div class="d-flex justify-content-center">
+                                    <span class="m-5">Aucun salaire trouvee</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    return
+                }
+
+                data.forEach((salary) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <tr>
+                            <td>${salary.name}</td>
+                            <td>${salary.start_date}</td>
+                            <td>${salary.net_pay}</td>
+                        </tr>
+                    `
+                    tbody.appendChild(row);
+                });
             }
             document.addEventListener("DOMContentLoaded",(e)=>{
                 fetchData()
             })
         </script>
+
     </th:block>
 </div>

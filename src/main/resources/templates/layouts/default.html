@@ -6,6 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title th:text="${title}">ERPNext Newapp</title>
         <link rel="stylesheet" th:href="@{/css/style.css}">
+        <link rel="stylesheet" th:href="@{/css/yearpicker.css}">
+        <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+        <script th:src="@{/js/yearpicker.js}"  async></script>
     </head>
     <body class="bg-light">
         <!-- HEADER -->
@@ -13,12 +16,20 @@
         
         <!-- Contenu -->
         <main id="main-content" class="container mt-3 ">
+            <!-- <input type="number" title="year-picker" class="yearpicker" value=""> -->
             <div th:replace="${content}">Default content</div>
         </main>
 
         <!-- Footer -->
         <div th:insert="~{fragments/footer :: footer}"></div>
         <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                console.log("Document loaded, initializing yearpicker...");
+                $('.yearpicker').yearpicker();
+            });
+        </script>
     </body>
 </html>
 </th:block>

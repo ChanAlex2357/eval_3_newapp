@@ -1,6 +1,7 @@
 package itu.eval3.newapp.client.models.hr.salary.filter;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.utils.filters.EqualsFilter;
@@ -12,9 +13,11 @@ import lombok.Data;
 @Data
 public class SalaryFilter implements FrappeFilter {
     private String employee;
-    private Date mois;
+    private int mois;
+    private int annee;
+
     public SalaryFilter(){}
-    public SalaryFilter(String employee, Date mois){
+    public SalaryFilter(String employee, int mois, int annee){
         this.employee = employee;
         this.mois = mois;
     }
@@ -25,10 +28,17 @@ public class SalaryFilter implements FrappeFilter {
 
     @Override
     public FrappeApiFilterList getFilters() {
-        FrappApiFilter[] filters = new FrappApiFilter[2];
+        FrappApiFilter[] filters = new FrappApiFilter[3];
         filters[0] = new EqualsFilter("employee", employee);
-        if (mois != null) {
-            filters[1] = new FrappApiFilter("start_date","=",mois.toString());
+        if (mois != 0 && annee != 0) {
+            LocalDate startDateLocalDate = LocalDate.of(annee, mois, 1);
+            LocalDate endDateLocalDate = startDateLocalDate.withDayOfMonth(startDateLocalDate.lengthOfMonth());
+
+            Date start_date = Date.valueOf(startDateLocalDate);
+            Date end_date = Date.valueOf(endDateLocalDate);
+            
+            filters[1] = new FrappApiFilter("start_date",">=",start_date.toString());
+            filters[1] = new FrappApiFilter("end_date","<=",end_date.toString());
         }
 
         return new FrappeApiFilterList(filters);
