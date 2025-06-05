@@ -3,7 +3,7 @@
         <div class="bg-light">
             <div class="container">
                 <div class="row mb-3">
-                    <form action="" th:object="${emp_filter}">
+                    <form action="" th:object="${emp_filter}" id="empFilterForm">
                         <div class="row g-1">
                             <div class="col">
                                 <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control">
@@ -13,7 +13,7 @@
                             </div>
                             <div class="col">
                                 <select class="form-select" name="" id="" title="Gender" th:field="*{gender}">
-                                    <option value="">-- Choisir un genre</option>
+                                    <option value="">-- Tous --</option>
                                     <option value="Male">Masculin</option>
                                     <option value="Female">Feminin</option>
                                 </select>
@@ -27,15 +27,19 @@
                     </form>
                 </div>
                 <table class="table" id="empTable">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Employee</th>
-                        <th scope="col">Genre</th>
-                        <th scope="col">Date d'embauche</th>
-                        <th scope="col">Designation</th>
-                        <th scope="col">Actions</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nom complet</th>
+                            <th scope="col">Genre</th>
+                            <th scope="col">Date d'embauche</th>
+                            <th scope="col">Poste</th>
+                            <!-- <th scope="col">Actions</th> -->
+                        </tr>
+                    </thead>
+                    <tbody id="empTableBody">
 
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -45,7 +49,23 @@
 
             document.addEventListener("DOMContentLoaded", async function () {
                 const employees = await fetchEmployees();
-                renderEmployeeTable(employees);
+                renderEmployeeTable(employees,"empTableBody");
+
+                const filterForm = document.getElementById("empFilterForm");
+
+                filterForm.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    const formData = new FormData(filterForm);
+                    const queryParams = {};
+                    formData.forEach((value, key) => {
+                        queryParams[key] = value;
+                    });
+
+                    const employees = await fetchEmployees('/api/employees', queryParams);
+                    renderEmployeeTable(employees,"empTableBody");
+                });
+
             });
         </script>
     </th:block>

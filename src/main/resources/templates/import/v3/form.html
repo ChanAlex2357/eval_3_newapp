@@ -3,17 +3,23 @@
         <div class="container">
             <h1>Import CSV</h1>
             <form th:action="@{/import/v3}" method="post" th:object="${importer}" id="import-form" enctype="multipart/form-data">
-                <div class="form-group mb-3">
-                    <label for="emp-file" class="form-label">Fichier 1 - Employee</label>
-                    <input type="file" class="form-control" id="emp-file" th:field="*{employeeFile}" accept=".csv" required>
+                <div class="form-group mb-3 row">
+                    <label for="emp-file" class="form-label col-sm-3 col-form-label">Fichier 1 - Employee</label>
+                    <div class="col-3">
+                        <input type="file" class="form-control" id="emp-file" th:field="*{employeeFile}" accept=".csv" required>
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="structure-file" class="form-label">Fichier 2 - Structure de salaire</label>
-                    <input type="file" th:field="*{salaryStructureFile}" id="structure-file" class="form-control">
+                <div class="form-group mb-3 row">
+                    <label for="structure-file" class="form-label col-sm-3 col-form-label">Fichier 2 - Structure de salaire</label>
+                    <div class="col-3">
+                        <input type="file" th:field="*{salaryStructureFile}" id="structure-file" class="form-control">
+                    </div>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="salary-file" class="form-label">Fichier 3 - Salaire</label>
-                    <input type="file" th:field="*{salarySlipFile}" id="salary-file" class="form-control">
+                <div class="form-group mb-3 row">
+                    <label for="salary-file" class="form-label col-sm-3 col-form-label">Fichier 3 - Salaire</label>
+                    <div class="col-3">
+                        <input type="file" th:field="*{salarySlipFile}" id="salary-file" class="form-control">
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Import</button>
             </form>

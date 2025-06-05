@@ -14,6 +14,9 @@ public class Employee extends FrappeDocument{
     private String employee;
     @JsonProperty("first_name")
     private String firstname;
+    @JsonProperty("last_name")
+    private String lastname;
+
     private String gender;
 
     @JsonProperty("date_of_birth")

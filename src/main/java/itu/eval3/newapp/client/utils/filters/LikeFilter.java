@@ -4,14 +4,11 @@ public class LikeFilter extends FrappApiFilter{
 
     public LikeFilter(String fieldname,String value) {
         super(fieldname, "like", value);
+        surroundLikeValue();
     }
 
     public void surroundLikeValue(){
-        if (this.getVaule() == null) {
-            return;
-        }
-
-        if (!this.getVaule().contains("%")) {
+        if (this.getVaule() != null && !this.getVaule().contains("%")) {
             setVaule("%"+getVaule()+"%");
         }
     }

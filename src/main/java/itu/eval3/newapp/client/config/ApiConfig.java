@@ -29,8 +29,6 @@ public class ApiConfig {
             return "";
         }
         String filtersStr = "[";
-        String suffix = ",";
- 
          for (int i = 0; i < filters.length; i++) {
             if (filters[i] == null) {
                 continue;

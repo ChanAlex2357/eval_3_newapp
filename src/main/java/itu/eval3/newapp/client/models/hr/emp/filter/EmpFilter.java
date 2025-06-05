@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 public class EmpFilter implements FrappeFilter {
-    public String firstname = "Rakoto";
+    public String firstname;
     public String lastname;
     public String gender;
     public Date joinDate;

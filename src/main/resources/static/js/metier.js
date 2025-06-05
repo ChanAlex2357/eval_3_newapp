@@ -1,10 +1,27 @@
-export async function fetchEmployees(apiUrl = '/api/employees') {
+export async function fetchEmployees(apiUrl = '/api/employees', queryParams = {}) {
+    const url = new URL(apiUrl,window.location.origin);
+    
+    Object.entries(queryParams).forEach(([key, value]) => {
+        if (value !== "") {
+            url.searchParams.append(key, value);
+        }
+    });
+    const data = fetchData(url.toString(),{
+        method:'GET'
+    })
+    return data;
+
+}
+
+export async function fetchData(apiUrl, params={},fail){
     try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+            params
+        });
         const body = await response.json();
         return body.data || [];
     } catch (error) {
-        console.error('Erreur lors de la récupération des employés :', error);
+        console.error(`Erreur lors de la récupération des donnes depuis ${apiUrl} : ${error}`);
         return [];
     }
 }
@@ -21,15 +38,15 @@ export function renderEmployeeTable(data, tableId = 'empTable') {
             <td>
                 <a href='/hr/employees/${employee.name}'>${employee.name}</a>
             </td>
-            <td>${employee.first_name}</td>
+            <td>${employee.first_name} ${employee.last_name}</td>
             <td>${employee.gender}</td>
             <td>${new Date(employee.date_of_joining).toLocaleDateString()}</td>
             <td>${employee.designation}</td>
-            <td>
-                <a href="/hr/employees/${employee.id}/edit" class="btn btn-primary">Edit</a>
-                <a href="/hr/employees/${employee.id}/delete" class="btn btn-danger">Delete</a>
-            </td>
-        `;
+            `;
+            // <td>
+            //     <a href="/hr/employees/${employee.id}/edit" class="btn btn-primary">Edit</a>
+            //     <a href="/hr/employees/${employee.id}/delete" class="btn btn-danger">Delete</a>
+            // </td>
         table.appendChild(row);
     });
 }
