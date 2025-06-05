@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,11 +15,10 @@ import itu.eval3.newapp.client.exceptions.AuthenticationException;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
+import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -29,17 +29,17 @@ public class SalaryApiController {
 
 
     @GetMapping
-    public ResponseEntity<?> getSalaries(HttpSession session){
+    public ResponseEntity<?> getSalaries(HttpSession session,@ModelAttribute("salary_filter") SalaryFilter salaryFilter ){
         SalariesRegisterReport salariesReport = new SalariesRegisterReport();
         ApiResponseBuilder<SalariesRegisterReport> responseBuilder = new ApiResponseBuilder<>();
-        FrappeFilter filter = null;
+        
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
             if (user == null) {
                 throw new AuthenticationException(); 
             }
 
-            List<SalarySlip> salaries_name = salarySlipService.getAll(user, new String[]{"name"}, filter);
+            List<SalarySlip> salaries_name = salarySlipService.getAll(user, new String[]{"name"}, salaryFilter);
             List<SalarySlip> salaries = new ArrayList<>(salaries_name.size());
 
             for (SalarySlip salary : salaries_name) {

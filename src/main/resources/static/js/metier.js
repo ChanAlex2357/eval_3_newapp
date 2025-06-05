@@ -1,29 +1,61 @@
-export async function fetchEmployees(apiUrl = '/api/employees', queryParams = {}) {
+export async function fetchEmployees(queryParams = {}) {
+    const apiUrl = '/api/employees';
     const url = new URL(apiUrl,window.location.origin);
-    
-    Object.entries(queryParams).forEach(([key, value]) => {
-        if (value !== "") {
-            url.searchParams.append(key, value);
-        }
-    });
-    const data = fetchData(url.toString(),{
+    addUrlPararms(url, queryParams);
+
+    const data = await fetchData(url.toString(),{
         method:'GET'
     })
     return data;
 
 }
 
-export async function fetchData(apiUrl, params={},fail){
+export async function fetchSalaries( queryParams = {}){
+    const apiUrl="/api/salaries";
+    const url = new URL(apiUrl, window.location.origin);
+    addUrlPararms(url, queryParams);
+
+    const data = await fetchData(url.toString(),{
+        method:'GET'
+    })
+    return data;
+}
+
+function addUrlPararms(url, params){
+    Object.entries(params).forEach(([key,value]) => {
+        if(value !== ""){
+            url.searchParams.append(key, value)
+        }
+    });
+}
+
+export async function fetchData(apiUrl, params={}){
     try {
-        const response = await fetch(apiUrl, {
-            params
-        });
+        const response = await fetch(apiUrl, params);
         const body = await response.json();
         return body.data || [];
     } catch (error) {
         console.error(`Erreur lors de la récupération des donnes depuis ${apiUrl} : ${error}`);
         return [];
     }
+}
+
+export function renderSalaries(salaries, tableBodySelector = "#salaryTable tbody") {
+    const tbody = document.querySelector(tableBodySelector);
+    tbody.innerHTML = ""; // reset
+
+    salaries.forEach((salary, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${salary.name}</td>
+            <td>${new Date(salary.start_date).toLocaleDateString()}</td>
+            <td>${new Date(salary.end_date).toLocaleDateString()}</td>
+            <td>${salary.salary_structure}</td>
+            <td>${salary.gross_pay.toFixed(2)}</td>
+            <td>${salary.net_pay.toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
+    });
 }
 
 export function renderEmployeeTable(data, tableId = 'empTable') {

@@ -16,18 +16,20 @@
                             <th scope="col">#</th>
                             <th scope="col">Employee</th>
                             <th scope="col">Genre</th>
+                            <th scope="col">Date d'embauche</th>
                         </tr>
                         <tr>
-                            <td th:text="${employee.getName()}"></td>
+                            <td id="emp_name" th:attr="data-employee-id=${employee.name}" th:text="${employee.getName()}"></td>
                             <td th:text="${employee.getFirstname()}"></td>
                             <td th:text="${employee.getGender()}"></td>
+                            <td th:text="${employee.getJoinDate()}"></td>
                         </tr>
                     </table>
                 </div>
 
                 <h2>Salaires</h2>
                 <div th:unless="${salaries == null}">
-                    <table class="table">
+                    <table class="table" id="salaryTable">
                         <thead>
                             <th scope="col">#</th>
                             <th scope="col">Start Date</th>
@@ -50,7 +52,17 @@
                 </div>
             </div>
         </div>    
-        <script>
+        <script type="module">
+            import {downloadSalaryPdf, fetchSalaries} from '/js/metier.js'
+
+            async function fetchData() {
+                const emp_name = document.getElementById("emp_name").dataset.employeeId;
+                const salaries = await fetchSalaries({"employee":emp_name});
+                console.log(salaries);
+            }
+            document.addEventListener("DOMContentLoaded",(e)=>{
+                fetchData()
+            })
         </script>
     </th:block>
 </div>
