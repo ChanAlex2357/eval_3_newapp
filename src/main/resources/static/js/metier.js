@@ -1,4 +1,6 @@
 export async function fetchEmployees(queryParams = {}) {
+    console.log("fetchEmployees called with params:", queryParams);
+    
     const apiUrl = '/api/employees';
     const url = new URL(apiUrl,window.location.origin);
     addUrlPararms(url, queryParams);

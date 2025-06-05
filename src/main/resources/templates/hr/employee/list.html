@@ -4,22 +4,22 @@
             <div class="container">
                 <div class="row mb-3">
                     <form action="" th:object="${emp_filter}" id="empFilterForm">
-                        <div class="row g-1">
-                            <div class="col">
+                        <div class="row justify-content-end g-1">
+                            <div class="col-2">
                                 <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control">
                             </div>
-                            <div class="col">
+                            <div class="col-2">
                                 <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control">
                             </div>
-                            <div class="col">
+                            <div class="col-2">
                                 <select class="form-select" name="" id="" title="Gender" th:field="*{gender}">
                                     <option value="">-- Tous les genres --</option>
                                     <option value="Male">Masculin</option>
                                     <option value="Female">Feminin</option>
                                 </select>
                             </div>
-                            <div class="col">
-                                <button type="submit" class="btn btn-primary">
+                            <div class="col-1">
+                                <button type="submit" class="btn btn-primary w-100">
                                     Filtrer
                                 </button>
                             </div>
@@ -62,7 +62,7 @@
                         queryParams[key] = value;
                     });
 
-                    const employees = await fetchEmployees('/api/employees', queryParams);
+                    const employees = await fetchEmployees(queryParams);
                     renderEmployeeTable(employees,"empTableBody");
                 });
 

@@ -8,40 +8,73 @@ import itu.eval3.newapp.client.utils.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.filters.FrappApiFilter;
 import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
-import lombok.Data;
 
-@Data
 public class SalaryFilter implements FrappeFilter {
     private String employee;
-    private int mois;
-    private int annee;
+    private String mois;
+    private int annee = 2025;
+
+    private int integerMois;
 
     public SalaryFilter(){}
-    public SalaryFilter(String employee, int mois, int annee){
+    public SalaryFilter(String employee, String mois, int annee){
         this.employee = employee;
         this.mois = mois;
+        integerMois = Integer.parseInt(mois);
     }
 
     public SalaryFilter(Employee employee){
         this.employee = employee.getName();
     }
-
+    public void convertMois(){
+        if (this.mois == null) {
+            return;
+        }
+        integerMois = Integer.parseInt(this.mois);
+    }
     @Override
     public FrappeApiFilterList getFilters() {
         FrappApiFilter[] filters = new FrappApiFilter[3];
         filters[0] = new EqualsFilter("employee", employee);
-        if (mois != 0 && annee != 0) {
-            LocalDate startDateLocalDate = LocalDate.of(annee, mois, 1);
+
+        convertMois();
+        if (integerMois != 0 && annee != 0) {
+            LocalDate startDateLocalDate = LocalDate.of(annee, integerMois, 1);
             LocalDate endDateLocalDate = startDateLocalDate.withDayOfMonth(startDateLocalDate.lengthOfMonth());
 
             Date start_date = Date.valueOf(startDateLocalDate);
             Date end_date = Date.valueOf(endDateLocalDate);
             
             filters[1] = new FrappApiFilter("start_date",">=",start_date.toString());
-            filters[1] = new FrappApiFilter("end_date","<=",end_date.toString());
+            filters[2] = new FrappApiFilter("end_date","<=",end_date.toString());
         }
 
         return new FrappeApiFilterList(filters);
+    }
+    public String getEmployee() {
+        return employee;
+    }
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+    public String getMois() {
+        return mois;
+    }
+    public void setMois(String mois) {
+        this.mois = mois;
+        convertMois();
+    }
+    public int getAnnee() {
+        return annee;
+    }
+    public void setAnnee(int annee) {
+        this.annee = annee;
+    }
+    public int getIntegerMois() {
+        return integerMois;
+    }
+    public void setIntegerMois(int integerMois) {
+        this.integerMois = integerMois;
     }
     
 }

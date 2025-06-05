@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 public class SalaryController {
     @GetMapping
     public String listSalaries(HttpSession session, Model model) {
-        model.addAttribute("salary_fitler",new SalaryFilter());
+        model.addAttribute("salary_filter",new SalaryFilter());
         return "hr/salary/list";
     }
 }
