@@ -2,7 +2,8 @@ package itu.eval3.newapp.client.models.hr.salary.filter;
 
 import java.sql.Date;
 import java.time.LocalDate;
-
+import java.util.HashMap;
+import java.util.Map;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.utils.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.filters.FrappApiFilter;
@@ -108,9 +109,25 @@ public class SalaryFilter implements FrappeFilter {
         Date start_date = Date.valueOf(startDateLocalDate);
         setStartDate(start_date);
         
-        LocalDate endDateLocalDate = startDateLocalDate.withDayOfMonth(startDateLocalDate.lengthOfMonth());
+        LocalDate endDateLocalDate = null;
+        if (integerMois == 0 && annee != 0) {
+            endDateLocalDate = LocalDate.of(annee, 12, 31);
+        }
+        else if (integerMois != 0 && annee != 0) {
+            endDateLocalDate = startDateLocalDate.withDayOfMonth(startDateLocalDate.lengthOfMonth());
+        }
         Date end_date = Date.valueOf(endDateLocalDate);
         setEndDate(end_date);
+    }
+
+    public Map<String,Object> getRequesBody(){
+        setDates();
+        Map<String,Object> body = new HashMap<>();
+        body.put("employee", getEmployee());
+        body.put("start_date", getStartDate().toString());
+        body.put("end_date", getEndDate().toString());
+
+        return body;
     }
     
 }

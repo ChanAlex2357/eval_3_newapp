@@ -93,16 +93,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="salariesBody">
-                                            <tr>
-                                                <td colspan="4">
-                                                    <div class="spinner-container">
-                                                        <div class="spinner-border text-primary" role="status">
-                                                            <span class="visually-hidden">Chargement...</span>
-                                                        </div>
-                                                        <div class="mt-2 text-muted">Chargement des fiches de paie...</div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -146,13 +137,12 @@
         </div>
 
         <script type="module">
-            import {downloadSalaryPdf, fetchSalaries, setSpinner} from '/js/metier.js'
+            import {downloadSalaryPdf, fetchSalaries, getSpinner, formatCurrency} from '/js/metier.js'
 
             async function fetchData() {
                 const emp_name = document.getElementById("emp_name").dataset.employeeId;
                 try {
                     const data = await fetchSalaries({"employee": emp_name});
-                    console.log(data);
                     renderSalariesTable(data.salaries);
                 } catch (error) {
                     console.error('Erreur lors du chargement des salaires:', error);
@@ -162,8 +152,7 @@
 
             function renderSalariesTable(data) {
                 const tbody = document.getElementById("salariesBody");
-                setSpinner(tbody);
-                
+                tbody.innerHTML = ''; // Réinitialiser le contenu du tbody
                 if (!data || data.length == 0) {
                     tbody.innerHTML = `
                         <tr>
@@ -224,18 +213,17 @@
                 return date.toLocaleDateString('fr-FR');
             }
 
-            function formatCurrency(amount) {
-                if (!amount) return '0 €';
-                return new Intl.NumberFormat('fr-FR', {
-                    style: 'currency',
-                    currency: 'EUR'
-                }).format(amount);
+            function setSpinner() {
+                const spinner = getSpinner();
+                const tbody = document.getElementById("salariesBody");
+                tbody.innerHTML = `<tr><td colspan="10">${spinner}</td></tr>`;
             }
-
             // Rendre downloadSalaryPdf disponible globalement
             window.downloadSalaryPdf = downloadSalaryPdf;
+            window.formatCurrency = formatCurrency;
 
             document.addEventListener("DOMContentLoaded", (e) => {
+                setSpinner();
                 fetchData();
             });
         </script>

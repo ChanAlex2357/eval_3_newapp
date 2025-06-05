@@ -12,9 +12,16 @@ export async function fetchEmployees(queryParams = {}) {
 
 }
 
-export function setSprinner(spinnerContainer,label = "Chargement...") {
-    const spinner = document.getElementById(spinnerContainer);
-    if (!spinner) return;
+export function getRowSpinner(colspan = 10, label = "Chargement...") {
+    return `
+        <tr>
+            <td colspan="${colspan}" class="text-center">
+                ${getSpinner(label)}
+            </td>
+        </tr>`;
+}
+
+export function getSpinner(label = "Chargement...") {
     const htmlSpin = `
         <div class="spinner-container">
             <div class="spinner-border text-primary" role="status">
@@ -22,7 +29,15 @@ export function setSprinner(spinnerContainer,label = "Chargement...") {
             </div>
             <div class="mt-2 text-muted">${label}</div>
         </div>`;
-    spinner.innerHTML = htmlSpin;
+    return htmlSpin;
+}
+
+export function formatCurrency(amount) {
+    if (!amount) return 'Ar 0';
+    return new Intl.NumberFormat('mg-MG', {
+        style: 'currency',
+        currency: 'MGA'
+    }).format(amount);
 }
 
 export async function fetchSalaries( queryParams = {}){

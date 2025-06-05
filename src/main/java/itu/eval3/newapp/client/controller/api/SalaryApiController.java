@@ -38,17 +38,7 @@ public class SalaryApiController {
             if (user == null) {
                 throw new AuthenticationException(); 
             }
-
-            List<SalarySlip> salaries_name = salarySlipService.getAll(user, new String[]{"name"}, salaryFilter);
-            List<SalarySlip> salaries = new ArrayList<>(salaries_name.size());
-
-            for (SalarySlip salary : salaries_name) {
-                salary = salarySlipService.getById(user, salary);
-                salaries.add(salary);
-            }
-
-            salariesReport.setSalaries(salaries.toArray(new SalarySlip[0]));
-
+            salariesReport = salarySlipService.getAllDetails(user, salaryFilter);
             return ResponseEntity.ok(
                 responseBuilder.success("Salaries fetched successfully", salariesReport)
             );

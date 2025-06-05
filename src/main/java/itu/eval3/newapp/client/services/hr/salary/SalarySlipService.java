@@ -14,7 +14,10 @@ import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
+import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
+import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
+import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
@@ -22,6 +25,7 @@ import itu.eval3.newapp.client.services.exporter.PdfExporterService;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
+import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 
 @Service
 public class SalarySlipService extends FrappeCrudService<SalarySlip> {
@@ -51,15 +55,18 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         return getAllByEmployee(user, emp,ApiConfig.ALL_FIELDS);
     }
 
-    public List<SalarySlip> getAll(UserErpNext user, FrappeFilter filter) throws ERPNexException {
-        return getAll(user,ApiConfig.ALL_FIELDS, filter);
+    public List<SalarySlip> getAll(UserErpNext user,String[] fields,FrappeFilter filter) throws ERPNexException {
+        return getAllDocuments(user,new SalarySlip(),ApiConfig.ALL_FIELDS, filter, SalarySlip.class);
     }
 
-    public List<SalarySlip> getAll(UserErpNext user, String[] fields, SalaryFilter filter) throws ERPNexException {
+    public SalariesRegisterReport getAllDetails(UserErpNext user, SalaryFilter filter) throws ERPNexException {
+        FrappeResponseParser<SalariesRegisterReport> parser = new FrappeResponseParser<>();
 
-            frappeWebService.callMethod(user, "eval_app.api.get_salary_slip_with_details",HeadersUtils.buildJsonHeader(user),HttpMethod.GET, filter);
+        ResponseEntity<String> response =frappeWebService.callMethod(user, "eval_app.api.get_salary_slip_with_details",HeadersUtils.buildJsonHeader(user),HttpMethod.GET, filter.getRequesBody());
 
-        return getAllDocuments(user, new SalarySlip(),fields, filter, SalarySlip.class);
+        MethodApiResponse<SalariesRegisterReport> jsonResponse = parser.parseMethodApiResponse(response, SalariesRegisterReport.class);
+        SalariesRegisterReport salariesRegisterReport = jsonResponse.getApiResponse().getData();
+        return salariesRegisterReport;
     }
 
     public SalarySlip getById(UserErpNext user, String id) throws ERPNexException {

@@ -67,13 +67,16 @@
             </div>
         </div>
         <script type="module">
-            import { downloadSalaryPdf, fetchSalaries } from '/js/metier.js';
+            import { downloadSalaryPdf, fetchSalaries, getRowSpinner } from '/js/metier.js';
 
             document.addEventListener("DOMContentLoaded", () => {
                 const filterForm = document.getElementById("salaryFilter");
                 
                 async function fetchData() {
-                    
+                    const spinner = getSpinner();
+                    const body = document.getElementById("salariesBody");
+                    body.innerHTML = getRowSpinner();
+
                     const formData = new FormData(filterForm);
                     const queryParams = {};
                     formData.forEach((value, key) => {
@@ -81,6 +84,7 @@
                     });
 
                     const data = await fetchSalaries(queryParams);
+                    
 
                     renderSalariesTable(data.salaries || []);
                 }
