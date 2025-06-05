@@ -24,19 +24,31 @@
                     </table>
             </div>
         </div>
-    <script>
+    <script type="module">
+        import {downloadSalaryPdf} from '/js/metier.js';
+
         document.addEventListener("DOMContentLoaded", function() {
             console.log("Document loaded, fetching salaries...");
             
+            
             fetch('/api/salaries')
-                .then(response => response.json())
-                .then(body => {
-                    console.log("Fetched salaries:", body);
-                    const data = body.data;
-                    const salaries = data.salaries || [];
-                    const salariesBody = document.getElementById('salariesBody');
-                    
-                    salaries.forEach((salary, index) => {
+            .then(response => response.json())
+            .then(body => {
+                console.log("Fetched salaries:", body);
+                const data = body.data;
+                const salaries = data.salaries || [];
+                const salariesBody = document.getElementById('salariesBody');
+                
+                salaries.forEach((salary, index) => {
+                    const pdfButton = document.createElement('button');
+                    pdfButton.className = "btn btn-sm btn-primary";
+                    pdfButton.innerHTML = `
+                        <span class="label">PDF</span>
+                        <div class="spinner spinner-border" style="display:none;" role="status">
+                        </div>
+                    `;
+                    pdfButton.addEventListener("click", () => downloadSalaryPdf(pdfButton, salary.name));
+
                     const row = document.createElement('tr');
                     const collapseId = `salary-details-${index}`;
 
@@ -53,12 +65,9 @@
                             <button class="btn btn-sm btn-outline-info" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
                                 🔽 Détails
                             </button>
-                            <button class="btn btn-sm btn-primary" onclick="downloadPdf(this, '${salary.name}')">
-                                <span class="label">PDF</span>
-                                <span class="spinner" style="display:none;">⏳</span>
-                            </button>
                         </td>
                     `;
+                    row.querySelector('td:last-child').appendChild(pdfButton);
 
                     const detailRow = document.createElement('tr');
                     detailRow.innerHTML = `
@@ -107,46 +116,6 @@
                 })
                 .catch(error => console.error('Error fetching salaries:', error));
             });
-
-            function downloadPdf(button, id) {
-                const label = button.querySelector('.label');
-                const spinner = button.querySelector('.spinner');
-
-                const safeId = id.replaceAll("/", "__");
-                const url = `/api/pdf/salary-slip/${safeId}`;
-
-                // Afficher le spinner
-                label.style.display = "none";
-                spinner.style.display = "inline";
-
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) throw new Error("Erreur lors de la récupération du PDF");
-                        return response.blob();
-                    })
-                    .then(blob => {
-                        const fileName = `bulletin-${id.replaceAll("/", "_")}.pdf`;
-                        const blobUrl = URL.createObjectURL(blob);
-
-                        const a = document.createElement("a");
-                        a.href = blobUrl;
-                        a.download = fileName;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(blobUrl);
-                    })
-                    .catch(err => {
-                        console.error("Erreur PDF :", err);
-                        alert("Impossible de générer le PDF.");
-                    })
-                    .finally(() => {
-                        // Restaurer le bouton
-                        label.style.display = "inline";
-                        spinner.style.display = "none";
-                    });
-            }
-
     </script>
     </th:block>
 

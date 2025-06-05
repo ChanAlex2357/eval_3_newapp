@@ -50,3 +50,43 @@ export function renderEmployeeTable(data, tableId = 'empTable') {
         table.appendChild(row);
     });
 }
+
+export function downloadSalaryPdf(button, id) {
+    const label = button.querySelector('.label');
+    const spinner = button.querySelector('.spinner');
+
+    const safeId = id.replaceAll("/", "__");
+    const url = `/api/pdf/salary-slip/${safeId}`;
+
+    // Afficher le spinner
+    label.style.display = "none";
+    spinner.style.display = "inline";
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) throw new Error("Erreur lors de la récupération du PDF");
+            return response.blob();
+        })
+        .then(blob => {
+            const fileName = `bulletin-${id.replaceAll("/", "_")}.pdf`;
+            const blobUrl = URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = blobUrl;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+        })
+        .catch(err => {
+            console.error("Erreur PDF :", err);
+            alert("Impossible de générer le PDF.");
+        })
+        .finally(() => {
+            // Restaurer le bouton
+            label.style.display = "inline";
+            spinner.style.display = "none";
+        });
+}
+
