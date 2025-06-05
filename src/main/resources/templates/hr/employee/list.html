@@ -2,25 +2,31 @@
     <th:block th:fragment="content">
         <div class="bg-light">
             <div class="container">
-                <div class="row">
+                <div class="row mb-3">
                     <form action="" th:object="${emp_filter}">
-                        <div class="form-group">
-                            <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <select name="" id="" title="Gender" th:field="*{gender}">
-                                <option value="">-- Choisir un genre</option>
-                                <option value="Male">Masculin</option>
-                                <option value="Female">Feminin</option>
-                            </select>
+                        <div class="row g-1">
+                            <div class="col">
+                                <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control">
+                            </div>
+                            <div class="col">
+                                <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control">
+                            </div>
+                            <div class="col">
+                                <select class="form-select" name="" id="" title="Gender" th:field="*{gender}">
+                                    <option value="">-- Choisir un genre</option>
+                                    <option value="Male">Masculin</option>
+                                    <option value="Female">Feminin</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary">
+                                    Filtrer
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
-                <table class="table">
-    
+                <table class="table" id="empTable">
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Employee</th>
@@ -34,35 +40,13 @@
             </div>
         </div>
     
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Fetch the employee data from the server
-                fetch('/api/employees')
-                    .then(response => response.json())
-                    .then(body => {
-                        const table = document.querySelector('table');
-                        const data = body.data || []; // Ensure data is an array
-                        data.forEach(employee => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>
-                                    <a href='/hr/employees/${employee.name}'> ${employee.name} </a>
-                                </td>
-                                <td>${employee.first_name}</td>
-                                <td>${employee.gender}</td>
-                                <td>${new Date(employee.date_of_joining).toLocaleDateString()}</td>
-                                <td>${employee.designation}</td>
-                                <td>
-                                    <a href="/hr/employees/${employee.id}/edit" class="btn btn-primary">Edit</a>
-                                    <a href="/hr/employees/${employee.id}/delete" class="btn btn-danger">Delete</a>
-                                </td>
-                            `;
-                            table.appendChild(row);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching employee data:', error));
+        <script type="module">
+            import { fetchEmployees, renderEmployeeTable } from '/js/metier.js';
+
+            document.addEventListener("DOMContentLoaded", async function () {
+                const employees = await fetchEmployees();
+                renderEmployeeTable(employees);
             });
-        
         </script>
     </th:block>
 </div>

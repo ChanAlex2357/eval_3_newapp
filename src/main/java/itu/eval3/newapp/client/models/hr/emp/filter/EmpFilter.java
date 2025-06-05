@@ -7,12 +7,14 @@ import itu.eval3.newapp.client.utils.filters.FrappApiFilter;
 import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import itu.eval3.newapp.client.utils.filters.LikeFilter;
+import lombok.Data;
 
+@Data
 public class EmpFilter implements FrappeFilter {
-    String firstname;
-    String lastname;
-    String gender;
-    Date joinDate;
+    public String firstname = "Rakoto";
+    public String lastname;
+    public String gender;
+    public Date joinDate;
 
     public EmpFilter(){}
 

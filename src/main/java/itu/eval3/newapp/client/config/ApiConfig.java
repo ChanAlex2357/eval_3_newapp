@@ -26,12 +26,15 @@ public class ApiConfig {
 
     private String makeRessourceFiters(FrappApiFilter[] filters) {
         if (filters == null || filters.length == 0) {
-            return null;
+            return "";
         }
         String filtersStr = "[";
         String suffix = ",";
  
          for (int i = 0; i < filters.length; i++) {
+            if (filters[i] == null) {
+                continue;
+            }
             if (i == filters.length - 1) {
                 suffix = "";
             }
@@ -44,7 +47,7 @@ public class ApiConfig {
  
     private String makeResourceFields(String[] fields){
         if (fields == null || fields.length == 0) {
-            return null;
+            return "";
         }
         String fieldsStr = "[";
 
