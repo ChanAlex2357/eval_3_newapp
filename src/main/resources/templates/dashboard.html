@@ -22,9 +22,43 @@
                     </form>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="container">
+                    <div class="card card-body border-0">
+                        <table class="table modern-table" id="salaryStatsTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Mois</th>
+                                    <th scope="col">Total Salaire</th>
+                                    <th scope="col">Total Gains</th>
+                                    <th scope="col">Total Deductions</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salaryStatsBody">
+                                <tr>
+                                    <td colspan="4">
+                                        <div class="spinner-container">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Chargement...</span>
+                                            </div>
+                                            <div class="mt-2 text-muted">Chargement...</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </section>
         <section class="row">
             <h3>Graph</h3>
         </section>
+        <script type="module">
+            import { formatCurrency } from '/js/metier.js';
+
+        </script>
     </th:block>
 </div>

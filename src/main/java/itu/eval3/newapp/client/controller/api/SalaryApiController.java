@@ -1,20 +1,17 @@
 package itu.eval3.newapp.client.controller.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import itu.eval3.newapp.client.builder.ApiResponseBuilder;
 import itu.eval3.newapp.client.exceptions.AuthenticationException;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
+import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
+import itu.eval3.newapp.client.models.hr.salary.DashboardData;
 import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
-import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
@@ -53,5 +50,14 @@ public class SalaryApiController {
         }
     }
 
+    public ResponseEntity<?> getAnnualSalaries(HttpSession session,String year){
+        int intYear = Integer.parseInt(year);
+        try {
+            ApiResponse<DashboardData> dashboardData = salarySlipService.getDashboardData((UserErpNext) session.getAttribute("user"), intYear);
+            return ResponseEntity.ok(dashboardData);
+        } catch (ERPNexException e) {
+            return ResponseEntity.badRequest().body(e.getAsApiResponse());
+        }
+    }
 
 }
