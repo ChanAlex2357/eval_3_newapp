@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import itu.eval3.newapp.client.builder.ApiResponseBuilder;
 import itu.eval3.newapp.client.exceptions.AuthenticationException;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
-import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
-import itu.eval3.newapp.client.models.hr.salary.DashboardData;
 import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;

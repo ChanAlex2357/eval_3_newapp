@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class MonthData {
     public String period  ;
+    public String month_num;
     public Date start_date;
     public Date end_date;
     public float total_earnings;
