@@ -8,5 +8,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class DashboardData implements ResponseModel {
     public int year;
+    public String[] component_idx;
+    public String[] month_idx;
     public MonthData[] months;
 }

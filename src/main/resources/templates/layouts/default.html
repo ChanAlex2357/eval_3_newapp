@@ -16,6 +16,7 @@
 
 <body class="bg-light">
     <!-- TOP HEADER -->
+    
     <header class="bg-primary text-white py-2 shadow-sm fixed-top">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <div>
@@ -91,6 +92,9 @@
                         console.log(body)
                         if(body.success = false){
                             alert(body.data)
+                        }
+                        else {
+                            window.location.reload();
                         }
                     })
                     .catch(error => {

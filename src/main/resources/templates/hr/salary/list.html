@@ -76,10 +76,10 @@
                             <thead>
                                 <th scope="col">Sr.No</th>
                                 <th scope="col">Fullname</th>
-                                <th scope="col">Period</th>
-                                <th scope="col">Total Gain</th>
-                                <th scope="col">Total Deductions</th>
-                                <th scope="col">Total Salaire</th>
+                                <th scope="col">Mois</th>
+                                <th scope="col">Salaire Brut</th>
+                                <th scope="col">Deductions</th>
+                                <th scope="col">Salaire Net</th>
                                 <th scope="col">Actions</th>
                             </thead>
                             <tbody id="salariesBody">
@@ -109,7 +109,8 @@
                     });
 
                     const data = await fetchSalaries(queryParams);
-            
+                    console.log(data);
+                    
                     renderSalariesTable(data || []);
                 }
                 window.setEmpFilter = function (emp_name) {
@@ -179,10 +180,10 @@
                         row.innerHTML = `
                             <td ><strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
                             <td>${salary.employee_name}</td>
-                            <td>${formatDate(salary.start_date)} </td>
+                            <td>${salary.period} </td>
                             <td><span class="badge border-bottom col-12 bg-light text-dark">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
                             <td><span class="badge border-bottom col-12 bg-light text-dark">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
-                            <td><span class="badge border-bottom col-12 bg-success">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
+                            <td><span class="badge border-bottom col-12 bg-light text-dark">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
                             `;
                         const btn_cont = `
                             <td class="p-0">
@@ -199,7 +200,7 @@
                         detailRow.innerHTML = `
                             <td colspan="8" class="p-0 border-0">
                                 <div id="${collapseId}" class="collapse">
-                                    <div class="card card-body border-0 bg-light">
+                                    <div class="card card-body rounded-0 border-0 bg-light">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <h6>Gains (Earnings)</h6>

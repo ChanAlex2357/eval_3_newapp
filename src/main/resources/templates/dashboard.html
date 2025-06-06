@@ -86,15 +86,15 @@
                                 </td>`;
                         const month_row = document.createElement("tr");
                         if(month.total_salary == 0){
-                            return ""
+                            // return ""
                         }
                         month_row.innerHTML = `
                             <td class="text-center">${month.period}</td>
                             <td class="text-center"> 
                                 <a href="/hr/salaries?annee=${year}&mois=${month_num}" class="">
-                                    <span class="col-8 badge border-bottom bg-success text-white">
+                                    <button class="col-4 btn btn-sm btn-success badge">
                                         ${formatCurrency(month.total_salary)}
-                                    </span>
+                                    </button>
                                 </a>
                             </td>
                             ${detail_btn}
@@ -103,8 +103,9 @@
                     }
                     function getDetailedRow(month, collapseId){
                         const detail_row = document.createElement("tr");
-                        const earning_table = getComponentsTable(month.components.earnings,"Eaninng")
-                        const deduction_table = getComponentsTable(month.components.deductions, "Deduction")
+                        const component_table = getComponentsTable(month.components)
+                        const t_e = month.total_earnings;
+                        const t_d = month.total_deductions;
 
                         detail_row.innerHTML = `
                             <td class="p-0 border-0" colspan="10">
@@ -112,8 +113,19 @@
                                     <div class="card rounded-0 card-body border-0 bg-light">
                                         <div class="row">
                                             <div class="col-12">
-                                                ${earning_table.outerHTML}
-                                                ${deduction_table.outerHTML}
+                                                <table class="table moder-table table-sm">
+                                                    <tbody class="">
+                                                        <tr class="">
+                                                            <td class="text-center text-dark ">
+                                                                Total Gains <span class="mx-3 badge bg-dark text-white border">${formatCurrency(t_e)}</span>
+                                                            </td>
+                                                            <td class="text-center text-dark ">
+                                                                Total Deductions<span class="badge mx-3 bg-dark text-white border">${formatCurrency(t_d)}</span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                ${component_table.outerHTML}
                                             </div>
                                         </div>
                                     </div>
@@ -122,7 +134,7 @@
                         `
                         return detail_row;
                     }
-                    function getComponentsTable(data, type) {
+                    function getComponentsTable(data) {
                         const table = document.createElement('table');
                         table.className = "table table-bordered table-sm modern-table"; // ✅ Correct
 

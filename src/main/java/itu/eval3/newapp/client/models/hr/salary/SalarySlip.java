@@ -17,6 +17,7 @@ public class SalarySlip extends FrappeDocument{
     private String employee;
     private String company;
     private String designation;
+    private String period;
 
     @JsonProperty("employee_name")
     private String employeeName;
@@ -166,4 +167,18 @@ public class SalarySlip extends FrappeDocument{
     public String getUriName(){
         return this.getName().replaceAll("/", "__");
     }
+
+    public String getPeriod(){
+        String result = "mm / yyyy";
+        if (startDate != null) {
+            result = getStartDate().toLocalDate().getMonth().name();
+            result += " "+getStartDate().toLocalDate().getYear();
+        }
+        else if (endDate != null) {
+            result = getEndDate().toLocalDate().getMonth().name();
+            result += " "+getEndDate().toLocalDate().getYear();
+        }
+        return result;
+    }
+
 }

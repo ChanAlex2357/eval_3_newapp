@@ -1,6 +1,7 @@
 package itu.eval3.newapp.client.models.hr.salary;
 
 import java.sql.Date;
+import java.util.Map;
 
 import lombok.Data;
 
@@ -13,6 +14,6 @@ public class MonthData {
     public float total_earnings;
     public float total_deductions;
     public float total_salary;
-    public ComponentsData components;
+    public Map<String,Float> components;
     public SalarySlip[] salaries;
 }
