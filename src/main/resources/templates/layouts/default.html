@@ -22,9 +22,7 @@
                 <h4 class="m-0">NewApp</h4>
             </div>
             <div class="d-flex gap-1 align-items-center justify-content-center">
-                <div>
-                    <button id="reset-btn" title="reset-button" class="btn btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
-                </div>
+                
                 <div>
                     <a th:href="@{/user/profile}" class="text-white text-decoration-none"><i class="bi bi-person-badge-fill"></i>Profile</a>
                 </div>
@@ -35,13 +33,20 @@
     <div class="container-fluid">
         <div class="row">
             <!-- MENU LATÉRAL -->
-            <aside class="col-md-2 bg-white text-info vh-100 position-fixed py-5 px-0 border border-">
-                <nav class="nav flex-column">
-                    <a class="nav-link text-dark " th:href="@{/home}"><i class="bi px-2 text-secondary bi-graph-up"></i>Statistique</a>
-                    <a class="nav-link text-dark " th:href="@{/hr/employees}"><i class="bi px-2 text-secondary bi-person-fill"></i> Employés</a>
-                    <a class="nav-link text-dark " th:href="@{/hr/salaries}"><i class="bi px-2 text-secondary bi-coin"></i> Salaires</a>
-                    <a class="nav-link text-dark " th:href="@{/import/v3}"><i class="bi px-2 text-secondary bi-folder"></i> Import</a>
-                </nav>
+            <aside class="col-md-2 bg-white text-info vh-100 position-fixed py-5 px-0 border">
+                
+                    <nav class="nav flex-column h-100">
+                        <a class="nav-link text-dark " th:href="@{/home}"><i class="bi px-2 text-secondary bi-graph-up"></i>Statistique</a>
+                        <a class="nav-link text-dark " th:href="@{/hr/employees}"><i class="bi px-2 text-secondary bi-person-fill"></i> Employés</a>
+                        <a class="nav-link text-dark " th:href="@{/hr/salaries}"><i class="bi px-2 text-secondary bi-coin"></i> Salaires</a>
+                        <a class="nav-link text-dark " th:href="@{/import/v3}"><i class="bi px-2 text-secondary bi-folder"></i> Import</a>
+                    </nav>
+                    <div class="border mt-3">
+                        <div>
+                            <button type="button" id="reset-btn" title="reset-button" class="btn btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </div>
+            
             </aside>
 
             <!-- CONTENU PRINCIPAL -->

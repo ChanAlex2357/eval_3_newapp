@@ -1,18 +1,30 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<body>
-    <div 
-        th:replace="~{layouts/default :: layout (title='Home Page', content=~{::content})}">
-        <th:block th:fragment="content">
-            <h2>Dashboard</h2>
-            <hr>
-            <section class="row">
-                <h3>Tableau Statistique</h3>
-            </section>
-            <section class="row">
-                <h3>Graph</h3>
-            </section>
-        </th:block>
-    </div>
-</body>
-</html>
+<div th:replace="~{layouts/default :: layout (title='Home Page', content=~{::content})}">
+    <th:block th:fragment="content">
+        <h2>Dashboard</h2>
+        <hr>
+        <section class="row">
+            <h3>Tableau Statistique</h3>
+            <div class="row mb-2">
+                <div class="container">
+                    <form action="" id="filterForm">
+                        <div class="row">
+                            <div class="form-group col">
+                                <div class="col-2">
+                                    <input type="number" title="annee" placeholder="Annee" value="2025" min="2000" name="" id="" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <button type="submit" class="btn btn-sm btn-primary w-100">
+                                    <span>Filtrer</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <section class="row">
+            <h3>Graph</h3>
+        </section>
+    </th:block>
+</div>
