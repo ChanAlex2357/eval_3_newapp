@@ -136,7 +136,6 @@ public class FrappeWebService {
      *
      * */
     public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpHeaders headers,HttpMethod method, String[] fields, FrappeFilter filter) throws ERPNexException {
-
         String url = apiConfig.getResourceUrl(document.getDoctype(), id, fields, filter != null ? filter.getFilters().getFilters() : null);
         log.info("Targeting api {} document at URL: {}", document.getDoctype(), url);
         ResponseEntity <String> response = null;

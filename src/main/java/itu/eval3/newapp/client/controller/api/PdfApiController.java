@@ -3,7 +3,6 @@ package itu.eval3.newapp.client.controller.api;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.user.UserErpNext;
-import itu.eval3.newapp.client.services.exporter.PdfExporterService;
 import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
 import jakarta.servlet.http.HttpSession;
 

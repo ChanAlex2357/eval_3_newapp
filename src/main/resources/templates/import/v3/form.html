@@ -1,40 +1,182 @@
 <div th:replace="~{layouts/default :: layout ( title='Import Csv', content=~{::content} )}">
     <th:block th:fragment="content">
         <div class="container">
-            <h1>Import CSV</h1>
-            <form th:action="@{/import/v3}" method="post" th:object="${importer}" id="import-form" enctype="multipart/form-data">
-                <div class="form-group mb-3">
-                    <label for="emp-file" class="form-label">Fichier 1 - Employee</label>
-                    <input type="file" class="form-control" id="emp-file" th:field="*{employeeFile}" accept=".csv" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="structure-file" class="form-label">Fichier 2 - Structure de salaire</label>
-                    <input type="file" th:field="*{salaryStructureFile}" id="structure-file" class="form-control">
-                </div>
-                <div class="form-group mb-3">
-                    <label for="salary-file" class="form-label">Fichier 3 - Salaire</label>
-                    <input type="file" th:field="*{salarySlipFile}" id="salary-file" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-primary">Import</button>
-            </form>
+            <h2>Import CSV</h2>
+            <hr>
+            <div class="card card-body modern-card mb-3">
+                <form th:action="@{/import/v3}" method="post" th:object="${importer}" id="import-form" enctype="multipart/form-data">
+                    <div class="form-group mb-3 row">
+                        <label for="emp-file" class="form-label col-sm-3 col-form-label">Fichier 1 - Employee</label>
+                        <div class="col-3">
+                            <input type="file" class="form-control form-control-sm" id="emp-file" th:field="*{employeeFile}" accept=".csv" required>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 row">
+                        <label for="structure-file" class="form-label col-sm-3 col-form-label">Fichier 2 - Structure de salaire</label>
+                        <div class="col-3">
+                            <input type="file" th:field="*{salaryStructureFile}" id="structure-file" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="form-group mb-3 row">
+                        <label for="salary-file" class="form-label col-sm-3 col-form-label">Fichier 3 - Salaire</label>
+                        <div class="col-3">
+                            <input type="file" th:field="*{salarySlipFile}" id="salary-file" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <button type="submit" id="importBtn" class="btn btn-primary btn-sm w-100">
+                                <span>Lancer import</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="table-responsive border">
+                <table class="table modern-table m-0">
+                    <thead>
+                        <tr>
+                            <th>Fichier</th>
+                            <th>Satus</th>
+                            <th>Success</th>
+                            <th>Erreurs</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsBody">
+                        <tr>
+                            <td colspan="5" class="p-0">
+                                <div class="m-5 text-center">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <script>
+
+        <script type="module">
+            import { downloadSalaryPdf, fetchSalaries, getRowSpinner, getSpinner, formatCurrency, formatDate} from '/js/metier.js';
             document.addEventListener("DOMContentLoaded",function(){
-                const import_form = document.getElementById("import-form")
+                const import_form = document.getElementById("import-form");
+                const logsBody = document.getElementById("logsBody");
+                const importBtn = document.getElementById("importBtn");
+                
+                function renderLog(log_data,order){
+                    const row = document.createElement("tr");
+                    const detail_row = document.createElement("tr");
+                    const collapseId = `detailLog${order}`;
+
+                    let status = "Neutre";
+                    if(log_data.status == 1){
+                        status = `<span class="badge bg-success">Success</span>`
+                    }
+                    else if (log_data.status == -1){
+                        status = `<span class="badge bg-danger">Erreur</span>`
+                    }
+                    else {
+                        status = `<span class="badge bg-dark">Neutre</span>`
+                    }
+
+                    row.innerHTML = `
+                        <td>Fichier ${order}</td>
+                        <td>${status}</td>
+                        <td>${log_data.success_count}</td>
+                        <td>${log_data.error_count}</td>
+                        <td>
+                            <button class="btn tbn-sm" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+                                <span><i class="bi bi-eye"></i></span>
+                            </button>
+                        </td>
+                    `;
+                    
+                    const logsTable = document.createElement("table");
+                    logsTable.classList = ["table","modern"]
+                    function getErrorId(num){
+                        return `error-${order}-${num}`;
+                    }
+                    detail_row.innerHTML =`
+                        <td colspan="8" class="p-0 border-0">
+                            <div id="${collapseId}" class="collapse">
+                                <div class="card card-body border-0 bg-light">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="table table-sm table-bordered">
+                                                <thead><tr><th>No.Row</th><th>Messages</th></tr></thead>
+                                                <tbody>
+                                                    ${log_data.import_logs.map(log => `
+                                                        <tr>
+                                                            <td>${log.row_num}</td>
+                                                            <td>
+                                                                <ul>
+                                                                    ${log.message.map(msg => `<li>${msg}</li>`).join("")}
+                                                                </ul>
+                                                                ${log.status == "Success"?``:`
+                                                                <button 
+                                                                    class="btn btn-sm btn-outline-danger"
+                                                                    data-bs-toggle="collapse" data-bs-target="#${getErrorId(log.row_num)}" >
+                                                                    Afficher Stacktrace
+                                                                </button>
+                                                                <p id="${getErrorId(log.row_num)}" class="collapse text-danger">${log.exception}</p>
+                                                                `}
+                                                            </td>
+                                                        </tr>`).join("")}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+        
+                    `;
+
+                    logsBody.appendChild(row);
+                    logsBody.appendChild(detail_row);
+                }
+
                 import_form.addEventListener("submit",function(e){
+                    importBtn.innerHTML = `
+                        <div class="d-flex gap-2 justify-content-center">
+                            <div class="spinner-border spinner-border-sm text-white" role="status">
+                            </div>
+                            <div class="text-white">Importing</div>
+                        </div>
+                    `;
                     e.preventDefault()
+                    logsBody.innerHTML = getRowSpinner(10, "","grow");
                     fetch("/api/import/v3",{
                         method:'POST',
                         body: new FormData(this)
                     })
                     .then((response)=>{
+                        logsBody.innerHTML = "";
                         return response.json()
                     })
                     .then((body) => {
-                        console.log(body)
+                        console.log(body);
+                        const data = body.data;
+                        renderLog(data.file_1, 1);
+                        renderLog(data.file_2, 2);
+                        renderLog(data.file_3, 3);
                     })
                     .catch((error)=>{
                         console.error("Error during import:", error)
+                        logsBody.innerHTML = `
+                            <tr>
+                                <td colspan="5" class="p-0">
+                                    <div class="m-5 text-center">
+                                        <h3>
+                                            Un probleme innatendu est survenu lors de l'import :
+                                        </h3>
+                                        <p>${error}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    })
+                    .finally(()=>{
+                        importBtn.innerHTML = "<span>Lancer import</span>"
                     })
                 })
             })
