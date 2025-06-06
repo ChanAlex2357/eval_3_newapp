@@ -61,7 +61,7 @@
 
             <div class="col-12">
                 <section class="row">
-                    
+                    <canvas id="salaryEvolutionChart" width="100" height="50"></canvas>
                 </section>
             </div>
         </div>
@@ -86,7 +86,7 @@
                                 </td>`;
                         const month_row = document.createElement("tr");
                         if(month.total_salary == 0){
-                            // return ""
+                            return ""
                         }
                         month_row.innerHTML = `
                             <td class="text-center">${month.period}</td>
@@ -145,8 +145,6 @@
                                 `).join("")}
                             </tbody>
                         `;
-
-                        console.log(table.outerHTML); // ✅ Pour déboguer l'affichage
                         return table;
                     }
                     function getComponentRow(component, amount) {
@@ -171,12 +169,12 @@
                     salaryStatsBody.innerHTML = getRowSpinner();
                     const formData = new FormData(filterForm);
                     const queryParams = {};
-                    console.log(formData);
                     formData.forEach((value, key) => {
                         queryParams[key] = value;
                     });
                     const data = await fetchDashboardData(queryParams);
-                    console.log(data);
+
+                    showEvolution(data)
                     renderDashboard(data);
                 }
 
@@ -186,6 +184,93 @@
                 })
                 
                 fetchDashboard();
+
+
+                function showEvolution(data){
+                    const ctx = document.getElementById("salaryEvolutionChart");
+
+                    const { labels, datasets} = extractMonthsComponentData(data);
+
+                    const salaryChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: datasets
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                display: true,
+                                text: 'Évolution des salaires en 2025'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: value => 'Ar ' + value.toLocaleString()
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                function extractMonthsComponentData(dashboarddata) {
+                    const months = dashboarddata.months
+
+                    const labels = months.map(m => m.period);
+                    const totalSalary = months.map(m => m.total_salary);
+                    const componentData = {};
+
+                    months.forEach(month => {
+                        const components = month.components || {};
+
+                        Object.keys(components).forEach(name => {
+                            if (!componentData[name]) {
+                                // Initialiser avec 0 pour tous les mois précédents
+                                componentData[name] = new Array(labels.length).fill(0);
+                            }
+                        });
+                    });
+
+                    months.forEach((month, index) => {
+                        const components = month.components || {};
+
+                        Object.keys(componentData).forEach(name => {
+                            const value = components[name] || 0;
+                            componentData[name][index] = value;
+                        });
+                    });
+
+                    const datasets = Object.entries(componentData).map(([name, data]) => ({
+                        label: name,
+                        data: data,
+                        borderColor: randomColor(),
+                        backgroundColor: randomColor(0.2),
+                        tension: 0.3,
+                        fill: false
+                    }));
+                    datasets.push({
+                        label: 'Total Salaire',
+                        data: totalSalary,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 5
+                    })
+
+                    return { labels, datasets};
+                }
+                function randomColor(opacity = 1) {
+                    const r = Math.floor(Math.random() * 200);
+                    const g = Math.floor(Math.random() * 200);
+                    const b = Math.floor(Math.random() * 200);
+                    return `rgba(${r},${g},${b},${opacity})`;
+                }
+
             })
         </script>
     </th:block>
