@@ -19,19 +19,19 @@
     <header class="bg-primary text-white py-2 shadow-sm fixed-top">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <h4 class="m-0">NewApp</h4>
-            <a th:href="@{/user/profile}" class="text-white text-decoration-none">👤 Mon Profil</a>
+            <a th:href="@{/user/profile}" class="text-white text-decoration-none"><i class="bi bi-person-badge-fill"></i>Profile</a>
         </div>
     </header>
 
     <div class="container-fluid">
         <div class="row">
             <!-- MENU LATÉRAL -->
-            <aside class="col-md-2 bg-white text-dark vh-100 position-fixed py-5 px-0 border border-">
+            <aside class="col-md-2 bg-white text-info vh-100 position-fixed py-5 px-0 border border-">
                 <nav class="nav flex-column">
-                    <a class="nav-link " th:href="@{/home}">🏠 Accueil</a>
-                    <a class="nav-link " th:href="@{/hr/employees}">👥 Employés</a>
-                    <a class="nav-link " th:href="@{/hr/salaries}">💰 Salaires</a>
-                    <a class="nav-link " th:href="@{/import/v3}">📁 Import</a>
+                    <a class="nav-link text-dark " th:href="@{/home}"><i class="bi bi-house-fill"></i> Accueil</a>
+                    <a class="nav-link text-dark " th:href="@{/hr/employees}"><i class="bi bi-person-fill"></i> Employés</a>
+                    <a class="nav-link text-dark " th:href="@{/hr/salaries}"><i class="bi bi-coin"></i> Salaires</a>
+                    <a class="nav-link text-dark " th:href="@{/import/v3}"><i class="bi bi-folder"></i> Import</a>
                 </nav>
             </aside>
 
