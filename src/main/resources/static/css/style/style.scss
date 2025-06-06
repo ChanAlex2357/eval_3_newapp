@@ -335,4 +335,31 @@ body {
     font-size: 0.9rem;
   }
 }
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba($light, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  &.active {
+    z-index: 10000;
+    display: block;
+  }
+  
+  &.inactive {
+    z-index: -10000;
+    display: none;
+  }
+
+  .over-text {
+    font-size: large;
+  }
+}
+
 @import "../../../../../../node_modules/bootstrap/scss/bootstrap"

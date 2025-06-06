@@ -18,8 +18,17 @@
     <!-- TOP HEADER -->
     <header class="bg-primary text-white py-2 shadow-sm fixed-top">
         <div class="container-fluid d-flex justify-content-between align-items-center">
-            <h4 class="m-0">NewApp</h4>
-            <a th:href="@{/user/profile}" class="text-white text-decoration-none"><i class="bi bi-person-badge-fill"></i>Profile</a>
+            <div>
+                <h4 class="m-0">NewApp</h4>
+            </div>
+            <div class="d-flex gap-1 align-items-center justify-content-center">
+                <div>
+                    <button id="reset-btn" title="reset-button" class="btn btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                </div>
+                <div>
+                    <a th:href="@{/user/profile}" class="text-white text-decoration-none"><i class="bi bi-person-badge-fill"></i>Profile</a>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -39,14 +48,60 @@
             <div class="col-md-10 offset-md-2 py-4 mt-5" >
                 <div th:replace="${content}">Contenu par défaut</div>
             </div>
+
+            <div class="overlay inactive" id="overlay">
+                <span class="over-text" id="over-text">Reseting . . .</span>
+            </div>
         </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            console.log("Document loaded, initializing yearpicker...");
-            $('.yearpicker').yearpicker();
+            // console.log("Document loaded, initializing yearpicker...");
+            // $('.yearpicker').yearpicker();
+
+            function acivateOverlay(label = "Loading..."){
+                const overlay = document.getElementById("overlay");
+                const over_text = document.getElementById("over-text");
+                
+                over_text.innerHTML = label;
+                overlay.classList.replace("inactive","active")
+            }
+            function deacivateOverlay(){
+                overlay.classList.replace("active","inactive")
+            }
+
+            const resetBtn = document.getElementById("reset-btn");
+
+            resetBtn.addEventListener("click",(e)=>{
+                let userConfirmed = confirm("Reset HR data ?");
+
+                if (userConfirmed) {
+                    acivateOverlay("Reseting data ...")
+                    fetch("/api/data/reset")
+                    .then((response)=>{
+                        return response.json()
+                    })
+                    .then((body)=>{
+                        console.log(body)
+                        if(body.success = false){
+                            alert(body.data)
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    })
+                    .finally(()=> {
+                        deacivateOverlay();
+                    })
+                } else {
+                // Code to execute if the user clicked "Cancel"
+                console.log("User clicked Cancel.");
+                }
+            })
         });
+
+
     </script>
 </body>
 

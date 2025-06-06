@@ -95,6 +95,7 @@ export function renderSalaries(salaries, tableBodySelector = "#salaryTable tbody
     });
 }
 
+
 export function renderEmployeeTable(data, tableId = 'empTable') {
     const table = document.getElementById(tableId);
     if (!table) return;

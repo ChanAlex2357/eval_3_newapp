@@ -12109,6 +12109,29 @@ body {
     font-size: 0.9rem;
   }
 }
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(248, 249, 250, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.overlay.active {
+  z-index: 10000;
+  display: block;
+}
+.overlay.inactive {
+  z-index: -10000;
+  display: none;
+}
+.overlay .over-text {
+  font-size: large;
+}
+
 /*!
  * Bootstrap  v5.3.6 (https://getbootstrap.com/)
  * Copyright 2011-2025 The Bootstrap Authors
