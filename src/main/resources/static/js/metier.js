@@ -127,10 +127,11 @@ export function downloadSalaryPdf(button, id) {
 
     const safeId = id.replaceAll("/", "__");
     const url = `/api/pdf/salary-slip/${safeId}`;
+    const d = document.getElementById(id)
 
     // Afficher le spinner
-    label.style.display = "none";
-    spinner.style.display = "inline";
+    label.classList.add("d-none");
+    spinner.classList.replace("d-none", "d-inline");
 
     fetch(url)
         .then(response => {
@@ -155,8 +156,8 @@ export function downloadSalaryPdf(button, id) {
         })
         .finally(() => {
             // Restaurer le bouton
-            label.style.display = "inline";
-            spinner.style.display = "none";
+            label.classList.replace("d-none", "d-inline");
+            spinner.classList.replace("d-inline", "d-none");
         });
 }
 

@@ -2,24 +2,32 @@
     <th:block th:fragment="content">
         <div class="bg-light">
             <div class="container">
-                <div class="row mb-3">
+                <div class="row mb-1">
                     <form action="" th:object="${emp_filter}" id="empFilterForm">
-                        <div class="row justify-content-end g-1">
-                            <div class="col-2">
-                                <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control">
-                            </div>
-                            <div class="col-2">
-                                <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control">
-                            </div>
-                            <div class="col-2">
-                                <select class="form-select" name="" id="" title="Gender" th:field="*{gender}">
-                                    <option value="">-- Tous les genres --</option>
-                                    <option value="Male">Masculin</option>
-                                    <option value="Female">Feminin</option>
-                                </select>
+                        <div class="row">
+                            <div class="d-flex justify-content-start gap-1 col">
+                                <div class="col-2">
+                                    <input type="text" th:field="*{empName}" placeholder="ID" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-2">
+                                    <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-2">
+                                    <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-2">
+                                    <input type="text" th:field="*{company}" placeholder="Company" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-2">
+                                    <select class="form-select-sm form-select" name="" id="" title="Gender" th:field="*{gender}">
+                                        <option value="">-- Tous les genres --</option>
+                                        <option value="Male">Masculin</option>
+                                        <option value="Female">Feminin</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-1">
-                                <button type="submit" class="btn btn-primary w-100">
+                                <button type="submit" class="btn btn-primary btn-sm w-100">
                                     Filtrer
                                 </button>
                             </div>

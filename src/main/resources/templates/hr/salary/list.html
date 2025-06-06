@@ -97,13 +97,13 @@
                         `;
                         return;
                     }
-
+                    
                     salaries.forEach((salary, index) => {
                         const pdfButton = `
-                            <button class=" col-12 btn btn-sm btn-outline-primary" onclick="downloadSalaryPdf(this,${salary.name})">
-                                <span class="label">Telecharger</span>
-                                <div class=" spinner spinner-container" style="display: none;">
-                                    <div class="spinner-border text-primary"  role="status">
+                            <button class="col-4 border-0 btn btn-sm" onclick="downloadSalaryPdf(this,'${salary.name}')">
+                                <span class="label"><i class="bi bi-download"></i></span>
+                                <div class="spinner text-center d-none">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
                                         <span class="visually-hidden">Chargement...</span>
                                     </div>
                                 </div>
@@ -122,10 +122,10 @@
                             <td><span class="badge bg-success">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
                             `;
                         const btn_cont = `
-                            <td>
-                                <div class="row g-2" id="btn-container">
-                                        <button col-12 class="btn btn-sm btn-outline-dark" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
-                                            Détails
+                            <td class="p-0">
+                                <div class="row gap-1 justify-content-center" id="btn-container">
+                                        <button class="btn col-4 btn-sm" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+                                            <i class="bi bi-eye"></i>
                                         </button>
                                         ${pdfButton}
                                 </div>
