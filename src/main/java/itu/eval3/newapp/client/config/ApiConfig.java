@@ -42,6 +42,9 @@ public class ApiConfig {
         }
  
         filtersStr += "]";
+        if (filtersStr.equals("[]")) {
+            return "";
+        }
         return filtersStr;
      }
  
@@ -61,6 +64,9 @@ public class ApiConfig {
         }
 
         fieldsStr += "]";
+        if (fieldsStr.equals("[]")) {
+            return "";
+        }
         return fieldsStr;
      }
  
@@ -77,11 +83,11 @@ public class ApiConfig {
         String filterSrt = makeRessourceFiters(filters);       
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
         
-        if (fieldsStr != null || fieldsStr != "") {
+        if (fieldsStr != "") {
             uriComponentsBuilder.queryParam("fields", fieldsStr);
         }
         
-        if (filters != null || filterSrt  != "" ) {
+        if (filterSrt  != "" ) {
             uriComponentsBuilder.queryParam("filters", filterSrt);
         }
 
