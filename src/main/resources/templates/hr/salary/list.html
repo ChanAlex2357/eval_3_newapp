@@ -8,6 +8,9 @@
                         <form action="" id="salaryFilter" th:object="${salary_filter}">
                             <div class="row">
                                 <div class="d-flex justify-content-start gap-1 col">
+                                    <div class="col-2">
+                                        <input type="text" th:field="*{employee}" placeholder="Employee" class="form-control form-control-sm" id="emp_filter">
+                                    </div>
                                     <div class="col-md-2">
                                         <select id="selectMonth" title="mois" th:field="*{mois}" class="form-select-sm form-select">
                                             <option value="">-- Choisir un mois --</option>
@@ -40,12 +43,28 @@
                     </div>    
                 </section>
                 <section class="row">
-                    <div class="card card-body border-0 p-0">
+                    <div class="card card-body rounded-0 border-0 p-0">              
+                        <table class="table table-sm">
+                            <thead>
+                                <th scope="col" class="text-center">Total Eanings</th>
+                                <th scope="col" class="text-center">Total Deductions</th>
+                                <th scope="col" class="text-center">Total Salaire</th>
+                            <tbody id="totalBody">
+                                <tr>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                    </div>
+                    <div class="card rounded-0 border-0 p-0">
                                               
                         <table class="table table-hover table-sm modern-table">
                             <thead>
                                 <th scope="col">Sr.No</th>
-                                <th scope="col">Employee</th>
+                                <th scope="col">Fullname</th>
                                 <th scope="col">Period</th>
                                 <th scope="col">Total Gain</th>
                                 <th scope="col">Total Deductions</th>
@@ -71,17 +90,44 @@
 
                     const formData = new FormData(filterForm);
                     const queryParams = {};
+
+                    console.log(formData);
+                    
                     formData.forEach((value, key) => {
                         queryParams[key] = value;
                     });
 
                     const data = await fetchSalaries(queryParams);
             
-                    renderSalariesTable(data.salaries || []);
+                    renderSalariesTable(data || []);
+                }
+                window.setEmpFilter = function (emp_name) {
+                    const filter = document.getElementById("emp_filter");
+                    filter.value = emp_name;
+                    console.log(filter);
+                    console.log(emp_name);
+                    
+                    fetchData().catch(error => {
+                        console.error("Erreur lors de la récupération des données :", error);
+                        const tbody = document.getElementById("salariesBody");
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="8">
+                                    <div class="d-flex justify-content-center">
+                                        <span class="m-5 text-danger">Erreur lors du chargement des fiches de paie</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
                 }
 
-                function renderSalariesTable(salaries) {
+                function renderSalariesTable(data) {
+                    const salaries = data.salaries;
                     const tbody = document.getElementById("salariesBody");
+                    const totalBody = document.getElementById("totalBody");
+
+                    totalBody.innerHTML = "";
                     tbody.innerHTML = "";
 
                     if (!salaries.length) {
@@ -97,6 +143,14 @@
                         return;
                     }
                     
+                    totalBody.innerHTML = `
+                        <tr>
+                            <td class="text-center"> <span class="badge bg-dark">${formatCurrency(data.sum_earnings)}</span></td>
+                            <td class="text-center"><span class="badge bg-dark">${formatCurrency(data.sum_deductions)}</span></td>
+                            <td class="text-center"><span class="badge bg-dark">${formatCurrency(data.sum_salary)}</span></td>
+                        </tr>
+                    `;
+
                     salaries.forEach((salary, index) => {
                         const pdfButton = `
                             <button class="col-4 border-0 btn btn-sm" onclick="downloadSalaryPdf(this,'${salary.name}')">
@@ -112,7 +166,7 @@
                         const row = document.createElement('tr');
                         const collapseId = `salary-details-${index}`;
                         row.innerHTML = `
-                            <td><strong>${salary.name}</strong></td>
+                            <td><strong onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
                             <td>${salary.employee_name}</td>
                             <td>${formatDate(salary.start_date)} </td>
                             <td><span class="badge bg-secondary">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
@@ -194,18 +248,18 @@
                 });
                 // Premier chargement
                 fetchData().catch(error => {
-                        console.error("Erreur lors de la récupération des données :", error);
-                        const tbody = document.getElementById("salariesBody");
-                        tbody.innerHTML = `
-                            <tr>
-                                <td colspan="8">
-                                    <div class="d-flex justify-content-center">
-                                        <span class="m-5 text-danger">Erreur lors du chargement des fiches de paie</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        `;
-                    });
+                    console.error("Erreur lors de la récupération des données :", error);
+                    const tbody = document.getElementById("salariesBody");
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8">
+                                <div class="d-flex justify-content-center">
+                                    <span class="m-5 text-danger">Erreur lors du chargement des fiches de paie</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
         });
 </script>
 
