@@ -1,66 +1,66 @@
 <div th:replace="~{layouts/default :: layout(title='Newapp | Employees list', content=~{::content})}">
     <th:block th:fragment="content">
-        <div class="bg-light">
-            <div class="container">
-                <div class="row mb-1">
-                    <form action="" th:object="${emp_filter}" id="empFilterForm">
-                        <div class="row">
-                            <div class="d-flex justify-content-start gap-1 col">
-                                <div class="col-2">
-                                    <input type="text" th:field="*{empName}" placeholder="ID" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-2">
-                                    <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-2">
-                                    <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-2">
-                                    <input type="text" th:field="*{company}" placeholder="Company" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-2">
-                                    <select class="form-select-sm form-select" name="" id="" title="Gender" th:field="*{gender}">
-                                        <option value="">-- Tous les genres --</option>
-                                        <option value="Male">Masculin</option>
-                                        <option value="Female">Feminin</option>
-                                    </select>
-                                </div>
+        <div class="container">
+            <h2>Employee List</h2>
+            <hr>
+            <div class="row mb-1">
+                <form action="" th:object="${emp_filter}" id="empFilterForm">
+                    <div class="row">
+                        <div class="d-flex justify-content-start gap-1 col">
+                            <div class="col-2">
+                                <input type="text" th:field="*{empName}" placeholder="ID" class="form-control form-control-sm">
                             </div>
-                            <div class="col-1">
-                                <button type="submit" class="btn btn-primary btn-sm w-100">
-                                    Filtrer
-                                </button>
+                            <div class="col-2">
+                                <input type="text" th:field="*{firstname}" placeholder="Firstname" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-2">
+                                <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-2">
+                                <input type="text" th:field="*{company}" placeholder="Company" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-2">
+                                <select class="form-select-sm form-select" name="" id="" title="Gender" th:field="*{gender}">
+                                    <option value="">-- Tous les genres --</option>
+                                    <option value="Male">Masculin</option>
+                                    <option value="Female">Feminin</option>
+                                </select>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="card card-body p-0">
-                    <table class="table table-sm table-hover modern-table" id="empTable">
-                        <thead class="">
-                            <tr>
-                                <th scope="col">Sr.No</th>
-                                <th scope="col">Nom complet</th>
-                                <th scope="col">Genre</th>
-                                <th scope="col">Date d'embauche</th>
-                                <th scope="col">Company</th>
-                                <th scope="col">Poste</th>
-                                <!-- <th scope="col">Actions</th> -->
-                            </tr>
-                        </thead>
-                        <tbody id="empTableBody">
-                            <tr>
-                                <td colspan="10">
-                                    <div class="spinner-container">
-                                        <div class="spinner-border text-primary" role="status">
-                                            <span class="visually-hidden">Chargement...</span>
-                                        </div>
-                                        <div class="mt-2 text-muted">Chargement...</div>
+                        <div class="col-1">
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                Filtrer
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card card-body p-0">
+                <table class="table table-sm table-hover modern-table" id="empTable">
+                    <thead class="">
+                        <tr>
+                            <th scope="col">Sr.No</th>
+                            <th scope="col">Nom complet</th>
+                            <th scope="col">Genre</th>
+                            <th scope="col">Date d'embauche</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Poste</th>
+                            <!-- <th scope="col">Actions</th> -->
+                        </tr>
+                    </thead>
+                    <tbody id="empTableBody">
+                        <tr>
+                            <td colspan="10">
+                                <div class="spinner-container">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Chargement...</span>
                                     </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                    <div class="mt-2 text-muted">Chargement...</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     
