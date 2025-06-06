@@ -101,6 +101,21 @@ export function renderEmployeeTable(data, tableId = 'empTable') {
 
     table.innerHTML = ""; // optionnel : reset le tableau
 
+    console.log(data);
+    
+    if (!data.length) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    <div class="d-flex justify-content-center">
+                        <span class="m-5">Aucun emloyee trouvé</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
     data.forEach(employee => {
         const row = document.createElement('tr');
         row.innerHTML = `
