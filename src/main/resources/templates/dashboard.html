@@ -2,62 +2,60 @@
     <th:block th:fragment="content">
         <h2>Dashboard</h2>
         <hr>
-        <div class="row">
+        <div class="row gap-3">
             <div class="col-12">
                 <section class="row">
                     <div class="card p-0 mx-3">
-
-                    <div class="section-header">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                        <h3>Tableau Statistique</h3>
-                        <div class="row mb-2">
-                            <div class="container">
-                            <form action="" id="filterForm">
-                                <div class="row">
-                                    <div class="form-group col">
-                                        <div class="col">
-                                            <input type="number" title="annee" placeholder="Annee" value="2025" min="2000" name="year" id="yearInput" class="form-control form-control-sm">
+                        <div class="section-header">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <h3>Tableau Statistique</h3>
+                            <div class="col mb-2">
+                                <div class="container">
+                                <form action="" id="filterForm">
+                                    <div class="row ">
+                                        <div class="form-group col d-flex justify-content-end">
+                                            <div class="col-3">
+                                                <input type="number" title="annee" placeholder="Annee" value="2025" min="2000" name="year" id="yearInput" class="form-control form-control-sm">
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <button type="submit" class="btn btn-sm btn-primary w-100">
+                                                <span>Filtrer</span>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="col">
-                                        <button type="submit" class="btn btn-sm btn-primary w-100">
-                                            <span>Filtrer</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
+                        </div> 
                         </div>
-                    </div> 
-                    </div>
-        
-                    <div class="row">
-                        <div class="container">
-                            <div class="card card-body border-0">
-                                <table class="table table-sm modern-table" id="salaryStatsTable">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col" class="text-center">Mois</th>
-                                            <th scope="col" class="text-center">Total Salaires</th>
-                                            <th scope="col" class="text-center">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="salaryStatsBody">
-                                        <tr>
-                                            <td colspan="10">
-                                                <div class="spinner-container">
-                                                    <div class="spinner-border text-primary" role="status">
-                                                        <span class="visually-hidden">Chargement...</span>
+                        <div class="row">
+                            <div class="container">
+                                <div class="card card-body border-0">
+                                    <table class="table table-sm modern-table" id="salaryStatsTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">Mois</th>
+                                                <th scope="col" class="text-center">Total Salaires</th>
+                                                <th scope="col" class="text-center">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="salaryStatsBody">
+                                            <tr>
+                                                <td colspan="10">
+                                                    <div class="spinner-container">
+                                                        <div class="spinner-border text-primary" role="status">
+                                                            <span class="visually-hidden">Chargement...</span>
+                                                        </div>
+                                                        <div class="mt-2 text-muted">Chargement...</div>
                                                     </div>
-                                                    <div class="mt-2 text-muted">Chargement...</div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </section>
             </div>
 
@@ -87,16 +85,14 @@
                                     </div>
                                 </td>`;
                         const month_row = document.createElement("tr");
-                        let badge = "light text-dark";
                         if(month.total_salary == 0){
-                            badge = "light text-dark"
                             return ""
                         }
                         month_row.innerHTML = `
                             <td class="text-center">${month.period}</td>
                             <td class="text-center"> 
                                 <a href="/hr/salaries?annee=${year}&mois=${month_num}" class="">
-                                    <span class="col-8 badge border-bottom bg-${badge}">
+                                    <span class="col-8 badge border-bottom bg-success text-white">
                                         ${formatCurrency(month.total_salary)}
                                     </span>
                                 </a>
@@ -106,15 +102,56 @@
                         return month_row;
                     }
                     function getDetailedRow(month, collapseId){
+                        const detail_row = document.createElement("tr");
+                        const earning_table = getComponentsTable(month.components.earnings,"Eaninng")
+                        const deduction_table = getComponentsTable(month.components.deductions, "Deduction")
 
+                        detail_row.innerHTML = `
+                            <td class="p-0 border-0" colspan="10">
+                                <div class="collapse" id="${collapseId}">
+                                    <div class="card rounded-0 card-body border-0 bg-light">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                ${earning_table.outerHTML}
+                                                ${deduction_table.outerHTML}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        `
+                        return detail_row;
+                    }
+                    function getComponentsTable(data, type) {
+                        const table = document.createElement('table');
+                        table.className = "table table-bordered table-sm modern-table"; // ✅ Correct
+
+                        table.innerHTML = `
+                            <tbody>
+                                ${Object.entries(data).map(([component, amount]) => `
+                                    <tr class="text-center">${getComponentRow(component, amount)}</tr>
+                                `).join("")}
+                            </tbody>
+                        `;
+
+                        console.log(table.outerHTML); // ✅ Pour déboguer l'affichage
+                        return table;
                     }
 
+                    function getComponentRow(component, amount) {
+                        return `
+                            <td> <strong class=""> ${component} </strong></td>
+                            <td> <span class="badge col-12 bg-light border text-dark">${formatCurrency(amount)}</span></td>
+                        `;
+                    }
+
+                    
                     months.forEach(month => {
                         const collapseId = `id${month.start_date}`;
                         const row = getMonthDom(month, collapseId);
-                        const detail_row = getDetailedRow(month, collapseId);
                         if(row != ""){
-                            salaryStatsBody.appendChild(row)
+                            salaryStatsBody.appendChild(row);
+                            salaryStatsBody.appendChild(getDetailedRow(month, collapseId));
                         }
                     })
                 }
