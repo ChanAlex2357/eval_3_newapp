@@ -177,3 +177,13 @@ export function downloadSalaryPdf(button, id) {
         });
 }
 
+
+export async function fetchDashboardData(queryParams){
+    const apiUrl="/api/dashboard";
+    const url = new URL(apiUrl, window.location.origin);
+    addUrlPararms(url, queryParams);
+    const data = await fetchData(url.toString(),{
+        method:'GET'
+    })
+    return data;
+}

@@ -50,14 +50,4 @@ public class SalaryApiController {
         }
     }
 
-    public ResponseEntity<?> getAnnualSalaries(HttpSession session,String year){
-        int intYear = Integer.parseInt(year);
-        try {
-            ApiResponse<DashboardData> dashboardData = salarySlipService.getDashboardData((UserErpNext) session.getAttribute("user"), intYear);
-            return ResponseEntity.ok(dashboardData);
-        } catch (ERPNexException e) {
-            return ResponseEntity.badRequest().body(e.getAsApiResponse());
-        }
-    }
-
 }

@@ -57,8 +57,20 @@
             <h3>Graph</h3>
         </section>
         <script type="module">
-            import { formatCurrency } from '/js/metier.js';
-
+            import { formatCurrency, fetchDashboardData} from '/js/metier.js';
+            document.addEventListener("DOMContentLoaded", (e) => {
+                const filterForm = document.getElementById("filterForm");
+                async function fetchDashboard(){
+                    const formData = new FormData(filterForm);
+                    const queryParams = {};
+                    console.log(formData);
+                    formData.forEach((value, key) => {
+                        queryParams[key] = value;
+                    });
+                    const data = await fetchDashboardData(queryParams);
+                    console.log(data);
+                }
+            })
         </script>
     </th:block>
 </div>
