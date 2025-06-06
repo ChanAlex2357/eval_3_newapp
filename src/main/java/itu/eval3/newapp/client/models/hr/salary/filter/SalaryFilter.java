@@ -9,9 +9,11 @@ import itu.eval3.newapp.client.utils.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.filters.FrappApiFilter;
 import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.filters.LikeFilter;
 
 public class SalaryFilter implements FrappeFilter {
     private String employee;
+    private String employeeName;
     private String mois;
     private int annee = 2025;
 
@@ -38,14 +40,15 @@ public class SalaryFilter implements FrappeFilter {
     }
     @Override
     public FrappeApiFilterList getFilters() {
-        FrappApiFilter[] filters = new FrappApiFilter[3];
-        filters[0] = new EqualsFilter("employee", employee);
+        FrappApiFilter[] filters = new FrappApiFilter[4];
+        filters[0] = new LikeFilter("employee", employee);
+        filters[1] = new LikeFilter("employee_name", employeeName);
 
         convertMois();
         setDates();
         if (integerMois != 0 && annee != 0) {
-            filters[1] = new FrappApiFilter("start_date",">=",getStartDate().toString());
-            filters[2] = new FrappApiFilter("end_date","<=",getEndDate().toString());
+            filters[2] = new FrappApiFilter("start_date",">=",getStartDate().toString());
+            filters[3] = new FrappApiFilter("end_date","<=",getEndDate().toString());
         }
 
         return new FrappeApiFilterList(filters);
@@ -89,7 +92,12 @@ public class SalaryFilter implements FrappeFilter {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
-
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+    public String getEmployeeName() {
+        return employeeName;
+    }
     public void setDates(){
         if (this.startDate != null && this.endDate != null) {
             return;
@@ -124,6 +132,7 @@ public class SalaryFilter implements FrappeFilter {
         setDates();
         Map<String,Object> body = new HashMap<>();
         body.put("employee", getEmployee());
+        body.put("employee_name", getEmployeeName());
         body.put("start_date", getStartDate().toString());
         body.put("end_date", getEndDate().toString());
 

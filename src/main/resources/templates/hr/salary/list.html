@@ -2,14 +2,18 @@
     <th:block th:fragment="content">
         <div>
             <div class="container">
-                <h1>Salary Report</h1>
-                <section class="row mb-2">
+                <h2>Salary Register</h2>
+                <hr>
+                <div class="row mb-2">
                     <div class="col">
                         <form action="" id="salaryFilter" th:object="${salary_filter}">
                             <div class="row">
                                 <div class="d-flex justify-content-start gap-1 col">
                                     <div class="col-2">
                                         <input type="text" th:field="*{employee}" placeholder="Employee" class="form-control form-control-sm" id="emp_filter">
+                                    </div>
+                                    <div class="col-2">
+                                        <input type="text" th:field="*{employeeName}" placeholder="Employee Name" class="form-control form-control-sm">
                                     </div>
                                     <div class="col-md-2">
                                         <select id="selectMonth" title="mois" th:field="*{mois}" class="form-select-sm form-select">
@@ -41,8 +45,8 @@
 
                         </form>
                     </div>    
-                </section>
-                <section class="row">
+                </div>
+                <div class="row">
                     <div class="card card-body rounded-0 border-0 p-0">              
                         <table class="table table-sm">
                             <thead>
@@ -166,7 +170,7 @@
                         const row = document.createElement('tr');
                         const collapseId = `salary-details-${index}`;
                         row.innerHTML = `
-                            <td><strong onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
+                            <td ><strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
                             <td>${salary.employee_name}</td>
                             <td>${formatDate(salary.start_date)} </td>
                             <td><span class="badge bg-secondary">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
