@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -12,6 +13,7 @@ import jakarta.servlet.http.HttpSession;
 public class SalaryController {
     @GetMapping
     public String listSalaries(HttpSession session, Model model) {
+        model.addAttribute("salary_filter",new SalaryFilter());
         return "hr/salary/list";
     }
 }

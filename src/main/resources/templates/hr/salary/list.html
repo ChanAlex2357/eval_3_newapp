@@ -2,106 +2,271 @@
     <th:block th:fragment="content">
         <div>
             <div class="container">
-                <h1>Salary Report</h1>
-                <section class="row">
-                    <!-- Filter Section -->
-                </section>
-                <section class="row">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <th scope="col">Sr.No</th>
-                            <th scope="col">Employee</th>
-                            <th scope="col">Start Date</th>
-                            <th scope="col">End Date</th>
-                            <th scope="col">Gain</th>
-                            <th scope="col">Deductions</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Actions</th>
-                        </thead>
-                        <tbody id="salariesBody">
+                <h2>Salary Register</h2>
+                <hr>
+                <div class="row mb-2">
+                    <div class="col">
+                        <form action="" id="salaryFilter" th:object="${salary_filter}">
+                            <div class="row">
+                                <div class="d-flex justify-content-start gap-1 col">
+                                    <div class="col-2">
+                                        <input type="text" th:field="*{employee}" placeholder="Employee" class="form-control form-control-sm" id="emp_filter">
+                                    </div>
+                                    <div class="col-2">
+                                        <input type="text" th:field="*{employeeName}" placeholder="Employee Name" class="form-control form-control-sm">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select id="selectMonth" title="mois" th:field="*{mois}" class="form-select-sm form-select">
+                                            <option value="">-- Choisir un mois --</option>
+                                            <option value="1">Janvier</option>
+                                            <option value="2">Février</option>
+                                            <option value="3">Mars</option>
+                                            <option value="4">Avril</option>
+                                            <option value="5">Mai</option>
+                                            <option value="6">Juin</option>
+                                            <option value="7">Juillet</option>
+                                            <option value="8">Août</option>
+                                            <option value="9">Septembre</option>
+                                            <option value="10">Octobre</option>
+                                            <option value="11">Novembre</option>
+                                            <option value="12">Décembre</option>
+                                        </select>
+                                    </div>
 
-                        </tbody>
-                    </table>
+                                    <div class="col-md-2">
+                                        <input type="number" id="selectYear" th:field="*{annee}" title="année" class="form-control form-control-sm" min="2000" max="2100">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <button type="submit" class="btn btn-primary btn-sm w-100" id="filterButton">Filtrer</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>    
+                </div>
+                <div class="row">
+                    <div class="card card-body rounded-0 border-0 p-0">              
+                        <table class="table table-sm">
+                            <thead>
+                                <th scope="col" class="text-center">Total Eanings</th>
+                                <th scope="col" class="text-center">Total Deductions</th>
+                                <th scope="col" class="text-center">Total Salaire</th>
+                            <tbody id="totalBody">
+                                <tr>
+                                    <td>0</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                    </div>
+                    <div class="card rounded-0 border-0 p-0">
+                                              
+                        <table class="table table-hover table-sm modern-table">
+                            <thead>
+                                <th scope="col">Sr.No</th>
+                                <th scope="col">Fullname</th>
+                                <th scope="col">Period</th>
+                                <th scope="col">Total Gain</th>
+                                <th scope="col">Total Deductions</th>
+                                <th scope="col">Salaire</th>
+                                <th scope="col">Actions</th>
+                            </thead>
+                            <tbody id="salariesBody">
+
+                            </tbody>
+                        </table>
+                    
+                    </div>
             </div>
         </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            console.log("Document loaded, fetching salaries...");
-            
-            fetch('/api/salaries')
-                .then(response => response.json())
-                .then(body => {
-                    console.log("Fetched salaries:", body);
-                    const data = body.data;
-                    const salaries = data.salaries || [];
-                    const salariesBody = document.getElementById('salariesBody');
+        <script type="module">
+            import { downloadSalaryPdf, fetchSalaries, getRowSpinner, getSpinner, formatCurrency, formatDate} from '/js/metier.js';
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const filterForm = document.getElementById("salaryFilter");
+                async function fetchData() {
+                    const body = document.getElementById("salariesBody");
+                    body.innerHTML = getRowSpinner();
+
+                    const formData = new FormData(filterForm);
+                    const queryParams = {};
+
+                    console.log(formData);
                     
-                    salaries.forEach(salary => {
-                        const row = document.createElement('tr');
-                        // "Sal Slip__HR-EMP-00001__00001" // encode le nom dynamiquement côté JS
+                    formData.forEach((value, key) => {
+                        queryParams[key] = value;
+                    });
 
-                        row.innerHTML = `
-                            <td>${salary.name}</td>
-                            <td>${salary.employee_name}</td>
-                            <td>${new Date(salary.start_date).toLocaleDateString()}</td>
-                            <td>${new Date(salary.end_date).toLocaleDateString()}</td>
-                            <td>${salary.gross_pay.toFixed(2)}</td>
-                            <td>${salary.total_deduction.toFixed(2)}</td>
-                            <td>${salary.net_pay.toFixed(2)}</td>
-                            <td>
-                                <button class="download-btn" onclick="downloadPdf(this, '${salary.name}')">
-                                    <span class="label">PDF</span>
-                                    <span class="spinner" style="display:none;">⏳</span>
-                                </button>
-                            </td>
-
+                    const data = await fetchSalaries(queryParams);
+            
+                    renderSalariesTable(data || []);
+                }
+                window.setEmpFilter = function (emp_name) {
+                    const filter = document.getElementById("emp_filter");
+                    filter.value = emp_name;
+                    console.log(filter);
+                    console.log(emp_name);
+                    
+                    fetchData().catch(error => {
+                        console.error("Erreur lors de la récupération des données :", error);
+                        const tbody = document.getElementById("salariesBody");
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="8">
+                                    <div class="d-flex justify-content-center">
+                                        <span class="m-5 text-danger">Erreur lors du chargement des fiches de paie</span>
+                                    </div>
+                                </td>
+                            </tr>
                         `;
-                        salariesBody.appendChild(row);
                     });
-                })
-                .catch(error => console.error('Error fetching salaries:', error));
-            });
+                }
 
-            function downloadPdf(button, id) {
-                const label = button.querySelector('.label');
-                const spinner = button.querySelector('.spinner');
+                function renderSalariesTable(data) {
+                    const salaries = data.salaries;
+                    const tbody = document.getElementById("salariesBody");
+                    const totalBody = document.getElementById("totalBody");
 
-                const safeId = id.replaceAll("/", "__");
-                const url = `/api/pdf/salary-slip/${safeId}`;
+                    totalBody.innerHTML = "";
+                    tbody.innerHTML = "";
 
-                // Afficher le spinner
-                label.style.display = "none";
-                spinner.style.display = "inline";
+                    if (!salaries.length) {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="8">
+                                    <div class="d-flex justify-content-center">
+                                        <span class="m-5">Aucun salaire trouvé</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        return;
+                    }
+                    
+                    totalBody.innerHTML = `
+                        <tr>
+                            <td class="text-center"> <span class="badge bg-dark">${formatCurrency(data.sum_earnings)}</span></td>
+                            <td class="text-center"><span class="badge bg-dark">${formatCurrency(data.sum_deductions)}</span></td>
+                            <td class="text-center"><span class="badge bg-dark">${formatCurrency(data.sum_salary)}</span></td>
+                        </tr>
+                    `;
 
-                fetch(url)
-                    .then(response => {
-                        if (!response.ok) throw new Error("Erreur lors de la récupération du PDF");
-                        return response.blob();
-                    })
-                    .then(blob => {
-                        const fileName = `bulletin-${id.replaceAll("/", "_")}.pdf`;
-                        const blobUrl = URL.createObjectURL(blob);
+                    salaries.forEach((salary, index) => {
+                        const pdfButton = `
+                            <button class="col-4 border-0 btn btn-sm" onclick="downloadSalaryPdf(this,'${salary.name}')">
+                                <span class="label"><i class="bi bi-download"></i></span>
+                                <div class="spinner text-center d-none">
+                                    <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                        <span class="visually-hidden">Chargement...</span>
+                                    </div>
+                                </div>
+                            </button>
+                        `;
+                            // - ${formatDate(salary.end_date)}
+                        const row = document.createElement('tr');
+                        const collapseId = `salary-details-${index}`;
+                        row.innerHTML = `
+                            <td ><strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
+                            <td>${salary.employee_name}</td>
+                            <td>${formatDate(salary.start_date)} </td>
+                            <td><span class="badge bg-secondary">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
+                            <td><span class="badge bg-secondary">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
+                            <td><span class="badge bg-success">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
+                            `;
+                        const btn_cont = `
+                            <td class="p-0">
+                                <div class="row gap-1 justify-content-center" id="btn-container">
+                                        <button class="btn btn-hover border-0 col-4 btn-sm" data-bs-toggle="collapse" data-bs-target="#${collapseId}">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        ${pdfButton}
+                                </div>
+                            </td>`;
+                        row.innerHTML += btn_cont;
+                            
+                        const detailRow = document.createElement('tr');
+                        detailRow.innerHTML = `
+                            <td colspan="8" class="p-0 border-0">
+                                <div id="${collapseId}" class="collapse">
+                                    <div class="card card-body border-0 bg-light">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Gains (Earnings)</h6>
+                                                <table class="table table-sm table-bordered">
+                                                    <thead><tr><th>Composant</th><th>Montant</th></tr></thead>
+                                                    <tbody>
+                                                        ${salary.earnings.map(e => `
+                                                            <tr>
+                                                                <td>${e.salary_component}</td>
+                                                                <td><span class="badge bg-secondary">${formatCurrency(e.amount.toFixed(2))}</span></td>
+                                                            </tr>`).join("")}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h6>Déductions</h6>
+                                                <table class="table table-sm table-bordered">
+                                                    <thead><tr><th>Composant</th><th>Montant</th></tr></thead>
+                                                    <tbody>
+                                                        ${salary.deductions.map(d => `
+                                                            <tr>
+                                                                <td>${d.salary_component}</td>
+                                                                <td><span class="badge bg-secondary">${formatCurrency(d.amount.toFixed(2))}</span></td>
+                                                            </tr>`).join("")}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        `;
 
-                        const a = document.createElement("a");
-                        a.href = blobUrl;
-                        a.download = fileName;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(blobUrl);
-                    })
-                    .catch(err => {
-                        console.error("Erreur PDF :", err);
-                        alert("Impossible de générer le PDF.");
-                    })
-                    .finally(() => {
-                        // Restaurer le bouton
-                        label.style.display = "inline";
-                        spinner.style.display = "none";
+                        tbody.appendChild(row);
+                        tbody.appendChild(detailRow);
                     });
-            }
+                }
+                window.formatDate = formatDate;
+                window.formatCurrency = formatCurrency;
+                window.downloadSalaryPdf = downloadSalaryPdf;
+                // Bouton de filtre
+                filterForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    fetchData().catch(error => {
+                        console.error("Erreur lors de la récupération des données :", error);
+                        const tbody = document.getElementById("salariesBody");
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="8">
+                                    <div class="d-flex justify-content-center">
+                                        <span class="m-5 text-danger">Erreur lors du chargement des fiches de paie</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                });
+                // Premier chargement
+                fetchData().catch(error => {
+                    console.error("Erreur lors de la récupération des données :", error);
+                    const tbody = document.getElementById("salariesBody");
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8">
+                                <div class="d-flex justify-content-center">
+                                    <span class="m-5 text-danger">Erreur lors du chargement des fiches de paie</span>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+        });
+</script>
 
-    </script>
     </th:block>
 
 </div>

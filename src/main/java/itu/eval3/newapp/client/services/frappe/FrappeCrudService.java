@@ -20,7 +20,7 @@ import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 public class FrappeCrudService<D extends FrappeDocument>{
 
     @Autowired
-    private FrappeWebService frappeWebService;
+    protected FrappeWebService frappeWebService;
 
     public List<D> getAllDocuments(UserErpNext user, D document, String[] fields, FrappeFilter filter, Class<D> modelClass) throws ERPNexException {
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
@@ -37,6 +37,9 @@ public class FrappeCrudService<D extends FrappeDocument>{
 
 
     public D getDocumentById(UserErpNext user, D document, String id, String[] fields, Class<D> modelClass) throws ERPNexException {
+        if (id == null) {
+            throw new ERPNexException("The document id must be setted for fetching data whith getDocumetnById");
+        }
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
         D doc = null;
         

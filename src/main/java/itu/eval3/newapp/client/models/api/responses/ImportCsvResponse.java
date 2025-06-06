@@ -9,4 +9,5 @@ public class ImportCsvResponse implements ResponseModel {
     private String status;
     private String error_count;
     private String success_count;
+    private Object import_logs;
 }

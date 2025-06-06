@@ -26,25 +26,31 @@ public class ApiConfig {
 
     private String makeRessourceFiters(FrappApiFilter[] filters) {
         if (filters == null || filters.length == 0) {
-            return null;
+            return "";
         }
         String filtersStr = "[";
-        String suffix = ",";
- 
+        int order = 0;
          for (int i = 0; i < filters.length; i++) {
-            if (i == filters.length - 1) {
-                suffix = "";
+            if (filters[i] == null) {
+                continue;
             }
-            filtersStr += filters[i].getFilterStr()+suffix;    
+            String temp_str = filters[i].getFilterStr(order);
+            if (temp_str != "") {
+                order += 1;
+                filtersStr += temp_str;
+            }
         }
  
         filtersStr += "]";
+        if (filtersStr.equals("[]")) {
+            return "";
+        }
         return filtersStr;
      }
  
     private String makeResourceFields(String[] fields){
         if (fields == null || fields.length == 0) {
-            return null;
+            return "";
         }
         String fieldsStr = "[";
 
@@ -58,6 +64,9 @@ public class ApiConfig {
         }
 
         fieldsStr += "]";
+        if (fieldsStr.equals("[]")) {
+            return "";
+        }
         return fieldsStr;
      }
  
@@ -74,11 +83,11 @@ public class ApiConfig {
         String filterSrt = makeRessourceFiters(filters);       
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
         
-        if (fieldsStr != null || fieldsStr != "") {
+        if (fieldsStr != "") {
             uriComponentsBuilder.queryParam("fields", fieldsStr);
         }
         
-        if (filters != null || filterSrt  != "" ) {
+        if (filterSrt  != "" ) {
             uriComponentsBuilder.queryParam("filters", filterSrt);
         }
 

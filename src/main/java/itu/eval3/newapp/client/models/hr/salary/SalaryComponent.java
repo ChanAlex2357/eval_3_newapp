@@ -24,13 +24,11 @@ public class SalaryComponent extends FrappeDocument{
 
     @Override
     public void save_controle() {
-        // TODO Auto-generated method stub
         
     }
 
     @Override
     public void update_cotnrole() {
-        // TODO Auto-generated method stub
-        
+    
     }
 }

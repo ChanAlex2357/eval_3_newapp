@@ -1,32 +1,52 @@
 
 <div th:replace="~{layouts/vanilla :: layout(title='Newapp | Login', content=~{::content})}">
     <th:block th:fragment="content">
-        <div class="bg-light">
-            <div class="card w-50 mx-auto mt-5">
-                <div class="card-body">
-                    <form th:action="@{/auth/login}" method="post">
-                        <div>
-                            <h2 class="text-center">Login to Newapp</h2>
-                            <div th:if="${err != null}" class="alert alert-danger">
-                                <p th:text="${err}"></p>
-                            </div>
+        <div class="card w-50 mx-auto mt-5">
+            <div class="card-body">
+                <form th:action="@{/auth/login}" id="loginForm" method="post">
+                    <div>
+                        <h2 class="text-center">Login to Newapp</h2>
+                        <div th:if="${err != null}" class="alert alert-danger">
+                            <p th:text="${err}"></p>
                         </div>
-                        <div class="form-group mt-3">
-                            <label class="form-label" for="username">Username:</label>
-                            <input class="form-control" type="text" id="username" name="usr" required>
-                        </div>
-                        <div class="form-group mt-3">
-                            <label class="form-label" for="password">Password:</label>
-                            <input class="form-control" type="password" id="password" name="pwd" required>
-                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label class="form-label" for="username">Username:</label>
+                        <input class="form-control" type="text" id="username" name="usr" required>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label class="form-label" for="password">Password:</label>
+                        <input class="form-control" type="password" id="password" name="pwd" required>
+                    </div>
 
-                        <div class=" form-group mt-4">
-                            <button class="btn btn-primary form-control" type="submit">Login</button>
-                        </div>
-                    </form>
-                    <p th:if="${param.error}">Invalid username or password.</p>
-                    <p th:if="${param.logout}">You have been logged out.</p>
-                </div>
+                    <div class=" form-group mt-4">
+                        <button class="btn btn-primary form-control" id="loginLabel" type="submit">
+                            <span class="label" > Login </span>
+                        </button>
+                        <button id="spinner" type="button" title="spinner" class="btn btn-primary d-none form-control">
+                            <div class="spinner-container p-0">
+                                <div class="spinner-border text-white"  role="status">
+
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+                <p th:if="${param.error}">Invalid username or password.</p>
+                <p th:if="${param.logout}">You have been logged out.</p>
             </div>
         </div>
+        <script>
+            document.addEventListener("DOMContentLoaded",(e)=>{
+                const loginForm = document.getElementById("loginForm");
+                loginForm.addEventListener("submit", (e)=>{
+                    const label = document.getElementById("loginLabel");
+                    const spinner = document.getElementById("spinner");
+
+                    label.classList.add("d-none");
+                    spinner.classList.remove("d-none");
+                })
+            })
+        </script>
+    </th:block>
 </div>

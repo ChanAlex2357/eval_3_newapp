@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import itu.eval3.newapp.client.models.hr.emp.Employee;
+import itu.eval3.newapp.client.models.hr.emp.filter.EmpFilter;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
@@ -27,6 +28,9 @@ public class EmpController {
 
     @GetMapping
     public String list(HttpSession session,Model model){
+        EmpFilter empFilter = new EmpFilter();
+
+        model.addAttribute("emp_filter", empFilter);
         return "hr/employee/list";
     }
 
