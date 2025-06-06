@@ -110,6 +110,7 @@ export function renderEmployeeTable(data, tableId = 'empTable') {
             <td>${employee.first_name} ${employee.last_name}</td>
             <td>${employee.gender}</td>
             <td>${new Date(employee.date_of_joining).toLocaleDateString()}</td>
+            <td>${employee.company}</td>
             <td>${employee.designation}</td>
             `;
             // <td>

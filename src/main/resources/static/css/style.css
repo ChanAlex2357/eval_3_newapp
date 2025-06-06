@@ -11968,7 +11968,7 @@ body {
 }
 
 .profile-header {
-  background: var(--gradient-primary);
+  background: #344e41;
   color: white;
   padding: 2rem;
   border-radius: 15px 15px 0 0;
@@ -11998,7 +11998,6 @@ body {
   font-size: 2.5rem;
   border: 3px solid rgba(255, 255, 255, 0.3);
   margin-bottom: 1rem;
-  backdrop-filter: blur(10px);
 }
 
 .info-card {
