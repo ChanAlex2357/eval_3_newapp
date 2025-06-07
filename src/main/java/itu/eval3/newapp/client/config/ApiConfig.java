@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import itu.eval3.newapp.client.utils.filters.FrappApiFilter;
+import itu.eval3.newapp.client.utils.filters.FrappeApiFilter;
 import lombok.Data;
 
 @Configuration
@@ -24,7 +24,7 @@ public class ApiConfig {
 
     public String getMethodUrl(String methodPath) { return getMethodBaseUrl() + "/" + methodPath; }
 
-    private String makeRessourceFiters(FrappApiFilter[] filters) {
+    private String makeRessourceFiters(FrappeApiFilter[] filters) {
         if (filters == null || filters.length == 0) {
             return "";
         }
@@ -72,7 +72,7 @@ public class ApiConfig {
  
     
     // *********** RESOURCES URLS ****************
-    public String getResourceUrl(String doctype,String id,String[] fields, FrappApiFilter[] filters ){
+    public String getResourceUrl(String doctype,String id,String[] fields, FrappeApiFilter[] filters ){
         String uri = baseUrl + ressource +"/"+ doctype ;
 
         if (id != null && id != "") {
@@ -96,7 +96,7 @@ public class ApiConfig {
         return uri;
     }
 
-    public String getResourceWithAllFieldsUrl(String doctype,FrappApiFilter[] filters){
+    public String getResourceWithAllFieldsUrl(String doctype,FrappeApiFilter[] filters){
         return getResourceUrl(doctype,null, ALL_FIELDS,filters);
     }
 

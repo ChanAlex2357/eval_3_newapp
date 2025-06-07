@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class FrappeApiFilterList {
-    private FrappApiFilter[] filters;
-    public FrappeApiFilterList(FrappApiFilter[] filters){
+    private FrappeApiFilter[] filters;
+    public FrappeApiFilterList(FrappeApiFilter[] filters){
         this.filters = filters;
     }
     // public FrappeApiFilterList(String[] fieldnames,String[] operators,String[] values){

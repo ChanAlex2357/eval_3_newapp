@@ -21,11 +21,14 @@
                                     <input type="text" th:field="*{company}" placeholder="Company" class="form-control form-control-sm">
                                 </div>
                                 <div class="col-2">
-                                    <select class="form-select-sm form-select" name="" id="" title="Gender" th:field="*{gender}">
+                                    <select class="form-select-sm form-select" id="" title="Gender" th:field="*{gender}">
                                         <option value="">-- Tous les genres --</option>
                                         <option value="Male">Masculin</option>
                                         <option value="Female">Feminin</option>
                                     </select>
+                                </div>
+                                <div class="col-2">
+                                    <input type="date" title="employee-hire-date" th:field="*{joinDate}" class="form-control form-control-sm">
                                 </div>
                             </div>
                             <div class="col-1">
