@@ -18,15 +18,15 @@
                                     <div class="col-md-2">
                                         <select id="selectMonth" title="mois" th:field="*{mois}" class="form-select-sm form-select">
                                             <option value="">-- Choisir un mois --</option>
-                                            <option value="1">Janvier</option>
-                                            <option value="2">Février</option>
-                                            <option value="3">Mars</option>
-                                            <option value="4">Avril</option>
-                                            <option value="5">Mai</option>
-                                            <option value="6">Juin</option>
-                                            <option value="7">Juillet</option>
-                                            <option value="8">Août</option>
-                                            <option value="9">Septembre</option>
+                                            <option value="01">Janvier</option>
+                                            <option value="02">Février</option>
+                                            <option value="03">Mars</option>
+                                            <option value="04">Avril</option>
+                                            <option value="05">Mai</option>
+                                            <option value="06">Juin</option>
+                                            <option value="07">Juillet</option>
+                                            <option value="08">Août</option>
+                                            <option value="09">Septembre</option>
                                             <option value="10">Octobre</option>
                                             <option value="11">Novembre</option>
                                             <option value="12">Décembre</option>
@@ -39,7 +39,7 @@
                                 </div>
 
                                 <div class="col-md-1">
-                                    <button type="submit" class="btn btn-primary btn-sm w-100" id="filterButton">Filtrer</button>
+                                    <button type="submit" class="btn btn-secondary text-white btn-sm w-100" id="filterButton"> <span class="fw-bold"> Filtrer </span></button>
                                 </div>
                             </div>
 
@@ -47,12 +47,16 @@
                     </div>    
                 </div>
                 <div class="row">
-                    <div class="card card-body rounded-0 border-0 p-0">              
+                    <div class="card card-body rounded-0 border-0 p-0">
+                        <div class="section-header">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            Totals du mois
+                        </div>    
                         <table class="table table-sm">
                             <thead>
-                                <th scope="col" class="text-center">Total Eanings</th>
-                                <th scope="col" class="text-center">Total Deductions</th>
-                                <th scope="col" class="text-center">Total Salaire</th>
+                                <th scope="col" class="text-center">Somme Eanings</th>
+                                <th scope="col" class="text-center">Somme Deductions</th>
+                                <th scope="col" class="text-center">Somme Salaire</th>
                             <tbody id="totalBody">
                                 <tr>
                                     <td>0</td>
@@ -64,15 +68,18 @@
                     
                     </div>
                     <div class="card rounded-0 border-0 p-0">
-                                              
+                        <div class="section-header">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            Details employees
+                        </div>   
                         <table class="table table-hover table-sm modern-table">
                             <thead>
                                 <th scope="col">Sr.No</th>
                                 <th scope="col">Fullname</th>
-                                <th scope="col">Period</th>
-                                <th scope="col">Total Gain</th>
-                                <th scope="col">Total Deductions</th>
-                                <th scope="col">Salaire</th>
+                                <th scope="col">Mois</th>
+                                <th scope="col">Salaire Brut</th>
+                                <th scope="col">Deductions</th>
+                                <th scope="col">Salaire Net</th>
                                 <th scope="col">Actions</th>
                             </thead>
                             <tbody id="salariesBody">
@@ -102,7 +109,8 @@
                     });
 
                     const data = await fetchSalaries(queryParams);
-            
+                    console.log(data);
+                    
                     renderSalariesTable(data || []);
                 }
                 window.setEmpFilter = function (emp_name) {
@@ -149,9 +157,9 @@
                     
                     totalBody.innerHTML = `
                         <tr>
-                            <td class="text-center"> <span class="badge bg-dark">${formatCurrency(data.sum_earnings)}</span></td>
-                            <td class="text-center"><span class="badge bg-dark">${formatCurrency(data.sum_deductions)}</span></td>
-                            <td class="text-center"><span class="badge bg-dark">${formatCurrency(data.sum_salary)}</span></td>
+                            <td class="text-center"> <span class="badge border-bottom col-6 bg-dark ">${formatCurrency(data.sum_earnings)}</span></td>
+                            <td class="text-center"><span class="badge border-bottom col-6 bg-dark ">${formatCurrency(data.sum_deductions)}</span></td>
+                            <td class="text-center"><span class="badge border-bottom col-6 bg-dark ">${formatCurrency(data.sum_salary)}</span></td>
                         </tr>
                     `;
 
@@ -172,10 +180,10 @@
                         row.innerHTML = `
                             <td ><strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
                             <td>${salary.employee_name}</td>
-                            <td>${formatDate(salary.start_date)} </td>
-                            <td><span class="badge bg-secondary">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
-                            <td><span class="badge bg-secondary">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
-                            <td><span class="badge bg-success">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
+                            <td>${salary.period} </td>
+                            <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
+                            <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
+                            <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
                             `;
                         const btn_cont = `
                             <td class="p-0">
@@ -192,7 +200,7 @@
                         detailRow.innerHTML = `
                             <td colspan="8" class="p-0 border-0">
                                 <div id="${collapseId}" class="collapse">
-                                    <div class="card card-body border-0 bg-light">
+                                    <div class="card card-body rounded-0 border-0 bg-light">
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <h6>Gains (Earnings)</h6>
@@ -202,7 +210,7 @@
                                                         ${salary.earnings.map(e => `
                                                             <tr>
                                                                 <td>${e.salary_component}</td>
-                                                                <td><span class="badge bg-secondary">${formatCurrency(e.amount.toFixed(2))}</span></td>
+                                                                <td><span class="badge border-bottom col-12 bg-light text-dark">${formatCurrency(e.amount.toFixed(2))}</span></td>
                                                             </tr>`).join("")}
                                                     </tbody>
                                                 </table>
@@ -215,7 +223,7 @@
                                                         ${salary.deductions.map(d => `
                                                             <tr>
                                                                 <td>${d.salary_component}</td>
-                                                                <td><span class="badge bg-secondary">${formatCurrency(d.amount.toFixed(2))}</span></td>
+                                                                <td><span class="badge border-bottom col-12 bg-light text-dark">${formatCurrency(d.amount.toFixed(2))}</span></td>
                                                             </tr>`).join("")}
                                                     </tbody>
                                                 </table>

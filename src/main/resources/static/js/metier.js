@@ -95,11 +95,27 @@ export function renderSalaries(salaries, tableBodySelector = "#salaryTable tbody
     });
 }
 
+
 export function renderEmployeeTable(data, tableId = 'empTable') {
     const table = document.getElementById(tableId);
     if (!table) return;
 
     table.innerHTML = ""; // optionnel : reset le tableau
+
+    console.log(data);
+    
+    if (!data.length) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    <div class="d-flex justify-content-center">
+                        <span class="m-5">Aucun emloyee trouvé</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return;
+    }
 
     data.forEach(employee => {
         const row = document.createElement('tr');
@@ -161,3 +177,13 @@ export function downloadSalaryPdf(button, id) {
         });
 }
 
+
+export async function fetchDashboardData(queryParams){
+    const apiUrl="/api/dashboard";
+    const url = new URL(apiUrl, window.location.origin);
+    addUrlPararms(url, queryParams);
+    const data = await fetchData(url.toString(),{
+        method:'GET'
+    })
+    return data;
+}

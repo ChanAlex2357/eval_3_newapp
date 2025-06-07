@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
-import itu.eval3.newapp.client.utils.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.filters.FrappApiFilter;
 import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
