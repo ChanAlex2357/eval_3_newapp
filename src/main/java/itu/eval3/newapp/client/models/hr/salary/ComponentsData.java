@@ -8,4 +8,5 @@ import lombok.Data;
 public class ComponentsData {
     Map<String,Float> earnings;
     Map<String,Float> deductions;
+    Map<String,Float> all;
 }

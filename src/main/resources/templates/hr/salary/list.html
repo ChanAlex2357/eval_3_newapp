@@ -39,7 +39,7 @@
                                 </div>
 
                                 <div class="col-md-1">
-                                    <button type="submit" class="btn btn-primary btn-sm w-100" id="filterButton">Filtrer</button>
+                                    <button type="submit" class="btn btn-secondary text-white btn-sm w-100" id="filterButton"> <span class="fw-bold"> Filtrer </span></button>
                                 </div>
                             </div>
 
@@ -157,9 +157,9 @@
                     
                     totalBody.innerHTML = `
                         <tr>
-                            <td class="text-center"> <span class="badge border col-6 bg-dark ">${formatCurrency(data.sum_earnings)}</span></td>
-                            <td class="text-center"><span class="badge border col-6 bg-dark ">${formatCurrency(data.sum_deductions)}</span></td>
-                            <td class="text-center"><span class="badge border col-6 bg-dark ">${formatCurrency(data.sum_salary)}</span></td>
+                            <td class="text-center"> <span class="badge border-bottom col-6 bg-dark ">${formatCurrency(data.sum_earnings)}</span></td>
+                            <td class="text-center"><span class="badge border-bottom col-6 bg-dark ">${formatCurrency(data.sum_deductions)}</span></td>
+                            <td class="text-center"><span class="badge border-bottom col-6 bg-dark ">${formatCurrency(data.sum_salary)}</span></td>
                         </tr>
                     `;
 
@@ -181,9 +181,9 @@
                             <td ><strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
                             <td>${salary.employee_name}</td>
                             <td>${salary.period} </td>
-                            <td><span class="badge border-bottom col-12 bg-light text-dark">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
-                            <td><span class="badge border-bottom col-12 bg-light text-dark">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
-                            <td><span class="badge border-bottom col-12 bg-light text-dark">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
+                            <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
+                            <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
+                            <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
                             `;
                         const btn_cont = `
                             <td class="p-0">

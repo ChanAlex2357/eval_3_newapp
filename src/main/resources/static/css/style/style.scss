@@ -27,8 +27,9 @@ $transition-base: all 0.3s ease;
 // =============================================================================
 // OVERRIDES BOOTSTRAP CLASSES
 // =============================================================================
-body {
+* {
   height:100vdh;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 // Cards customisées
 .card {
@@ -337,7 +338,7 @@ body {
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
@@ -349,12 +350,12 @@ body {
   
   &.active {
     z-index: 10000;
-    display: block;
+    visibility: visible;
   }
   
   &.inactive {
     z-index: -10000;
-    display: none;
+    visibility: hidden;
   }
 
   .over-text {

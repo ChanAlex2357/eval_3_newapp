@@ -14,6 +14,6 @@ public class MonthData {
     public float total_earnings;
     public float total_deductions;
     public float total_salary;
-    public Map<String,Float> components;
+    public ComponentsData components;
     public SalarySlip[] salaries;
 }

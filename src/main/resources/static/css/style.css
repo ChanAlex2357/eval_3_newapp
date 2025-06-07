@@ -11859,8 +11859,9 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-body {
+* {
   height: 100vdh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .card, .modern-card {
@@ -12110,7 +12111,7 @@ body {
   }
 }
 .overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
@@ -12122,11 +12123,11 @@ body {
 }
 .overlay.active {
   z-index: 10000;
-  display: block;
+  visibility: visible;
 }
 .overlay.inactive {
   z-index: -10000;
-  display: none;
+  visibility: hidden;
 }
 .overlay .over-text {
   font-size: large;
