@@ -1,7 +1,9 @@
 package itu.eval3.newapp.client.services.hr.salary;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -17,6 +19,7 @@ import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
+import itu.eval3.newapp.client.models.hr.salary.DashboardData;
 import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
@@ -97,6 +100,18 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     public SalarySlip getById(UserErpNext user, SalarySlip salary) throws ERPNexException{
         SalarySlip s = getById(user, salary.getName());
         return s;
+    }
+
+    public ApiResponse<DashboardData> getDashboardData(UserErpNext user, int year) throws ERPNexException {
+        FrappeResponseParser<DashboardData> parser = new FrappeResponseParser<>();
+        Map<String,Object> body = new HashMap<>();
+        body.put("year", year);
+
+        ResponseEntity<String> response = frappeWebService.callMethod(user, "eval_app.api.get_salary_annual", HeadersUtils.buildJsonHeader(user), HttpMethod.GET, body);
+
+        MethodApiResponse<DashboardData> methodResponse = parser.parseMethodApiResponse(response, DashboardData.class);
+        return methodResponse.getApiResponse();
+
     }
 
 }

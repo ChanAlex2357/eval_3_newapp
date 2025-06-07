@@ -78,10 +78,10 @@
                                     <table class="table modern-table" id="salaryTable">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Sr.No</th>
-                                                <th scope="col">Période</th>
-                                                <th scope="col">Salaire net</th>
-                                                <th scope="col">Actions</th>
+                                                <th scope="col" class="">Sr.No</th>
+                                                <th scope="col" class="">Période</th>
+                                                <th scope="col" class="">Salaire net</th>
+                                                <th scope="col" class="">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody id="salariesBody">
@@ -162,20 +162,20 @@
                 data.forEach((salary, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>
+                        <td class="">
                             <strong>${salary.name}</strong>
                         </td>
-                        <td>
+                        <td class="">
                             <i class="fas fa-calendar-alt text-muted me-1"></i>
-                            ${formatDate(salary.start_date)}
+                            ${salary.period}
                         </td>
-                        <td>
-                            <span class="badge bg-success">
+                        <td class="">
+                            <span class="badge bg-success col-10">
                                 ${formatCurrency(salary.net_pay)}
                             </span>
                         </td>
                         <td class="p-0">
-                            <div class="row justify-content-center">
+                            <div class="row justify-content-start">
                                 <button class="col-2 border-0 btn btn-sm" onclick="downloadSalaryPdf(this,'${salary.name}')">
                                     <span class="label"><i class="bi bi-download"></i></span>
                                     <div class="spinner text-center d-none">
