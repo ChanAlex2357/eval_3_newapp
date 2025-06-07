@@ -13,53 +13,55 @@
         <div class="row gap-3" >
             <div class="col-12">
                 <section class="row">
-                    <div class="card p-0 mx-3">
-                        <div class="section-header">
-                            <i class="fas fa-file-invoice-dollar"></i>
-                            <h3 >Tableau Statistique</h3>
-                            <div class="col mb-2">
-                                <div class="container">
-                                <form action="" id="filterForm">
-                                    <div class="row g-1">
-                                        <div class="form-group col d-flex justify-content-end">
-                                            <div class="col-2">
-                                                <input type="number" title="annee" placeholder="Annee" value="2025" min="2000" name="year" id="yearInput" class="form-control form-control-sm">
+                    <div class="container">
+                        <div class="card p-0">
+                            <div class="section-header">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <h3 >Tableau Statistique</h3>
+                                <div class="col mb-2">
+                                    <div class="container">
+                                    <form action="" id="filterForm">
+                                        <div class="row g-1">
+                                            <div class="form-group col d-flex justify-content-end">
+                                                <div class="col-2">
+                                                    <input type="number" title="annee" placeholder="Annee" value="2025" min="2000" name="year" id="yearInput" class="form-control form-control-sm">
+                                                </div>
+                                            </div>
+                                            <div class="col-1">
+                                                <button type="submit" class="btn btn-sm btn-secondary text-white fw-bold w-100">
+                                                    <span>Filtrer</span>
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="col-1">
-                                            <button type="submit" class="btn btn-sm btn-secondary text-white fw-bold w-100">
-                                                <span>Filtrer</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
+                            </div> 
                             </div>
-                        </div> 
-                        </div>
-                        <div class="row">
-                            <div class="container">
-                                <div class="card card-body border-0">
-                                    <table class="table table-sm modern-table" id="salaryStatsTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="text-center">Mois</th>
-                                                <th scope="col" class="text-center">Total Salaires</th>
-                                                <th scope="col" class="text-center">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="salaryStatsBody">
-                                            <tr>
-                                                <td colspan="10">
-                                                    <div class="spinner-container">
-                                                        <div class="spinner-border text-primary" role="status">
-                                                            <span class="visually-hidden">Chargement...</span>
+                            <div class="row">
+                                <div class="container">
+                                    <div class="card card-body border-0">
+                                        <table class="table table-sm modern-table" id="salaryStatsTable">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="text-center">Mois</th>
+                                                    <th scope="col" class="text-center">Total Salaires</th>
+                                                    <th scope="col" class="text-center">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="salaryStatsBody">
+                                                <tr>
+                                                    <td colspan="10">
+                                                        <div class="spinner-container">
+                                                            <div class="spinner-border text-primary" role="status">
+                                                                <span class="visually-hidden">Chargement...</span>
+                                                            </div>
+                                                            <div class="mt-2 text-muted">Chargement...</div>
                                                         </div>
-                                                        <div class="mt-2 text-muted">Chargement...</div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>

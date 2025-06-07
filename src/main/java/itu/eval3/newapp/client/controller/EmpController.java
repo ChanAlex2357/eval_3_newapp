@@ -56,4 +56,9 @@ public class EmpController {
         model.addAttribute("salaries", salaries);
         return "hr/employee/fiche";
     }
+
+    @GetMapping("/augmentation")
+    public String augmentations(HttpSession session, Model model){
+        return "hr/employee/augmentation";
+    }
 }
