@@ -28,5 +28,5 @@ public class EmpService extends FrappeCrudService<Employee>{
 
     public Employee getById(UserErpNext user, String id, String[] fields) throws ERPNexException{
         return getDocumentById(user, new Employee(), id, fields, Employee.class);
-    }    
+    }
 }

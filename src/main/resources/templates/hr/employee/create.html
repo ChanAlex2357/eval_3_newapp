@@ -3,18 +3,24 @@
         <div class="row">
             <div class="container">
                 <div class="col-8 mx-auto">
-                    <form th:action="@{/ht/employees/create}" method="post">
+                    <form th:action="@{/hr/employees/create}" th:object="${empForm}" method="post">
+                        <!-- Exemple pour afficher les erreurs globales -->
+                        <div th:if="${#fields.hasErrors()}">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                            </ul>
+                        </div>
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="emp-firstname" class="form-label">Nom</label>
-                                    <input type="text" name="firstname" id="emp-firstname" class="form-control form-control-sm">
+                                    <input th:value="*{first_name}" type="text" id="emp-firstname" class="form-control form-control-sm">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="emp-lastname" class="form-label">Prenom</label>
-                                    <input type="text" name="lastname" id="emp-lastname" class="form-control form-control-sm">
+                                    <input type="text" th:value="*{last_name}"  id="emp-lastname" class="form-control form-control-sm">
                                 </div>
                             </div>
                         </div>
@@ -22,7 +28,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="emp-gender" class="form-label">Genre</label>
-                                    <select class="form-select form-select-sm" name="gender" id="emp-gender">
+                                    <select class="form-select form-select-sm" th:value="*{gender}" id="emp-gender">
                                         <option th:each="g : ${genders}" th:value="${g.name}">
                                             <span th:text="${g.name}"></span>
                                         </option>
@@ -32,7 +38,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="emp-company" class="form-label">Company</label>
-                                    <select class="form-select form-select-sm" name="company" id="emp-company">
+                                    <select class="form-select form-select-sm" th:value="${company}" id="emp-company">
                                         <option th:each=" comp : ${companies}" th:value="${comp.name}">
                                             <span th:text="${comp.name}"></span>
                                         </option>
@@ -45,13 +51,13 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="emp-joining-date" class="form-label">Date d'embauche</label>
-                                    <input type="date" name="joinDate" id="emp-joining-date" class="form-control form-control-sm">
+                                    <input type="date" th:value="*{date_of_joining}" id="emp-joining-date" class="form-control form-control-sm">
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="emp-birth-date" class="form-label">Date de naissance</label>
-                                    <input type="date" name="joinDate" id="emp-birth-date" class="form-control form-control-sm">
+                                    <input type="date" th:value="*{date_of_birth}" id="emp-birth-date" class="form-control form-control-sm">
                                 </div>
                             </div>
                         </div>

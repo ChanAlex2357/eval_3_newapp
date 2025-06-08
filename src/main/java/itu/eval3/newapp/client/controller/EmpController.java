@@ -6,13 +6,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.annexe.Company;
 import itu.eval3.newapp.client.models.annexe.Gender;
+import itu.eval3.newapp.client.models.hr.emp.EmpForm;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.emp.filter.EmpFilter;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
@@ -22,7 +25,10 @@ import itu.eval3.newapp.client.services.gender.GenderService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
 import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @Controller
 @Slf4j
@@ -102,6 +108,34 @@ public class EmpController {
 
         model.addAttribute("genders", genders);
         model.addAttribute("companies", companies);
+        if (!model.containsAttribute("empForm")) {
+            model.addAttribute("empForm", new EmpForm());
+        }
         return "hr/employee/create";
     }
+
+    @PostMapping("/create")
+    public String doCreate(@Valid @ModelAttribute EmpForm empForm,
+                        BindingResult bindingResult,
+                        Model model,
+                        HttpSession session) {
+                            
+        try {
+            if (bindingResult.hasErrors()) {
+                UserErpNext user = (UserErpNext) session.getAttribute("user");
+                model.addAttribute("companies", companyService.getAll(user));
+                model.addAttribute("genders", genderService.getAll(user));
+                return "hr/employee/create";
+            }
+
+            // empService;
+
+            return "redirect:/hr/employees";
+        } catch (Exception e) {
+            model.addAttribute("err", e.getMessage());
+            return "hr/employee/create";
+        }
+    }
+
+    
 }

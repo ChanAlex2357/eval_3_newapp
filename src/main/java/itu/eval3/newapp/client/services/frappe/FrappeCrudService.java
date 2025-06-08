@@ -50,4 +50,21 @@ public class FrappeCrudService<D extends FrappeDocument>{
         return doc;
     }
     
+    public D createDocument(UserErpNext user, D document, Object body, Class<D> modClass)throws ERPNexException {
+        FrappeResponseParser<D> parser = new FrappeResponseParser<>();
+        
+        ResponseEntity<String> response = frappeWebService.callResource(
+            user, 
+            document, 
+            null, 
+            body, 
+            HeadersUtils.buildJsonHeader(user), 
+            HttpMethod.POST, 
+            null, 
+            null
+        );
+
+        ResourceSingleResponse<D> singleResponse = parser.parseSingleResourceResponse(response, modClass);
+        return singleResponse.getData();
+    }
 }
