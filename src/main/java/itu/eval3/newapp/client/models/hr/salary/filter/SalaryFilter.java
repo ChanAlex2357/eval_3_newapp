@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
-import itu.eval3.newapp.client.utils.filters.FrappApiFilter;
+import itu.eval3.newapp.client.utils.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import itu.eval3.newapp.client.utils.filters.LikeFilter;
@@ -39,15 +39,15 @@ public class SalaryFilter implements FrappeFilter {
     }
     @Override
     public FrappeApiFilterList getFilters() {
-        FrappApiFilter[] filters = new FrappApiFilter[4];
+        FrappeApiFilter[] filters = new FrappeApiFilter[4];
         filters[0] = new LikeFilter("employee", employee);
         filters[1] = new LikeFilter("employee_name", employeeName);
 
         convertMois();
         setDates();
         if (integerMois != 0 && annee != 0) {
-            filters[2] = new FrappApiFilter("start_date",">=",getStartDate().toString());
-            filters[3] = new FrappApiFilter("end_date","<=",getEndDate().toString());
+            filters[2] = new FrappeApiFilter("start_date",">=",getStartDate().toString());
+            filters[3] = new FrappeApiFilter("end_date","<=",getEndDate().toString());
         }
 
         return new FrappeApiFilterList(filters);

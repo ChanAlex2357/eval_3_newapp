@@ -10,10 +10,15 @@
                             <div class="row">
                                 <div class="d-flex justify-content-start gap-1 col">
                                     <div class="col-2">
-                                        <input type="text" th:field="*{employee}" placeholder="Employee" class="form-control form-control-sm" id="emp_filter">
-                                    </div>
-                                    <div class="col-2">
-                                        <input type="text" th:field="*{employeeName}" placeholder="Employee Name" class="form-control form-control-sm">
+                                        <select  class="form-select-sm form-select" name="" th:field="*{employee}" title="Employee" id="">
+                                            <option value="">-- Tous les employees</option>
+                                            <option th:each="emp : ${employees}" th:value="${emp.name}">
+                                                <p>
+                                                    <span th:text="${emp.getFullName()}"></span>
+                                                    (<span th:text="${emp.name}"></span>)
+                                                </p>
+                                            </option>
+                                        </select>
                                     </div>
                                     <div class="col-md-2">
                                         <select id="selectMonth" title="mois" th:field="*{mois}" class="form-select-sm form-select">
@@ -50,7 +55,7 @@
                     <div class="card card-body rounded-0 border-0 p-0">
                         <div class="section-header">
                             <i class="fas fa-file-invoice-dollar"></i>
-                            Totals du mois
+                            Totals du mois <span id="s-month"></span>
                         </div>    
                         <table class="table table-sm">
                             <thead>
@@ -95,6 +100,11 @@
 
             document.addEventListener("DOMContentLoaded", () => {
                 const filterForm = document.getElementById("salaryFilter");
+                const months_str = ["de Janvier", "de Février", "de Mars", "d'Avril", "de Mai", "de Juin", "de Juillet", "d'Août", "de Septembre", "de Octobre", "de Novembre", "de Décembre"];
+                const month = document.getElementById("s-month");
+                const selectedOption = document.getElementById("selectMonth");
+                const selectedYear = document.getElementById("selectYear");
+
                 async function fetchData() {
                     const body = document.getElementById("salariesBody");
                     body.innerHTML = getRowSpinner();
@@ -112,6 +122,8 @@
                     console.log(data);
                     
                     renderSalariesTable(data || []);
+                    const month_idx = parseInt(selectedOption.value);
+                    month.innerHTML = `${months_str[month_idx-1]} ${selectedYear.value}`;
                 }
                 window.setEmpFilter = function (emp_name) {
                     const filter = document.getElementById("emp_filter");

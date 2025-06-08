@@ -73,5 +73,9 @@ public class Employee extends FrappeDocument{
 
     @Override
     public void save_controle() {}
+
+    public String getFullName(){
+        return firstname +" "+ lastname;
+    }
     
 }

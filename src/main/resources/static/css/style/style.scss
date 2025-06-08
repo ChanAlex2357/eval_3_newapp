@@ -336,7 +336,16 @@ $transition-base: all 0.3s ease;
     font-size: 0.9rem;
   }
 }
-
+.bubble-container {
+  position: fixed;
+  z-index:2000;
+  bottom: 6px;
+  right: 6px;
+  display: flex;
+  .bubble {
+    height: 100%;
+  }
+}
 .overlay {
   position: fixed;
   top: 0;

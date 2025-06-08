@@ -1,6 +1,6 @@
 package itu.eval3.newapp.client.utils.filters;
 
-public class LikeFilter extends FrappApiFilter{
+public class LikeFilter extends FrappeApiFilter{
 
     public LikeFilter(String fieldname,String value) {
         super(fieldname, "like", value);

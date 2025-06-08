@@ -1,14 +1,11 @@
 package itu.eval3.newapp.client.utils.filters;
 
-import lombok.Data;
-
-
-public class FrappApiFilter {
+public class FrappeApiFilter {
     private String fieldname;
     private String operator;
     private String vaule;
     
-    public FrappApiFilter(String fieldname, String opt, String value){
+    public FrappeApiFilter(String fieldname, String opt, String value){
         setFieldname(fieldname);
         setOperator(opt);
         setVaule(value);
