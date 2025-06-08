@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import itu.eval3.newapp.client.exceptions.ERPNexException;
-import itu.eval3.newapp.client.models.hr.company.Company;
+import itu.eval3.newapp.client.models.company.Company;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.emp.filter.EmpFilter;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;

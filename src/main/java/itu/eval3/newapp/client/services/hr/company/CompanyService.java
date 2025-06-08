@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import itu.eval3.newapp.client.exceptions.ERPNexException;
-import itu.eval3.newapp.client.models.hr.company.Company;
+import itu.eval3.newapp.client.models.company.Company;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 

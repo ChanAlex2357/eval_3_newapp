@@ -1,4 +1,4 @@
-package itu.eval3.newapp.client.models.hr.company;
+package itu.eval3.newapp.client.models.company;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
