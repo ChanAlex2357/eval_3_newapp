@@ -1,4 +1,4 @@
-package itu.eval3.newapp.client.models.gender;
+package itu.eval3.newapp.client.models.annexe;
 
 import itu.eval3.newapp.client.models.action.FrappeDocument;
 import lombok.Data;
