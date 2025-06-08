@@ -1,0 +1,68 @@
+<div th:replace="~{layouts/default :: layout(title='Create Employee',content=~{::content})}">
+    <th:object th:fragment="content">
+        <div class="row">
+            <div class="container">
+                <div class="col-8 mx-auto">
+                    <form th:action="@{/ht/employees/create}" method="post">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="emp-firstname" class="form-label">Nom</label>
+                                    <input type="text" name="firstname" id="emp-firstname" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="emp-lastname" class="form-label">Prenom</label>
+                                    <input type="text" name="lastname" id="emp-lastname" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="emp-gender" class="form-label">Genre</label>
+                                    <select class="form-select form-select-sm" name="gender" id="emp-gender">
+                                        <option th:each="g : ${genders}" th:value="${g.name}">
+                                            <span th:text="${g.name}"></span>
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="emp-company" class="form-label">Company</label>
+                                    <select class="form-select form-select-sm" name="company" id="emp-company">
+                                        <option th:each=" comp : ${companies}" th:value="${comp.name}">
+                                            <span th:text="${comp.name}"></span>
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="emp-joining-date" class="form-label">Date d'embauche</label>
+                                    <input type="date" name="joinDate" id="emp-joining-date" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="emp-birth-date" class="form-label">Date de naissance</label>
+                                    <input type="date" name="joinDate" id="emp-birth-date" class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end mt-4">
+                            <div class="col-6 text-end">
+                                <button type="submit" class="btn btn-primary">Create New Employee</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </th:object>
+</div>

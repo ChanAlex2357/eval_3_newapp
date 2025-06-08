@@ -35,19 +35,37 @@
     <div class="container-fluid">
         <div class="row">
             <!-- MENU LATÉRAL -->
-            <aside class="col-md-2 bg-white text-info vh-100 position-fixed py-5 px-0 border">
+            <aside class="col-md-2 bg-white vh-100 position-fixed py-5 px-0 border">
                 
                     <nav class="nav flex-column h-100">
-                        <a class="nav-link text-dark " th:href="@{/home}"><i class="bi px-2 text-secondary bi-graph-up"></i>Statistique</a>
-                        <a class="nav-link text-dark " th:href="@{/hr/employees}"><i class="bi px-2 text-secondary bi-person-fill"></i> Employés</a>
-                        <a class="nav-link text-dark " th:href="@{/hr/salaries}"><i class="bi px-2 text-secondary bi-coin"></i> Salaires</a>
-                        <a class="nav-link text-dark " th:href="@{/import/v3}"><i class="bi px-2 text-secondary bi-folder"></i> Import</a>
+                    <div class="container">
+
+                        <b class="border-bottom">Dashboard</b>
+                            <a class="nav-link text-dark " th:href="@{/home}">
+                                <i class="bi px-2 text-secondary bi-graph-up"></i>Statistique
+                            </a>
+                        <b class="border-bottom">Employees</b>
+                            <a class="nav-link text-dark " th:href="@{/hr/employees}">
+                                <i class="bi px-2 text-secondary bi-person-fill"></i> Employés
+                            </a>
+                            <a class="nav-link text-dark " th:href="@{/hr/employees/create}">
+                                <i class="bi px-2 text-secondary bi-plus"></i> Create Employee
+                            </a>
+                        <b class="border-bottom">Salaires</b>
+                            <a class="nav-link text-dark " th:href="@{/hr/salaries}">
+                                <i class="bi px-2 text-secondary bi-coin"></i>Registre
+                            </a>
+                        <b class="border-bottom">Data Management</b>
+                            <a class="nav-link text-dark " th:href="@{/import/v3}">
+                                <i class="bi px-2 text-secondary bi-folder"></i> Import
+                            </a>
                         <hr>
-                        <h3>My Features</h3>
+                        <!-- <b>My Features</b>
                         <nav class="nav d-column">
                             <a th:href="@{/hr/employees/augmentation}" class="nav-link text-dark">Promotions</a>
                             <a th:href="@{/hr/salaries/make}" class="nav-link text-dark">Creation Fiche de paie</a>
-                        </nav>
+                        </nav> -->
+                    </div>
                     </nav>
                     <div class="border mt-3">
                         <div>

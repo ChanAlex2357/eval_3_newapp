@@ -85,4 +85,23 @@ public class EmpController {
     public String augmentations(HttpSession session, Model model){
         return "hr/employee/augmentation";
     }
+
+    @GetMapping("/create")
+    public String employeeForm(Model model, HttpSession session){
+
+        List<Company> companies;
+        List<Gender> genders;
+        try {
+            UserErpNext user = (UserErpNext) session.getAttribute("user");
+            companies = companyService.getAll(user);
+            genders = genderService.getAll(user);
+        } catch (ERPNexException e) {
+            log.error("Create Employee Form Exception", e);
+            throw new RuntimeException(e.getMessage(), e.getCause());
+        }
+
+        model.addAttribute("genders", genders);
+        model.addAttribute("companies", companies);
+        return "hr/employee/create";
+    }
 }
