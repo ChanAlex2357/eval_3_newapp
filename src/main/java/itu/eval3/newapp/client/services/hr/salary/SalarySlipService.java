@@ -77,24 +77,20 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     }
 
     public ByteArrayOutputStream generateBulletinDePaiePdf(SalarySlip salarySlip) throws Exception {
-        Context context = new Context();
-        context.setVariable("salarySlip", salarySlip); // ton objet Java
-
-        String html = templateEngine.process("pdf/bulletin-paie", context);
-
-        // Convertir HTML → PDF
-        ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
-        PdfRendererBuilder builder = new PdfRendererBuilder();
-        builder.useFastMode();
-        builder.withHtmlContent(html, null);
-        builder.toStream(pdfStream);
-        builder.run();
-
-        return pdfStream;
+        return pdfExporterService.generatePdfFromTemplate(
+            salarySlip, 
+            "salarySlip", 
+            "pdf/bulletin-paie"
+        );
     }
 
     public ResponseEntity<byte[]> exportBulletinPaie(SalarySlip salarySlipInstance) throws Exception{
-        return pdfExporterService.exportData(generateBulletinDePaiePdf(salarySlipInstance).toByteArray(),"bulletin-paie-"+salarySlipInstance.getName()+"-"+salarySlipInstance.getStartDate());
+        return pdfExporterService.exportData(
+            salarySlipInstance, 
+            "salarySlip", 
+            "pdf/bulletin-paie",
+            "bulletin-paie-"+salarySlipInstance.getName()+"-"+salarySlipInstance.getStartDate()
+        );
     }
 
     public SalarySlip getById(UserErpNext user, SalarySlip salary) throws ERPNexException{
