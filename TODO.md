@@ -30,3 +30,22 @@
   - [ ] fetch dynamiquement les salary slip
   - [ ] fetch dynamiquement l'hitorique des salaires
   - [ ]
+
+## Creation d'une assignation de salaire
+
+- [ ] Api
+  - [ ] tester body dans postman
+- [ ] Affichage
+  - [ ] formulaire d'insertion
+    - [ ] Select Salary Structure
+    - [ ] Salaire de base imposable
+    - [ ] Date de validation
+    - [ ] Liste des employees a y assigner
+      - [ ] salaire de base a considerer
+- [ ] Metier
+  - [ ] model de la requete
+  - [ ] controller formulaire
+  - [ ] recuperer la liste des sal struct
+  - [ ] controller d'insertion
+  - [ ] Service de crud
+  - [ ] renvoyer erreur

@@ -1,0 +1,38 @@
+<div th:replace="~{layouts/default :: layout(title='Assignement Salary',content=~{::content})}">
+    <th:block th:fragment="content">
+        <div class="row">
+            <div class="container">
+                <div class="col-12">
+                    <form>
+                        <div class="form-group">
+                            <label for="sal-date" class="form-label">Date d'assignation</label>
+                            <input type="date" name="from_date" id="sal-date" class="form-control form-control-sm">
+                        </div>
+                        <div>
+                            <label for="sal-struct" class="form-label">Salary Structure</label>
+                            <select name="salary_structure" id="sal-struct" class="form-select form-select-sm"></select>
+                        </div>
+                        <div>
+                            <table>
+                                <thead>
+                                    <th>Employee</th>
+                                    <th>Salaire de base</th>
+                                </thead>
+                                <tbody>
+                                    <tr class="sal-assign-detail">
+                                        <td>
+                                            <input type="text" name="employee[]" title="employee">
+                                        </td>
+                                        <td>
+                                            <input type="text" name="salary[]" title="salary">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </th:block>
+</div>

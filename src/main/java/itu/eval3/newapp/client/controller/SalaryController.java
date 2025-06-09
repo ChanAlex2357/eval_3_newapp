@@ -37,4 +37,17 @@ public class SalaryController {
 
         return "hr/salary/list";
     }
+
+
+    @GetMapping("/create/assignement")
+    public String crateAssignement(HttpSession session, Model model){
+        List<Employee> employees = null;
+        try {
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        model.addAttribute("employees", employees);
+        return "hr/salary/create-assigenment";
+    }
 }
