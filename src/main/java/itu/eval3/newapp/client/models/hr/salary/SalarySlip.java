@@ -155,13 +155,18 @@ public class SalarySlip extends FrappeDocument{
     }
 
     @Override
-    public void save_controle() {
+    public void save_controle() throws Exception {
         
     }
     
     @Override
     public void update_cotnrole() {
         
+    }
+
+    @Override
+    public Object as_dict() {
+        return null;
     }
 
     public String getUriName(){

@@ -37,5 +37,6 @@ public abstract class FrappeDocument {
     private String namingSeries;
 
     abstract public void update_cotnrole();
-    abstract public void save_controle();
+    abstract public void save_controle() throws Exception;
+    abstract public Object as_dict();
 }

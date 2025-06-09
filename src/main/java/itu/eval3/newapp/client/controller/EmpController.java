@@ -25,7 +25,6 @@ import itu.eval3.newapp.client.services.gender.GenderService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
 import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -115,24 +114,23 @@ public class EmpController {
     }
 
     @PostMapping("/create")
-    public String doCreate(@Valid @ModelAttribute EmpForm empForm,
+    public String doCreate(@ModelAttribute Employee employee,
                         BindingResult bindingResult,
                         Model model,
                         HttpSession session) {
                             
         try {
-            if (bindingResult.hasErrors()) {
-                UserErpNext user = (UserErpNext) session.getAttribute("user");
+            UserErpNext user = (UserErpNext) session.getAttribute("user");
+            // if (bindingResult.hasErrors()) {
                 model.addAttribute("companies", companyService.getAll(user));
                 model.addAttribute("genders", genderService.getAll(user));
-                return "hr/employee/create";
-            }
-
-            // empService;
-
+            //     return "hr/employee/create";
+            // }
+            Employee savedEmployee = empService.createEmployee(user, employee);
             return "redirect:/hr/employees";
         } catch (Exception e) {
             model.addAttribute("err", e.getMessage());
+            model.addAttribute("empForm", employee.as_dict());
             return "hr/employee/create";
         }
     }

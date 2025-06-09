@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
+import itu.eval3.newapp.client.models.hr.emp.EmpForm;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
@@ -28,5 +29,9 @@ public class EmpService extends FrappeCrudService<Employee>{
 
     public Employee getById(UserErpNext user, String id, String[] fields) throws ERPNexException{
         return getDocumentById(user, new Employee(), id, fields, Employee.class);
+    }
+
+    public Employee createEmployee(UserErpNext user, Employee employee) throws ERPNexException, Exception {
+        return createDocument(user, employee, Employee.class);
     }
 }

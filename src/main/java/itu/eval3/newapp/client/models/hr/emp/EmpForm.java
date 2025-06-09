@@ -14,21 +14,21 @@ public class EmpForm {
 
     @NotBlank(message = "Le nom est obligatoire")
     @Size(min = 2, message = "Le nom doit contenir au moins 2 caractères")
-    private String first_name;
+    public String first_name;
 
-    private String last_name;
+    public String last_name;
 
     @NotNull(message = "La date d'entrée est obligatoire")
-    private Date date_of_joining = Date.valueOf(LocalDate.now());
+    public String date_of_joining = Date.valueOf(LocalDate.now()).toString();
 
     @NotNull(message = "La date de naissance est obligatoire")
     @Past(message = "La date de naissance doit être dans le passé")
-    private Date date_of_birth;
+    public String date_of_birth;
 
     @NotBlank(message = "Le genre est obligatoire")
-    private String gender;
+    public String gender;
 
     @NotBlank(message = "La société est obligatoire")
-    private String company;
+    public String company;
 
 }

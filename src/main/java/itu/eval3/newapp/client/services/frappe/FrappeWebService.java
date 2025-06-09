@@ -142,7 +142,7 @@ public class FrappeWebService {
         try {
             response = frappeCall(user, url,headers ,method, body);
         } catch (Exception e) {
-            ErpNextCallException callException = new ErpNextCallException("Error while calling ressource to "+document.getDoctype(), url, method,ErpCallExceptionType.SRC, e);
+            ErpNextCallException callException = new ErpNextCallException("Error while calling ressource to "+document.getDoctype()+" : "+e.getMessage(), url, method,ErpCallExceptionType.SRC, e);
             throw  ERPNextExceptionBuilder.handle(callException, response);
         }
 

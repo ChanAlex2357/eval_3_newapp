@@ -15,7 +15,12 @@ public class Gender extends FrappeDocument{
     }
 
     @Override
-    public void save_controle() {
+    public void save_controle() throws Exception{
+    }
+
+    @Override
+    public Object as_dict() {
+        return null;
     }
     
 }
