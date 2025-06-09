@@ -9,38 +9,35 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import itu.eval3.newapp.client.builder.ApiResponseBuilder;
 import itu.eval3.newapp.client.exceptions.AuthenticationException;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
-import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
-import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryStructureAssignmentFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
-import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
 import itu.eval3.newapp.client.services.hr.salary.SalaryStructureAssignmentService;
 import jakarta.servlet.http.HttpSession;
 
-
 @RestController
-@RequestMapping("/api/salaries")
-public class SalaryApiController {
+@RequestMapping("/api/assignments")
+public class SalaryStructureAssignmentsApiController {
     @Autowired
-    private SalarySlipService salarySlipService;
-
+    private SalaryStructureAssignmentService assignmentService;
+    
     @GetMapping
-    public ResponseEntity<?> getSalaries(HttpSession session,@ModelAttribute("salary_filter") SalaryFilter salaryFilter ){
-        SalariesRegisterReport salariesReport = new SalariesRegisterReport();
-        ApiResponseBuilder<SalariesRegisterReport> responseBuilder = new ApiResponseBuilder<>();
+    public ResponseEntity<?> getSalaryAssignments(HttpSession session, @ModelAttribute SalaryStructureAssignmentFilter assignmentFilter){
+        List<SalaryStructureAssignment> salaryAssignements = new ArrayList<>();
+        ApiResponseBuilder<List<SalaryStructureAssignment>> responseBuilder = new ApiResponseBuilder<>();
         
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
             if (user == null) {
                 throw new AuthenticationException(); 
             }
-            salariesReport = salarySlipService.getAllDetails(user, salaryFilter);
+            salaryAssignements = assignmentService.getAll(user, assignmentFilter);
             return ResponseEntity.ok(
-                responseBuilder.success("Salaries fetched successfully", salariesReport)
+                responseBuilder.success("Assignments fetched successfully", salaryAssignements)
             );
         }
         catch (ERPNexException e) {
@@ -52,7 +49,4 @@ public class SalaryApiController {
             return ResponseEntity.badRequest().body(ApiResponseBuilder.DFAULT_BUILDER.error(exc));
         }
     }
-
-
-
 }

@@ -12,6 +12,10 @@ export async function fetchEmployees(queryParams = {}) {
 
 }
 
+export async function fetchAssignments(queryParams = {}){
+    const apiUrl = '/api/salaries'
+}
+
 export function getRowSpinner(colspan = 10, label = "Chargement...", type="border") {
     return `
         <tr>
