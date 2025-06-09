@@ -37,6 +37,8 @@ export function downloadSalaryPdf(button, id) {
 
     fetch(url)
         .then(response => {
+            console.log(response);
+            
             if (!response.ok) throw new Error("Erreur lors de la récupération du PDF");
             return response.blob();
         })
@@ -53,6 +55,7 @@ export function downloadSalaryPdf(button, id) {
             spinner.classList.replace("d-inline", "d-none");
         });
 }
+
 
 export function extractFormData(formData){
     const queryParams = {};
