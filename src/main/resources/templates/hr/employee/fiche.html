@@ -129,8 +129,10 @@
         </div>
 
         <script type="module">
-            import { downloadSalaryPdf, fetchSalaries, getSpinner, formatCurrency, formatDate } from '/js/metier.js'
-
+            import {formatCurrency, formatDate, downloadSalaryPdf} from '/js/services/utils.js';
+            import {getRowSpinner, getSpinner} from '/js/services/spinnerService.js';
+            import {fetchSalaries} from '/js/services/salaryService.js';
+            
             async function fetchData() {
                 const emp_name = document.getElementById("emp_name").dataset.employeeId;
                 try {
