@@ -53,3 +53,11 @@ export function downloadSalaryPdf(button, id) {
             spinner.classList.replace("d-inline", "d-none");
         });
 }
+
+export function extractFormData(formData){
+    const queryParams = {};
+    formData.forEach((value, key) => {
+        queryParams[key] = value;
+    });
+    return queryParams;
+}

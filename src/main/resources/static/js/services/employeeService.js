@@ -2,10 +2,7 @@ import  {build_api_url, fetchData}  from "./apiService.js";
 import  {formatDate } from "./utils.js";
 
 export async function fetchEmployees(queryParams = {}) {
-    console.log("fetchEmployees called with params:", queryParams);
-    
     const url = build_api_url('/api/employees',queryParams);
-
     const data = await fetchData(url.toString(),{
         method:'GET'
     })
@@ -18,8 +15,6 @@ export function renderEmployeeTable(data, tableId = 'empTable') {
     if (!table) return;
 
     table.innerHTML = ""; // optionnel : reset le tableau
-
-    console.log(data);
     
     if (!data.length) {
         table.innerHTML = `
