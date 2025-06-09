@@ -78,7 +78,7 @@
         </div>
     
         <script type="module">
-            import { fetchEmployees, renderEmployeeTable } from '/js/metier.js';
+            import { fetchEmployees, renderEmployeeTable } from '/js/services/employeeService.js';
 
             document.addEventListener("DOMContentLoaded", async function () {
                 const employees = await fetchEmployees();

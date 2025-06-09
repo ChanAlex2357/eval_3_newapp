@@ -1,5 +1,5 @@
-import { build_api_url, fetchData } from "./apiService";
-import { formatDate, formatCurrency } from "./utils";
+import { build_api_url, fetchData } from "./apiService.js";
+import { formatDate, formatCurrency } from "./utils.js";
 
 export async function fetchSalaries( queryParams = {}){
     const url = build_api_url("/api/salaries", queryParams)

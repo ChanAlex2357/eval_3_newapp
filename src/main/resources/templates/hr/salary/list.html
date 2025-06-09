@@ -96,7 +96,9 @@
             </div>
         </div>
         <script type="module">
-            import { downloadSalaryPdf, fetchSalaries, getRowSpinner, getSpinner, formatCurrency, formatDate} from '/js/metier.js';
+            import {formatCurrency, formatDate, downloadSalaryPdf} from '/js/services/utils.js';
+            import {getRowSpinner, getSpinner} from '/js/services/spinnerService.js';
+            import {fetchSalaries} from '/js/services/salaryService.js';
 
             document.addEventListener("DOMContentLoaded", () => {
                 const filterForm = document.getElementById("salaryFilter");

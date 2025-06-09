@@ -1,5 +1,5 @@
-import  {build_api_url, fetchData}  from "./apiService";
-import  {formatDate } from "./utils";
+import  {build_api_url, fetchData}  from "./apiService.js";
+import  {formatDate } from "./utils.js";
 
 export async function fetchEmployees(queryParams = {}) {
     console.log("fetchEmployees called with params:", queryParams);
