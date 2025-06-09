@@ -1,4 +1,4 @@
-import { fetchData, build_api_url } from "./apiService";
+import { fetchData, build_api_url } from "./apiService.js";
 
 export async function fetchDashboardData(queryParams){
     const apiUrl="/api/dashboard";

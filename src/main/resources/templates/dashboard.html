@@ -77,7 +77,10 @@
             <div  class="visibility-hidden"></div>
         </div>
         <script type="module">
-            import { formatCurrency, fetchDashboardData, getRowSpinner} from '/js/metier.js';
+            import {fetchDashboardData} from '/js/services/dashboardService.js';
+            import {formatCurrency} from '/js/services/utils.js';
+            import {getRowSpinner} from '/js/services/spinnerService.js';
+
             document.addEventListener("DOMContentLoaded", (e) => {
                 const filterForm = document.getElementById("filterForm");
                 const salaryStatsBody = document.getElementById("salaryStatsBody");
