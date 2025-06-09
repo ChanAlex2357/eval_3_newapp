@@ -44,7 +44,7 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col" class="text-center">Mois</th>
-                                                    <th scope="col" class="text-center">Total Salaires</th>
+                                                    <th scope="col" class="text-center">Total Salaire Net</th>
                                                     <th scope="col" class="text-center">Actions</th>
                                                 </tr>
                                             </thead>
@@ -133,7 +133,7 @@
                                                     <tbody class="">
                                                         <tr class="">
                                                             <td class="text-center text-dark ">
-                                                                Total Gains <span class="mx-3 badge bg-dark text-white border">${formatCurrency(t_e)}</span>
+                                                                Total Salaire Brut <span class="mx-3 badge bg-dark text-white border">${formatCurrency(t_e)}</span>
                                                             </td>
                                                             <td class="text-center text-dark ">
                                                                 Total Deductions<span class="badge mx-3 bg-dark text-white border">${formatCurrency(t_d)}</span>
@@ -159,7 +159,7 @@
                     }
                     function getComponentsTable(data) {
                         const table = document.createElement('table');
-                        table.className = "table table-bordered table-sm modern-table"; // ✅ Correct
+                        table.className = "table table-bordered table-sm modern-table";
 
                         table.innerHTML = `
                             <tbody>

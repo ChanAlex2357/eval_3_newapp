@@ -114,7 +114,7 @@ public class EmpController {
     }
 
     @PostMapping("/create")
-    public String doCreate(@ModelAttribute Employee employee,
+    public String doCreate(@ModelAttribute EmpForm employee,
                         BindingResult bindingResult,
                         Model model,
                         HttpSession session) {
@@ -130,7 +130,7 @@ public class EmpController {
             return "redirect:/hr/employees";
         } catch (Exception e) {
             model.addAttribute("err", e.getMessage());
-            model.addAttribute("empForm", employee.as_dict());
+            model.addAttribute("empForm", employee);
             return "hr/employee/create";
         }
     }

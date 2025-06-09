@@ -14,7 +14,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        flex-direction: row;
+        flex-direction: column;
     }
     .title {
         align-self: left;
@@ -48,8 +48,7 @@
         padding: 2px 4px;
     }
     .section-title {
-        background-color: #464646;
-        color: white;
+        color: #464646;
         padding: 5px;
         font-weight: bold;
         margin-top: 15px;
@@ -82,11 +81,11 @@
     <div class="logo">
         Logo
     </div>
-</header>
+</header> 
 
-<hr>
+
 <h1>Bulletin de Paie</h1>
-<hr>
+
 <table class="no-border">
     <tr>
         <td><strong>Employé :</strong> <span th:text="${salarySlip.employeeName}"></span></td>
@@ -94,7 +93,7 @@
         <td><strong>Poste :</strong> <span th:text="${salarySlip.designation}"></span></td>
         <td><strong>Date :</strong> <span th:text="${salarySlip.postingDate}"></span></td>
     </tr>
-</table>
+</table> 
 
 <div class="section-title">Détails de présence</div>
 <table>
@@ -119,12 +118,13 @@
             <tr>
                 <th>Composant</th>
                 <th>Montant (Ar)</th>
-                <th>Cumul Annuel (Ar)</th>
             </tr>
             <tr th:each="e : ${salarySlip.earnings}">
                 <td th:text="${e.salaryComponent}">Basic</td>
                 <td th:text="${#numbers.formatDecimal(e.amount, 1, 'COMMA', 2, 'POINT')}">4400.00</td>
-                <td th:text="${#numbers.formatDecimal(e.yearToDate, 1, 'COMMA', 2, 'POINT')}">4400.00</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(salarySlip.earnings)}">
+                <td colspan="3">Aucune déduction</td>
             </tr>
         </table>
     </div>
@@ -134,15 +134,13 @@
             <tr>
                 <th>Composant</th>
                 <th>Montant (Ar)</th>
-                <th>Cumul Annuel (Ar)</th>
             </tr>
             <tr th:each="d : ${salarySlip.deductions}">
                 <td th:text="${d.salaryComponent}">---</td>
                 <td th:text="${#numbers.formatDecimal(d.amount, 1, 'COMMA', 2, 'POINT')}">---</td>
-                <td th:text="${#numbers.formatDecimal(d.yearToDate, 1, 'COMMA', 2, 'POINT')}">---</td>
             </tr>
             <tr th:if="${#lists.isEmpty(salarySlip.deductions)}">
-                <td colspan="3" style="text-align:center;">Aucune déduction</td>
+                <td colspan="3">Aucune déduction</td>
             </tr>
         </table>
     </div>

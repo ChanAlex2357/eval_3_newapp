@@ -21,12 +21,12 @@
     <header class="bg-primary text-white py-2 shadow-sm fixed-top">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <div>
-                <h4 class="m-0">NewApp</h4>
+                <!-- <h4 class="m-0">NewApp</h4> -->
             </div>
             <div class="d-flex gap-1 align-items-center justify-content-center">
                 
                 <div>
-                    <a th:href="@{/user/profile}" class="text-white text-decoration-none"><i class="bi bi-person-badge-fill"></i>Profile</a>
+                    <a th:href="@{/user/profile}" class="text-white text-decoration-none"><i class="bi bi-person-badge-fill"></i></a>
                 </div>
             </div>
         </div>
@@ -44,10 +44,10 @@
                             </a>
                         <b class="border-bottom">Employees</b>
                             <a class="nav-link text-dark " th:href="@{/hr/employees}">
-                                <i class="bi px-2 text-secondary bi-person-fill"></i> Employés
+                                <i class="bi px-2 text-secondary bi-list"></i> List
                             </a>
                             <a class="nav-link text-dark " th:href="@{/hr/employees/create}">
-                                <i class="bi px-2 text-secondary bi-plus"></i> Create Employee
+                                <i class="bi px-2 text-secondary bi-plus"></i> Create
                             </a>
                         <b class="border-bottom">Salaires</b>
                             <a class="nav-link text-dark " th:href="@{/hr/salaries}">

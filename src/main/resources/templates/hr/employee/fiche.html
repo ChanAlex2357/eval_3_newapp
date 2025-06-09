@@ -67,6 +67,35 @@
                 <!-- Colonne 2: Fiches de paie et historique -->
                 <div class="col-lg-8 col-md-12">
                     <div class="row g-4">
+                        <!-- Historique de salaire -->
+                        <div class="col-12">
+                            <div class="modern-card">
+                                <div class="section-header">
+                                    <i class="fas fa-chart-line"></i>
+                                    Historique des salaires
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table modern-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="text-center">Date début</th>
+                                                <th scope="col" class="text-center">Salaire de base</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="history-table">
+                                            <tr>
+                                                <td colspan="4">
+                                                    <div class="empty-state">
+                                                        <i class="fas fa-history"></i>
+                                                        <p class="mb-0">Aucun historique disponible</p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Fiches de paie -->
                         <div class="col-12">
                             <div class="card">
@@ -91,38 +120,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Historique des salaires
-                        <div class="col-12">
-                            <div class="modern-card">
-                                <div class="section-header">
-                                    <i class="fas fa-chart-line"></i>
-                                    Historique des salaires
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table modern-table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Référence</th>
-                                                <th scope="col">Date début</th>
-                                                <th scope="col">Salaire</th>
-                                                <th scope="col">Statut</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colspan="4">
-                                                    <div class="empty-state">
-                                                        <i class="fas fa-history"></i>
-                                                        <p class="mb-0">Aucun historique disponible</p>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div> -->
+                        
                     </div>
                 </div>
             </div>
@@ -132,12 +130,20 @@
             import {formatCurrency, formatDate, downloadSalaryPdf} from '/js/services/utils.js';
             import {getRowSpinner, getSpinner} from '/js/services/spinner.js';
             import {fetchSalaries} from '/js/services/salaryService.js';
+            import {fetchAssignments, renderAssignmentsTable} from '/js/services/assignmentService.js';
             
             async function fetchData() {
                 const emp_name = document.getElementById("emp_name").dataset.employeeId;
                 try {
                     const data = await fetchSalaries({ "employee": emp_name });
                     renderSalariesTable(data.salaries);
+
+                    console.log(emp_name);
+                    const assignmentsData = await fetchAssignments({"employee":emp_name});
+                    console.log(assignmentsData);
+
+                    renderAssignmentsTable(assignmentsData,"history-table")
+                    
                 } catch (error) {
                     console.error('Erreur lors du chargement des salaires:', error);
                     renderErrorState();

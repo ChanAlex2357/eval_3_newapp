@@ -31,7 +31,7 @@ public class EmpService extends FrappeCrudService<Employee>{
         return getDocumentById(user, new Employee(), id, fields, Employee.class);
     }
 
-    public Employee createEmployee(UserErpNext user, Employee employee) throws ERPNexException, Exception {
-        return createDocument(user, employee, Employee.class);
+    public Employee createEmployee(UserErpNext user, EmpForm empForm) throws ERPNexException, Exception {
+        return createDocument(user, new Employee(),empForm, Employee.class);
     }
 }

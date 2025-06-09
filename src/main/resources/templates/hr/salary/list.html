@@ -59,9 +59,9 @@
                         </div>    
                         <table class="table table-sm">
                             <thead>
-                                <th scope="col" class="text-center">Somme Eanings</th>
+                                <th scope="col" class="text-center">Somme Salaire Brut</th>
                                 <th scope="col" class="text-center">Somme Deductions</th>
-                                <th scope="col" class="text-center">Somme Salaire</th>
+                                <th scope="col" class="text-center">Somme Salaire Net</th>
                             <tbody id="totalBody">
                                 <tr>
                                     <td>0</td>
@@ -79,9 +79,9 @@
                         </div>   
                         <table class="table table-hover table-sm modern-table">
                             <thead>
-                                <th scope="col">Sr.No</th>
-                                <th scope="col">Fullname</th>
+                                <!-- <th scope="col">Sr.No</th> -->
                                 <th scope="col">Mois</th>
+                                <th scope="col">Employee</th>
                                 <th scope="col">Salaire Brut</th>
                                 <th scope="col">Deductions</th>
                                 <th scope="col">Salaire Net</th>
@@ -190,9 +190,11 @@
                         const row = document.createElement('tr');
                         const collapseId = `salary-details-${index}`;
                         row.innerHTML = `
-                            <td ><strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
-                            <td>${salary.employee_name}</td>
                             <td>${salary.period} </td>
+                            <td >
+                                <strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong> - 
+                                ${salary.employee_name}
+                            </td>
                             <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
                             <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
                             <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
