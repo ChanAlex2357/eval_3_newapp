@@ -108,7 +108,7 @@
                             <td class="text-center"> 
                                 <a href="/hr/salaries?annee=${year}&mois=${month_num}" class="">
                                     <button class="col-4 btn btn-success badge">
-                                        ${formatCurrency(month.total_salary)}
+                                        ${formatCurrency(month.total_salary.toFixed(2))}
                                     </button>
                                 </a>
                             </td>

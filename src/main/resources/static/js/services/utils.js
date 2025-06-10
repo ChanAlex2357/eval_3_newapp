@@ -1,9 +1,11 @@
 export function formatCurrency(amount) {
     if (!amount) return 'Ar 0';
-    return new Intl.NumberFormat('mg-MG', {
+    let formated_amount = new Intl.NumberFormat('fr-FR', {
         style: 'currency',
-        currency: 'MGA'
+        currency: 'MGA',
     }).format(amount);
+
+    return formated_amount
 }
 
 export function formatDate(dateString){

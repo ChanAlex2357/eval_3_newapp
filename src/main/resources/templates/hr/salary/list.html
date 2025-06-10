@@ -80,8 +80,8 @@
                         <table class="table table-hover table-sm modern-table">
                             <thead>
                                 <!-- <th scope="col">Sr.No</th> -->
-                                <th scope="col">Mois</th>
                                 <th scope="col">Employee</th>
+                                <th scope="col">Mois</th>
                                 <th scope="col">Salaire Brut</th>
                                 <th scope="col">Deductions</th>
                                 <th scope="col">Salaire Net</th>
@@ -192,11 +192,11 @@
                         const row = document.createElement('tr');
                         const collapseId = `salary-details-${index}`;
                         row.innerHTML = `
-                            <td>${salary.period} </td>
                             <td >
                                 <strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong> - 
                                 ${salary.employee_name}
                             </td>
+                            <td>${salary.period} </td>
                             <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
                             <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
                             <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
