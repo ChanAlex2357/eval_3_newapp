@@ -1,8 +1,5 @@
 package itu.eval3.newapp.client.controller.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +10,9 @@ import itu.eval3.newapp.client.builder.ApiResponseBuilder;
 import itu.eval3.newapp.client.exceptions.AuthenticationException;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
-import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
-import itu.eval3.newapp.client.models.hr.salary.filter.SalaryStructureAssignmentFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
-import itu.eval3.newapp.client.services.hr.salary.SalaryStructureAssignmentService;
 import jakarta.servlet.http.HttpSession;
 
 
