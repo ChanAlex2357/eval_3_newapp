@@ -79,6 +79,7 @@ public class EmpController {
             
         } catch (Exception e) {
             model.addAttribute("error_msg", e.getMessage());
+            return "redirect:/home";
         }
 
         model.addAttribute("employee", employee);

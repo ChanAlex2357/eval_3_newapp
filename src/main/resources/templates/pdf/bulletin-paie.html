@@ -17,7 +17,7 @@
         flex-direction: column;
     }
     .title {
-        align-self: left;
+        text-align: right;
     }
     .logo {
         width: 150px;
@@ -73,13 +73,13 @@
 <body>
 
 <header>
+    <div class="logo">
+        Logo
+    </div>
     <div class="title">
         <div><strong>Entreprise :</strong> <span th:text="${salarySlip.company}">Itu Eval</span></div>
         <div><strong>Période :</strong> <span th:text="${salarySlip.startDate}"></span> au <span th:text="${salarySlip.endDate}"></span></div>
         <div><strong>Structure :</strong> <span th:text="${salarySlip.salaryStructure}"></span></div>
-    </div>
-    <div class="logo">
-        Logo
     </div>
 </header> 
 
