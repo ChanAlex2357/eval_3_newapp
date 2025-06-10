@@ -123,7 +123,9 @@
                     
                     renderSalariesTable(data || []);
                     const month_idx = parseInt(selectedOption.value);
-                    month.innerHTML = `${months_str[month_idx-1]} ${selectedYear.value}`;
+                    if (month_idx){
+                        month.innerHTML = `${months_str[month_idx-1]} ${selectedYear.value}`;
+                    }
                 }
                 window.setEmpFilter = function (emp_name) {
                     const filter = document.getElementById("emp_filter");

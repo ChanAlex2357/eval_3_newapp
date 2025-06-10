@@ -72,7 +72,8 @@ public class ApiConfig {
  
     
     // *********** RESOURCES URLS ****************
-    public String getResourceUrl(String doctype,String id,String[] fields, FrappeApiFilter[] filters ){
+    
+    public String getResourceUrl(String doctype,String id,String[] fields, FrappeApiFilter[] filters, int length ){
         String uri = baseUrl + ressource +"/"+ doctype ;
 
         if (id != null && id != "") {
@@ -90,6 +91,7 @@ public class ApiConfig {
         if (filterSrt  != "" ) {
             uriComponentsBuilder.queryParam("filters", filterSrt);
         }
+        uriComponentsBuilder.queryParam("limit_page_length",0);
 
         uri = uriComponentsBuilder.build().toUriString();
 
@@ -97,12 +99,12 @@ public class ApiConfig {
     }
 
     public String getResourceWithAllFieldsUrl(String doctype,FrappeApiFilter[] filters){
-        return getResourceUrl(doctype,null, ALL_FIELDS,filters);
+        return getResourceUrl(doctype,null, ALL_FIELDS,filters,0);
     }
 
     
     public String getResourceUrl(String doctype,String id) {
-        return getResourceUrl(doctype,id,null,null);
+        return getResourceUrl(doctype,id,null,null,0);
     }
 
     public String getResourceWithAllFieldsUrl(String doctype){

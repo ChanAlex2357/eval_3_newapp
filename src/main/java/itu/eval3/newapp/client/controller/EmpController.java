@@ -128,7 +128,7 @@ public class EmpController {
             //     return "hr/employee/create";
             // }
             Employee savedEmployee = empService.createEmployee(user, employee);
-            return "redirect:/hr/employees";
+            return "redirect:/hr/employees/"+savedEmployee.getName();
         } catch (Exception e) {
             model.addAttribute("err", e.getMessage());
             model.addAttribute("empForm", employee);

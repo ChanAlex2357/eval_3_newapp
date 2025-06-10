@@ -69,10 +69,10 @@
                     const collapseId = `detailLog${order}`;
 
                     let status = "Neutre";
-                    if(log_data.status == 1){
+                    if(log_data.error_count <= 0){
                         status = `<span class="badge bg-success">Success</span>`
                     }
-                    else if (log_data.status == -1){
+                    else if (log_data.error_count > 0){
                         status = `<span class="badge bg-danger">Erreur</span>`
                     }
                     else {
