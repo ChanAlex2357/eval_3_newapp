@@ -3,8 +3,6 @@ package itu.eval3.newapp.client.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
