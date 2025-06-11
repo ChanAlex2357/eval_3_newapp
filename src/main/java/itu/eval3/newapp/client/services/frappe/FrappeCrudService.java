@@ -104,15 +104,13 @@ public class FrappeCrudService<D extends FrappeDocument>{
         return createDocument(user, document, modClass, document.as_dict());
     }
 
-    public D submit(UserErpNext user, D document, Class<D> modClass) throws ERPNexException{
+   public D updateDocument(UserErpNext user, D document, Class<D> modClass, Object body) throws ERPNexException{
         FrappeResponseParser<D> parser = new FrappeResponseParser<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("docstatus", 1);
         ResponseEntity<String> response = frappeWebService.callResource(
             user, 
             document, 
             document.getName(),
-            map, 
+            body,
             HeadersUtils.buildJsonHeader(user), 
             HttpMethod.POST,
             null,
@@ -122,5 +120,17 @@ public class FrappeCrudService<D extends FrappeDocument>{
         );
         ResourceSingleResponse<D> singleResponse = parser.parseSingleResourceResponse(response, modClass);
         return singleResponse.getData();
+   }
+
+   public D cancel(UserErpNext user, D document, Class<D> moClass) throws ERPNexException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("docstatus", 2);
+        return updateDocument(user, document, moClass, map);
+   }
+
+    public D submit(UserErpNext user, D document, Class<D> modClass) throws ERPNexException{
+        Map<String, Object> map = new HashMap<>();
+        map.put("docstatus", 1);
+        return updateDocument(user, document, modClass, map);
    }
 }
