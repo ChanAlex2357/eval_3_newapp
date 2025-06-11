@@ -16,7 +16,7 @@ public class SalaryGeneratorForm {
     public String currency;
     public double salary;
 
-    public Map<String, Object> as_dict(){
+    public Map<String, Object> getAssignmentDict(){
         Map<String, Object> map = new HashMap<>();
         map.put("employee",employee);
         map.put("salary_structure", salary_structure);
@@ -28,11 +28,29 @@ public class SalaryGeneratorForm {
         return map;
     }
 
-    public Map<String, Object> as_dict(Date from_date){
-        Map<String, Object> map = as_dict();
+    public Map<String, Object> getAssignmentDict(Date from_date){
+        Map<String, Object> map = getAssignmentDict();
         map.replace("from_date", from_date.toString());
         return map;
     }
 
+
+    public Map<String, Object> getSalarySDict(){
+        Map<String, Object> map = new HashMap<>();
+        // map.put("employee",employee);
+        // map.put("salary_structure", salary_structure);
+        // map.put("base", salary);
+        // map.put("from_date", start_date.toString());
+        // map.put("currency", currency);
+        // map.put("company", company);
+        // map.put("docstatus", 1);
+        return map;
+    }
+
+    public Map<String, Object> getSalaryDict(Date from_date){
+        Map<String, Object> map = getSalarySDict();
+        // map.replace("from_date", from_date.toString());
+        return map;
+    }
 
 }

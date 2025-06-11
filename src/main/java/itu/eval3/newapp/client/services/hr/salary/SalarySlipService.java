@@ -1,6 +1,9 @@
 package itu.eval3.newapp.client.services.hr.salary;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +21,9 @@ import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.salary.DashboardData;
 import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
+import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
+import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.exporter.PdfExporterService;
@@ -36,6 +41,9 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     
     @Autowired
     private PdfExporterService pdfExporterService;
+
+    @Autowired
+    private SalaryStructureAssignmentService assignmentService;
 
     public List<SalarySlip> getAllByEmployee(UserErpNext user, String idEmployee, String[] fields, FrappeFilterComponent filter) throws ERPNexException{
         List<SalarySlip> data = getAllDocuments(
@@ -139,5 +147,49 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         return salaries;
     }
 
-    
+    public List<SalarySlip> generateSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
+        List<SalarySlip> results = new ArrayList<>();
+         Date start_date = salaryGeneratorForm.getStart_date();
+        int start_year = start_date.toLocalDate().getYear();
+        int start_month = start_date.toLocalDate().getMonthValue();
+
+        Date end_date = salaryGeneratorForm.getEnd_date();
+        int end_year = end_date.toLocalDate().getYear();
+        int end_month = end_date.toLocalDate().getMonthValue();
+        assignmentService.createSalaryAssignment(user, salaryGeneratorForm)
+        results.add(createDocument(
+            user,
+            new SalaryStructureAssignment(),
+            SalaryStructureAssignment.class,
+            salaryGeneratorForm.as_dict()
+        ));
+        try {
+            
+            if (start_month != end_month && start_year == end_year) {
+                start_month += 1;
+                while (start_month <= end_month ) {
+                    Date from_date = Date.valueOf(LocalDate.of(start_year, start_month, 1));
+                    try {
+                        results.add(createDocument(
+                            user,
+                            new SalaryStructureAssignment(),
+                            SalaryStructureAssignment.class,
+                            salaryGeneratorForm.as_dict(from_date)
+                            )
+                        );
+                        
+                    } catch (Exception e) {
+                        // Skip
+                    }
+                    finally {
+                        start_month += 1;
+                    }
+                };
+            }
+        } catch (Exception e) {
+            e.printStackTrace();   
+        }
+
+        return results;
+    }
 }
