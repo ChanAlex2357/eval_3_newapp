@@ -8,14 +8,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import itu.eval3.newapp.client.config.ApiConfig;
+import itu.eval3.newapp.client.models.annexe.Company;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
+import itu.eval3.newapp.client.models.hr.salary.SalaryComponent;
+import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
+import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
+import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
+import itu.eval3.newapp.client.services.company.CompanyService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
+import itu.eval3.newapp.client.services.hr.salary.SalaryComponentService;
+import itu.eval3.newapp.client.services.hr.salary.SalaryStructureAssignmentService;
+import itu.eval3.newapp.client.services.hr.salary.SalaryStructureService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 
 @Controller
 @Slf4j
@@ -23,6 +39,20 @@ import lombok.extern.slf4j.Slf4j;
 public class SalaryController {
     @Autowired
     private EmpService empService;
+    @Autowired
+    private CompanyService companyService;
+
+    @Autowired
+    private SalaryStructureService salaryStructureService;
+
+    @Autowired
+    private SalaryStructureAssignmentService assignmentService;
+
+    @Autowired
+    private SalaryComponentService componentService;
+
+
+
     @GetMapping
     public String listSalaries(HttpSession session, Model model, @ModelAttribute SalaryFilter salaryFilter) {
         model.addAttribute("salary_filter",salaryFilter);
@@ -42,12 +72,62 @@ public class SalaryController {
     @GetMapping("/create/assignement")
     public String crateAssignement(HttpSession session, Model model){
         List<Employee> employees = null;
+        List<SalaryStructure> salaryStructures = null;
         try {
-            
+            UserErpNext user = (UserErpNext) session.getAttribute("user");
+            employees = empService.getAll(user, null);
+
+            salaryStructures = salaryStructureService.getAll(user);
         } catch (Exception e) {
-            // TODO: handle exception
+            throw new RuntimeException(e);
         }
         model.addAttribute("employees", employees);
+        model.addAttribute("salaryStructures", salaryStructures);
         return "hr/salary/create-assigenment";
     }
+
+    @PostMapping("/create/assignement")
+    public String doCreate(HttpSession session , @ModelAttribute SalaryGeneratorForm salaryGeneratorForm) {
+        
+        try {
+            UserErpNext user = (UserErpNext) session.getAttribute("user");
+            Employee employee = empService.getById(user,salaryGeneratorForm.getEmployee());
+            Company company = companyService.getDocumentById(user, new Company(), employee.getCompany(), ApiConfig.ALL_FIELDS, Company.class);
+            salaryGeneratorForm.setCompany(company.getName());
+            salaryGeneratorForm.setCurrency(company.getDefaulCurrency());
+
+            List<SalaryStructureAssignment> assignments = assignmentService.createSalaryAssignment(user, salaryGeneratorForm);
+            // assignmentService.submit(user, assignment, SalaryStructureAssignment.class);
+            return "redirect:/hr/salaries";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/update/salary")
+    public String updateSalary(HttpSession session, Model model) {
+        List<SalaryComponent> components = null;
+        List<Employee> employees = null;
+
+        try {
+            UserErpNext user = (UserErpNext) session.getAttribute("user");
+
+            components= componentService.getAll(user);
+            employees = empService.getAll(user, null);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        model.addAttribute("components", components);
+        model.addAttribute("employees", employees);
+        return "/hr/update-assignment";
+    }
+
+    @PostMapping("/hr/update/salary")
+    public String udpateSalary(HttpSession session){
+        return "redirect:/hr/salaries";
+    }
+    
+    
 }

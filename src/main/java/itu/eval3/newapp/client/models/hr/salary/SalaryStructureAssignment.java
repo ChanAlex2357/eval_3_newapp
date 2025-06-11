@@ -40,20 +40,15 @@ public class SalaryStructureAssignment extends FrappeDocument {
 
 @Override
     public void update_cotnrole() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update_cotnrole'");
     }
 
     @Override
     public void save_controle() throws Exception {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save_controle'");
     }
 
     @Override
     public Object as_dict() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'as_dict'");
+        return null;
     }
     
 }

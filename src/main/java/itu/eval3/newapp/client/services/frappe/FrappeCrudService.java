@@ -1,8 +1,11 @@
 package itu.eval3.newapp.client.services.frappe;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -70,4 +73,13 @@ public class FrappeCrudService<D extends FrappeDocument>{
     public D createDocument(UserErpNext user, D document, Class<D> modClass)throws ERPNexException, Exception {
         return createDocument(user, document, document.as_dict(), modClass);
     }
+
+   public D submit(UserErpNext user, D document, Class<D> modClass) throws ERPNexException{
+        FrappeResponseParser<D> parser = new FrappeResponseParser<>();
+        Map<String, Object> map = new HashMap<>();
+        map.put("docstatus", 1);
+        ResponseEntity<String> response = frappeWebService.callResource(user, document, document.getName(),map, HeadersUtils.buildJsonHeader(user), HttpMethod.POST,null,null);
+        ResourceSingleResponse<D> singleResponse = parser.parseSingleResourceResponse(response, modClass);
+        return singleResponse.getData();
+   }
 }

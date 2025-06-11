@@ -24,6 +24,7 @@ import itu.eval3.newapp.client.exceptions.ErpNextCallException;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import lombok.extern.slf4j.Slf4j;
 
 @Service

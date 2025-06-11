@@ -91,7 +91,7 @@ public class ApiConfig {
         if (filterSrt  != "" ) {
             uriComponentsBuilder.queryParam("filters", filterSrt);
         }
-        uriComponentsBuilder.queryParam("limit_page_length",0);
+        // uriComponentsBuilder.queryParam("limit_page_length",0);
 
         uri = uriComponentsBuilder.build().toUriString();
 
