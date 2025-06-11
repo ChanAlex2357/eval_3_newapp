@@ -7,14 +7,12 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import itu.eval3.newapp.client.models.action.FrappeDocument;
-import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SalarySlip extends FrappeDocument{
-
     private String employee;
     private String company;
     private String designation;
@@ -167,25 +165,11 @@ public class SalarySlip extends FrappeDocument{
 
     @Override
     public SalaryRequest as_dict() {
-        SalaryRequest salary = new SalaryRequest();
         return null;
     }
 
     public String getUriName(){
         return this.getName().replaceAll("/", "__");
-    }
-
-    public String getPeriod(){
-        String result = "mm / yyyy";
-        if (startDate != null) {
-            result = getStartDate().toLocalDate().getMonth().name();
-            result += " "+getStartDate().toLocalDate().getYear();
-        }
-        else if (endDate != null) {
-            result = getEndDate().toLocalDate().getMonth().name();
-            result += " "+getEndDate().toLocalDate().getYear();
-        }
-        return result;
     }
 
 }

@@ -1,8 +1,6 @@
 package itu.eval3.newapp.client.services.hr.salary;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,7 +14,6 @@ import itu.eval3.newapp.client.models.hr.salary.filter.SalaryStructureAssignment
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;

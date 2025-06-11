@@ -8,17 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.models.annexe.Company;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.salary.SalaryComponent;
 import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
-import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
-import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.SalaryUpdateForm;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
@@ -26,13 +22,10 @@ import itu.eval3.newapp.client.services.company.CompanyService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
 import itu.eval3.newapp.client.services.hr.salary.SalaryComponentService;
 import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
-import itu.eval3.newapp.client.services.hr.salary.SalaryStructureAssignmentService;
 import itu.eval3.newapp.client.services.hr.salary.SalaryStructureService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -47,9 +40,6 @@ public class SalaryController {
 
     @Autowired
     private SalaryStructureService salaryStructureService;
-
-    @Autowired
-    private SalaryStructureAssignmentService assignmentService;
 
     @Autowired
     private SalaryComponentService componentService;
