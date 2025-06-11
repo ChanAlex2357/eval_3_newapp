@@ -7,10 +7,10 @@ import java.util.Map;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilterList;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import itu.eval3.newapp.client.utils.uri.filters.LikeFilter;
 
-public class SalaryFilter implements FrappeFilter {
+public class SalaryFilter implements FrappeFilterComponent {
     private String employee;
     private String employeeName;
     private String mois;

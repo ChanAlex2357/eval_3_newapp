@@ -10,24 +10,24 @@ import itu.eval3.newapp.client.models.hr.emp.EmpForm;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 
 @Service
 public class EmpService extends FrappeCrudService<Employee>{
 
-    public List<Employee> getAll(UserErpNext user, FrappeFilter filter ) throws ERPNexException{
+    public List<Employee> getAll(UserErpNext user, FrappeFilterComponent filter ) throws ERPNexException{
         return getAll(user,ApiConfig.ALL_FIELDS, filter);
     }
 
-    public List<Employee> getAll(UserErpNext user, String[] fields, FrappeFilter filter ) throws ERPNexException{
+    public List<Employee> getAll(UserErpNext user, String[] fields, FrappeFilterComponent filter ) throws ERPNexException{
         return getAllDocuments(
             user, 
             new Employee(), 
             Employee.class,
             fields, 
             filter,
-            FrappeLimiter.NOLIMITER            
+            FrappeLimiterComponent.NOLIMITER            
         );
     }
 

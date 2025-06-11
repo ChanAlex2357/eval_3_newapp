@@ -14,7 +14,7 @@ import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryStructureAssignmentFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
-import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 
 @Service
 public class SalaryStructureAssignmentService extends FrappeCrudService<SalaryStructureAssignment> {
@@ -25,7 +25,7 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
             SalaryStructureAssignment.class,
             ApiConfig.ALL_FIELDS, 
             assignmentFilter, 
-            FrappeLimiter.NOLIMITER
+            FrappeLimiterComponent.NOLIMITER
         );
     }
     public List<SalaryStructureAssignment> createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {

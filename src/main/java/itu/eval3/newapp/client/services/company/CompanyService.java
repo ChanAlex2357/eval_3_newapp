@@ -9,16 +9,16 @@ import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.annexe.Company;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 
 @Service
 public class CompanyService extends FrappeCrudService<Company>{
     private static Company document = new Company();
     private static Class<Company> docClass = Company.class;    
 
-    public List<Company> getAll(UserErpNext user, FrappeFilter filter) throws ERPNexException{
-        List<Company> companies = getAllDocuments(user,document, docClass, ApiConfig.ALL_FIELDS , filter,FrappeLimiter.NOLIMITER);
+    public List<Company> getAll(UserErpNext user, FrappeFilterComponent filter) throws ERPNexException{
+        List<Company> companies = getAllDocuments(user,document, docClass, ApiConfig.ALL_FIELDS , filter,FrappeLimiterComponent.NOLIMITER);
         return companies;
     }   
     public List<Company> getAll(UserErpNext user) throws ERPNexException{

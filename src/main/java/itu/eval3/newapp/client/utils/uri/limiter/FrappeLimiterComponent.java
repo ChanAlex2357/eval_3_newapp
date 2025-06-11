@@ -2,21 +2,22 @@ package itu.eval3.newapp.client.utils.uri.limiter;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
+import itu.eval3.newapp.client.utils.uri.FrappeUriComponent;
 import lombok.Data;
 
 @Data
-public class FrappeLimiter {
-    public static final FrappeLimiter NOLIMITER = new FrappeLimiter(-1, 0);
+public class FrappeLimiterComponent implements FrappeUriComponent{
+    public static final FrappeLimiterComponent NOLIMITER = new FrappeLimiterComponent(-1, 0);
 
     public int limitStart;
     public int limitLength;
-    public FrappeLimiter() {}
-    public FrappeLimiter(int limitStart, int limitLength) {
+    public FrappeLimiterComponent() {}
+    public FrappeLimiterComponent(int limitStart, int limitLength) {
         this.limitStart = limitStart;
         this.limitLength = limitLength;
     }
-
-    public void setUri(UriComponentsBuilder uriComponentsBuilder){
+    @Override
+    public void addToUri(UriComponentsBuilder uriComponentsBuilder) {
         if (limitStart >= 0) {
             uriComponentsBuilder.queryParam("limit_start", limitStart);
         }

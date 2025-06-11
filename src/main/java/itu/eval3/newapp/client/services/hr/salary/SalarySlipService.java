@@ -25,8 +25,8 @@ import itu.eval3.newapp.client.services.exporter.PdfExporterService;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 
 @Service
 public class SalarySlipService extends FrappeCrudService<SalarySlip> {
@@ -36,35 +36,35 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     @Autowired
     private PdfExporterService pdfExporterService;
 
-    public List<SalarySlip> getAllByEmployee(UserErpNext user, String idEmployee, String[] fields, FrappeFilter filter) throws ERPNexException{
+    public List<SalarySlip> getAllByEmployee(UserErpNext user, String idEmployee, String[] fields, FrappeFilterComponent filter) throws ERPNexException{
         List<SalarySlip> data = getAllDocuments(
             user, 
             new SalarySlip(),
             SalarySlip.class,
             fields,
             filter,
-            FrappeLimiter.NOLIMITER
+            FrappeLimiterComponent.NOLIMITER
         );
 
         return data;
     }
 
     public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp, String[] fields) throws ERPNexException{
-        FrappeFilter filter = new SalaryFilter(emp);
+        FrappeFilterComponent filter = new SalaryFilter(emp);
         return getAllByEmployee(user, emp.getName(),fields,filter);
     }
     public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp) throws ERPNexException{
         return getAllByEmployee(user, emp,ApiConfig.ALL_FIELDS);
     }
 
-    public List<SalarySlip> getAll(UserErpNext user,String[] fields,FrappeFilter filter) throws ERPNexException {
+    public List<SalarySlip> getAll(UserErpNext user,String[] fields,FrappeFilterComponent filter) throws ERPNexException {
         return getAllDocuments(
             user,
             new SalarySlip(),
             SalarySlip.class,
             ApiConfig.ALL_FIELDS, 
             filter, 
-            FrappeLimiter.NOLIMITER
+            FrappeLimiterComponent.NOLIMITER
         );
     }
 

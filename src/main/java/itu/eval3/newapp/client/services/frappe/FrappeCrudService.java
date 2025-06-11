@@ -17,8 +17,8 @@ import itu.eval3.newapp.client.models.api.responses.resources.ResourceSingleResp
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 
 @Service
 public class FrappeCrudService<D extends FrappeDocument>{
@@ -26,7 +26,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
     @Autowired
     protected FrappeWebService frappeWebService;
 
-    public List<D> getAllDocuments(UserErpNext user, D document,  Class<D> modelClass, String[] fields, FrappeFilter filter, FrappeLimiter limiter) throws ERPNexException {
+    public List<D> getAllDocuments(UserErpNext user, D document,  Class<D> modelClass, String[] fields, FrappeFilterComponent filter, FrappeLimiterComponent limiter) throws ERPNexException {
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
         List<D> data = null;
 

@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 import lombok.Data;
 
 @Configuration
@@ -75,7 +75,7 @@ public class ApiConfig {
     
     // *********** RESOURCES URLS ****************
     
-    public String getResourceUrl(String doctype,String id,String[] fields, FrappeApiFilter[] filters, FrappeLimiter limiter){
+    public String getResourceUrl(String doctype,String id,String[] fields, FrappeApiFilter[] filters, FrappeLimiterComponent limiter){
         String uri = baseUrl + ressource +"/"+ doctype ;
 
         if (id != null && id != "") {
@@ -108,12 +108,12 @@ public class ApiConfig {
     }
 
     public String getResourceUrl(String doctype,FrappeApiFilter[] filters){
-        return getResourceUrl(doctype,null, ALL_FIELDS,filters,FrappeLimiter.NOLIMITER);
+        return getResourceUrl(doctype,null, ALL_FIELDS,filters,FrappeLimiterComponent.NOLIMITER);
     }
 
     
     public String getResourceUrl(String doctype,String id) {
-        return getResourceUrl(doctype,id,null,null,FrappeLimiter.NOLIMITER);
+        return getResourceUrl(doctype,id,null,null,FrappeLimiterComponent.NOLIMITER);
     }
 
     public String getResourceUrl(String doctype){

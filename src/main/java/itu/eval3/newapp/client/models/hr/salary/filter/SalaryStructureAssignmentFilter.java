@@ -2,10 +2,10 @@ package itu.eval3.newapp.client.models.hr.salary.filter;
 
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilterList;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import lombok.Data;
 @Data
-public class SalaryStructureAssignmentFilter implements FrappeFilter {
+public class SalaryStructureAssignmentFilter implements FrappeFilterComponent {
     public String employee;
     public String salaryStructure;
 

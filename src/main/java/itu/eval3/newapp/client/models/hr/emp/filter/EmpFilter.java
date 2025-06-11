@@ -5,12 +5,12 @@ import java.sql.Date;
 import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilterList;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import itu.eval3.newapp.client.utils.uri.filters.LikeFilter;
 import lombok.Data;
 
 @Data
-public class EmpFilter implements FrappeFilter {
+public class EmpFilter implements FrappeFilterComponent {
     public String empName;
     public String firstname;
     public String lastname;
