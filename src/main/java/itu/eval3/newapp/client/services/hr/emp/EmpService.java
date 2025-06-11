@@ -10,7 +10,8 @@ import itu.eval3.newapp.client.models.hr.emp.EmpForm;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
 
 @Service
 public class EmpService extends FrappeCrudService<Employee>{
@@ -20,7 +21,14 @@ public class EmpService extends FrappeCrudService<Employee>{
     }
 
     public List<Employee> getAll(UserErpNext user, String[] fields, FrappeFilter filter ) throws ERPNexException{
-        return getAllDocuments(user, new Employee(), fields, filter, Employee.class);
+        return getAllDocuments(
+            user, 
+            new Employee(), 
+            Employee.class,
+            fields, 
+            filter,
+            FrappeLimiter.NOLIMITER            
+        );
     }
 
     public Employee getById(UserErpNext user, String id) throws ERPNexException{

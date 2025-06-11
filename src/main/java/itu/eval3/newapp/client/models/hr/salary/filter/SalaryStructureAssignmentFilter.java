@@ -1,8 +1,8 @@
 package itu.eval3.newapp.client.models.hr.salary.filter;
 
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilter;
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilterList;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
 import lombok.Data;
 @Data
 public class SalaryStructureAssignmentFilter implements FrappeFilter {

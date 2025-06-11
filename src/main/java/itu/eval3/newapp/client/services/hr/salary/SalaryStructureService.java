@@ -9,6 +9,7 @@ import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
 
 @Service
 public class SalaryStructureService extends FrappeCrudService<SalaryStructure>{
@@ -16,9 +17,10 @@ public class SalaryStructureService extends FrappeCrudService<SalaryStructure>{
         return getAllDocuments(
             user, 
             new SalaryStructure(),
+            SalaryStructure.class,
             ApiConfig.ALL_FIELDS,
             null,
-            SalaryStructure.class
+            FrappeLimiter.NOLIMITER
         );
     }
 }

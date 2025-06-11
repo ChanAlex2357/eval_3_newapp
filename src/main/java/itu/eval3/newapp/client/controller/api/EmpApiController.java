@@ -10,7 +10,7 @@ import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.emp.filter.EmpFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;

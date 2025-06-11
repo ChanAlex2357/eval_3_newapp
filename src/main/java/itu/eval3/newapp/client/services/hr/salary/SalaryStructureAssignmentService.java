@@ -14,11 +14,19 @@ import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryStructureAssignmentFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
 
 @Service
 public class SalaryStructureAssignmentService extends FrappeCrudService<SalaryStructureAssignment> {
     public List<SalaryStructureAssignment> getAll(UserErpNext user, SalaryStructureAssignmentFilter assignmentFilter) throws ERPNexException{
-        return super.getAllDocuments(user, new SalaryStructureAssignment(), ApiConfig.ALL_FIELDS, assignmentFilter, SalaryStructureAssignment.class);
+        return super.getAllDocuments(
+            user, 
+            new SalaryStructureAssignment(), 
+            SalaryStructureAssignment.class,
+            ApiConfig.ALL_FIELDS, 
+            assignmentFilter, 
+            FrappeLimiter.NOLIMITER
+        );
     }
     public List<SalaryStructureAssignment> createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
         List<SalaryStructureAssignment> results = new ArrayList<>();

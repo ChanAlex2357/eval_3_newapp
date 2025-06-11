@@ -2,11 +2,11 @@ package itu.eval3.newapp.client.models.hr.emp.filter;
 
 import java.sql.Date;
 
-import itu.eval3.newapp.client.utils.filters.EqualsFilter;
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilter;
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.filters.LikeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilterList;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.LikeFilter;
 import lombok.Data;
 
 @Data

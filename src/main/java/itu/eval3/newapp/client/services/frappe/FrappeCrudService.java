@@ -15,9 +15,10 @@ import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceListResponse;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceSingleResponse;
 import itu.eval3.newapp.client.models.user.UserErpNext;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
 
 @Service
 public class FrappeCrudService<D extends FrappeDocument>{
@@ -25,11 +26,21 @@ public class FrappeCrudService<D extends FrappeDocument>{
     @Autowired
     protected FrappeWebService frappeWebService;
 
-    public List<D> getAllDocuments(UserErpNext user, D document, String[] fields, FrappeFilter filter, Class<D> modelClass) throws ERPNexException {
+    public List<D> getAllDocuments(UserErpNext user, D document,  Class<D> modelClass, String[] fields, FrappeFilter filter, FrappeLimiter limiter) throws ERPNexException {
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
         List<D> data = null;
 
-        ResponseEntity<String> response = frappeWebService.callResource(user, document, null, null, HeadersUtils.buildJsonHeader(user), HttpMethod.GET, fields, filter);
+        ResponseEntity<String> response = frappeWebService.callResource(
+            user, 
+            document,
+            null, 
+            null,
+            HeadersUtils.buildJsonHeader(user), 
+            HttpMethod.GET,
+            fields, 
+            filter,
+            limiter
+        );
         
         ResourceListResponse<D> listResponse = responseParser.parseResourceListResponse(response, modelClass);
 
@@ -46,7 +57,17 @@ public class FrappeCrudService<D extends FrappeDocument>{
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
         D doc = null;
         
-        ResponseEntity<String> response = frappeWebService.callResource(user, document, id, null, HeadersUtils.buildJsonHeader(user), HttpMethod.GET, fields, null);
+        ResponseEntity<String> response = frappeWebService.callResource(
+            user, 
+            document, 
+            id, 
+            null, 
+            HeadersUtils.buildJsonHeader(user), 
+            HttpMethod.GET, 
+            fields, 
+            null,
+            null
+        );
         ResourceSingleResponse<D> singleResponse = responseParser.parseSingleResourceResponse(response, modelClass);
         doc = singleResponse.getData();
         
@@ -64,6 +85,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
             HeadersUtils.buildJsonHeader(user), 
             HttpMethod.POST, 
             null, 
+            null,
             null
         );
 
@@ -74,11 +96,21 @@ public class FrappeCrudService<D extends FrappeDocument>{
         return createDocument(user, document, document.as_dict(), modClass);
     }
 
-   public D submit(UserErpNext user, D document, Class<D> modClass) throws ERPNexException{
+    public D submit(UserErpNext user, D document, Class<D> modClass) throws ERPNexException{
         FrappeResponseParser<D> parser = new FrappeResponseParser<>();
         Map<String, Object> map = new HashMap<>();
         map.put("docstatus", 1);
-        ResponseEntity<String> response = frappeWebService.callResource(user, document, document.getName(),map, HeadersUtils.buildJsonHeader(user), HttpMethod.POST,null,null);
+        ResponseEntity<String> response = frappeWebService.callResource(
+            user, 
+            document, 
+            document.getName(),
+            map, 
+            HeadersUtils.buildJsonHeader(user), 
+            HttpMethod.POST,
+            null,
+            null,
+            null
+        );
         ResourceSingleResponse<D> singleResponse = parser.parseSingleResourceResponse(response, modClass);
         return singleResponse.getData();
    }

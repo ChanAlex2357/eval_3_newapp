@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilter;
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.filters.LikeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilterList;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.LikeFilter;
 
 public class SalaryFilter implements FrappeFilter {
     private String employee;

@@ -4,7 +4,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
 import lombok.Data;
 
 @Configuration
@@ -73,7 +75,7 @@ public class ApiConfig {
     
     // *********** RESOURCES URLS ****************
     
-    public String getResourceUrl(String doctype,String id,String[] fields, FrappeApiFilter[] filters, int length ){
+    public String getResourceUrl(String doctype,String id,String[] fields, FrappeApiFilter[] filters, FrappeLimiter limiter){
         String uri = baseUrl + ressource +"/"+ doctype ;
 
         if (id != null && id != "") {
@@ -81,33 +83,41 @@ public class ApiConfig {
         }
 
         String fieldsStr = makeResourceFields(fields); 
-        String filterSrt = makeRessourceFiters(filters);       
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
+        String filterSrt = makeRessourceFiters(filters);
         
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
+        // Fields
         if (fieldsStr != "") {
             uriComponentsBuilder.queryParam("fields", fieldsStr);
         }
-        
+        // Filters
         if (filterSrt  != "" ) {
             uriComponentsBuilder.queryParam("filters", filterSrt);
         }
-        // uriComponentsBuilder.queryParam("limit_page_length",0);
+        // Limitation
+        if (limiter!= null) {
+            limiter.setUri(uriComponentsBuilder);
+        }
+        // Ordering
+        
+        
 
         uri = uriComponentsBuilder.build().toUriString();
 
         return uri;
     }
 
-    public String getResourceWithAllFieldsUrl(String doctype,FrappeApiFilter[] filters){
-        return getResourceUrl(doctype,null, ALL_FIELDS,filters,0);
+    public String getResourceUrl(String doctype,FrappeApiFilter[] filters){
+        return getResourceUrl(doctype,null, ALL_FIELDS,filters,FrappeLimiter.NOLIMITER);
     }
 
     
     public String getResourceUrl(String doctype,String id) {
-        return getResourceUrl(doctype,id,null,null,0);
+        return getResourceUrl(doctype,id,null,null,FrappeLimiter.NOLIMITER);
     }
 
-    public String getResourceWithAllFieldsUrl(String doctype){
-        return getResourceWithAllFieldsUrl(doctype,null);
+    public String getResourceUrl(String doctype){
+        FrappeApiFilter[] nullFilter = null;
+        return getResourceUrl(doctype,nullFilter);
     }
 }

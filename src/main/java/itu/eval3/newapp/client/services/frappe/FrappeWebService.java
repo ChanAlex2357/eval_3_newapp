@@ -23,8 +23,8 @@ import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.exceptions.ErpNextCallException;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.user.UserErpNext;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.http.HeadersUtils;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -136,8 +136,8 @@ public class FrappeWebService {
      * @param filter un filtre pour definir la contrainte des donnees a recuperer
      *
      * */
-    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpHeaders headers,HttpMethod method, String[] fields, FrappeFilter filter) throws ERPNexException {
-        String url = apiConfig.getResourceUrl(document.getDoctype(), id, fields, filter != null ? filter.getFilters().getFilters() : null,0);
+    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpHeaders headers,HttpMethod method, String[] fields, FrappeFilter filter,FrappeLimiter limiter) throws ERPNexException {
+        String url = apiConfig.getResourceUrl(document.getDoctype(), id, fields, filter != null ? filter.getFilters().getFilters() : null,limiter);
         log.info("Targeting api {} document at URL: {}", document.getDoctype(), url);
         ResponseEntity <String> response = null;
         try {

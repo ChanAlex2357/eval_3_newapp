@@ -23,9 +23,10 @@ import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.exporter.PdfExporterService;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiter;
 
 @Service
 public class SalarySlipService extends FrappeCrudService<SalarySlip> {
@@ -39,9 +40,10 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         List<SalarySlip> data = getAllDocuments(
             user, 
             new SalarySlip(),
+            SalarySlip.class,
             fields,
             filter,
-            SalarySlip.class
+            FrappeLimiter.NOLIMITER
         );
 
         return data;
@@ -56,7 +58,14 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     }
 
     public List<SalarySlip> getAll(UserErpNext user,String[] fields,FrappeFilter filter) throws ERPNexException {
-        return getAllDocuments(user,new SalarySlip(),ApiConfig.ALL_FIELDS, filter, SalarySlip.class);
+        return getAllDocuments(
+            user,
+            new SalarySlip(),
+            SalarySlip.class,
+            ApiConfig.ALL_FIELDS, 
+            filter, 
+            FrappeLimiter.NOLIMITER
+        );
     }
 
     public SalariesRegisterReport getAllDetails(UserErpNext user, SalaryFilter filter) throws ERPNexException {

@@ -1,4 +1,4 @@
-package itu.eval3.newapp.client.utils.filters;
+package itu.eval3.newapp.client.utils.uri.filters;
 
 
 import lombok.Data;
