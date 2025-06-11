@@ -12,6 +12,10 @@ public class FrappeOrderComponent implements FrappeUriComponent{
         setFieldName(fieldName);
         setDirection(direction);
     }
+    public FrappeOrderComponent(String fieldName){
+        this(fieldName,null);
+    }
+
     @Override
     public void addToUri(UriComponentsBuilder uriComponentsBuilder) {
         if (getFieldName() != null) {

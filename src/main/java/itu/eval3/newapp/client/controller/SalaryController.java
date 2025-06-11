@@ -92,10 +92,11 @@ public class SalaryController {
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
             Employee employee = empService.getById(user,salaryGeneratorForm.getEmployee());
-            Company company = companyService.getDocumentById(user, new Company(), employee.getCompany(), ApiConfig.ALL_FIELDS, Company.class);
+            Company company = companyService.getById(user,employee.getCompany());
+
             salaryGeneratorForm.setCompany(company.getName());
             salaryGeneratorForm.setCurrency(company.getDefaulCurrency());
-
+            
             List<SalaryStructureAssignment> assignments = assignmentService.createSalaryAssignment(user, salaryGeneratorForm);
             // assignmentService.submit(user, assignment, SalaryStructureAssignment.class);
             return "redirect:/hr/salaries";

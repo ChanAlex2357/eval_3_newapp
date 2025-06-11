@@ -9,6 +9,10 @@ public class FrappeApiFilterList {
     public FrappeApiFilterList(FrappeApiFilter[] filters){
         this.filters = filters;
     }
+    public boolean hasFilter(){
+        return filters != null && filters.length > 0;
+    }
+
     // public FrappeApiFilterList(String[] fieldnames,String[] operators,String[] values){
     //     List<FrappApiFilter> filters = new ArrayList<>();
     //     String current_value = null;

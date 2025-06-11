@@ -20,7 +20,8 @@ public class SalaryStructureService extends FrappeCrudService<SalaryStructure>{
             SalaryStructure.class,
             ApiConfig.ALL_FIELDS,
             null,
-            FrappeLimiterComponent.NOLIMITER
+            FrappeLimiterComponent.NOLIMITER,
+            null
         );
     }
 }

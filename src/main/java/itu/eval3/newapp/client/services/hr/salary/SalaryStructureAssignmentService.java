@@ -15,6 +15,7 @@ import itu.eval3.newapp.client.models.hr.salary.filter.SalaryStructureAssignment
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
+import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
 
 @Service
 public class SalaryStructureAssignmentService extends FrappeCrudService<SalaryStructureAssignment> {
@@ -25,7 +26,8 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
             SalaryStructureAssignment.class,
             ApiConfig.ALL_FIELDS, 
             assignmentFilter, 
-            FrappeLimiterComponent.NOLIMITER
+            FrappeLimiterComponent.NOLIMITER,
+            new FrappeOrderComponent("from_date")
         );
     }
     public List<SalaryStructureAssignment> createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
@@ -38,7 +40,12 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
         int end_year = end_date.toLocalDate().getYear();
         int end_month = end_date.toLocalDate().getMonthValue();
 
-        results.add(createDocument(user,new SalaryStructureAssignment(),salaryGeneratorForm.as_dict(),SalaryStructureAssignment.class));
+        results.add(createDocument(
+            user,
+            new SalaryStructureAssignment(),
+            SalaryStructureAssignment.class,
+            salaryGeneratorForm.as_dict()
+        ));
         try {
             
             if (start_month != end_month && start_year == end_year) {
@@ -49,8 +56,8 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
                         results.add(createDocument(
                             user,
                             new SalaryStructureAssignment(),
-                            salaryGeneratorForm.as_dict(from_date),
-                            SalaryStructureAssignment.class
+                            SalaryStructureAssignment.class,
+                            salaryGeneratorForm.as_dict(from_date)
                             )
                         );
                         

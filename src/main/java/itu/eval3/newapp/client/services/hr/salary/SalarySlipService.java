@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
 
 import itu.eval3.newapp.client.config.ApiConfig;
+import itu.eval3.newapp.client.enums.FrappeOrderDirection;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
@@ -27,12 +27,12 @@ import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
+import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
 
 @Service
 public class SalarySlipService extends FrappeCrudService<SalarySlip> {
+    private final FrappeOrderComponent POSTING_DATE_ORDER = new FrappeOrderComponent("posting_date", FrappeOrderDirection.ASC);
     
-    @Autowired
-    private TemplateEngine templateEngine;
     @Autowired
     private PdfExporterService pdfExporterService;
 
@@ -43,7 +43,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
             SalarySlip.class,
             fields,
             filter,
-            FrappeLimiterComponent.NOLIMITER
+            FrappeLimiterComponent.NOLIMITER,
+            POSTING_DATE_ORDER
         );
 
         return data;
@@ -53,6 +54,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         FrappeFilterComponent filter = new SalaryFilter(emp);
         return getAllByEmployee(user, emp.getName(),fields,filter);
     }
+    
     public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp) throws ERPNexException{
         return getAllByEmployee(user, emp,ApiConfig.ALL_FIELDS);
     }
@@ -64,7 +66,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
             SalarySlip.class,
             ApiConfig.ALL_FIELDS, 
             filter, 
-            FrappeLimiterComponent.NOLIMITER
+            FrappeLimiterComponent.NOLIMITER,
+            POSTING_DATE_ORDER
         );
     }
 
@@ -79,7 +82,13 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     }
 
     public SalarySlip getById(UserErpNext user, String id) throws ERPNexException {
-        return getDocumentById(user, new SalarySlip(), id, null, SalarySlip.class);
+        return getDocumentById(
+            user, 
+            new SalarySlip(), 
+            SalarySlip.class,
+            id, 
+            null 
+        );
     }
 
     public ByteArrayOutputStream generateBulletinDePaiePdf(SalarySlip salarySlip) throws Exception {

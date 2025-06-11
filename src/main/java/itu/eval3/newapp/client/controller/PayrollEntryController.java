@@ -66,7 +66,7 @@ public class PayrollEntryController {
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
             
-            Company company = companyService.getDocumentById(user, new Company(), payrollForm.company, ApiConfig.ALL_FIELDS, Company.class);
+            Company company = companyService.getById(user, payrollForm.company);
 
             payrollForm.setPayroll_payable_account(company.getDefaultPayableAccount());
 

@@ -14,7 +14,15 @@ import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 public class GenderService extends FrappeCrudService<Gender> {
     public List<Gender> getAll(UserErpNext user) throws ERPNexException {
         List<Gender> genders = null;
-        genders = getAllDocuments(user,new Gender(),Gender.class, null, null,FrappeLimiterComponent.NOLIMITER);
+        genders = getAllDocuments(
+            user,
+            new Gender(),
+            Gender.class, 
+            null, 
+            null,
+            FrappeLimiterComponent.NOLIMITER,
+            null
+        );
         return genders;
     }
 }

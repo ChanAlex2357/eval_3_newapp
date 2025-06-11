@@ -18,10 +18,27 @@ public class CompanyService extends FrappeCrudService<Company>{
     private static Class<Company> docClass = Company.class;    
 
     public List<Company> getAll(UserErpNext user, FrappeFilterComponent filter) throws ERPNexException{
-        List<Company> companies = getAllDocuments(user,document, docClass, ApiConfig.ALL_FIELDS , filter,FrappeLimiterComponent.NOLIMITER);
+        List<Company> companies = getAllDocuments(
+            user,
+            document, 
+            docClass, 
+            ApiConfig.ALL_FIELDS , 
+            filter,FrappeLimiterComponent.NOLIMITER,
+            null
+        );
         return companies;
-    }   
+    }
+
     public List<Company> getAll(UserErpNext user) throws ERPNexException{
         return getAll(user,null);
     }   
+
+    public Company getById(UserErpNext user, String id) throws ERPNexException {
+        return getDocumentById(
+            user, 
+            new Company(),
+            Company.class,
+            id
+        );
+    }
 }

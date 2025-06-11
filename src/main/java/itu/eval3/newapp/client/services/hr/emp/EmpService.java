@@ -27,19 +27,28 @@ public class EmpService extends FrappeCrudService<Employee>{
             Employee.class,
             fields, 
             filter,
-            FrappeLimiterComponent.NOLIMITER            
+            FrappeLimiterComponent.NOLIMITER,
+            null
         );
     }
 
     public Employee getById(UserErpNext user, String id) throws ERPNexException{
-        return getById(user, id, ApiConfig.ALL_FIELDS);
-    }    
 
-    public Employee getById(UserErpNext user, String id, String[] fields) throws ERPNexException{
-        return getDocumentById(user, new Employee(), id, fields, Employee.class);
+        return getDocumentById(
+            user, 
+            new Employee(), 
+            Employee.class,
+            id, 
+            null
+        );
     }
 
     public Employee createEmployee(UserErpNext user, EmpForm empForm) throws ERPNexException, Exception {
-        return createDocument(user, new Employee(),empForm, Employee.class);
+        return createDocument(
+            user, 
+            new Employee(),
+            Employee.class,
+            empForm 
+        );
     }
 }

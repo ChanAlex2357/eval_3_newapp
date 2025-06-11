@@ -19,6 +19,7 @@ import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
+import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
 
 @Service
 public class FrappeCrudService<D extends FrappeDocument>{
@@ -26,7 +27,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
     @Autowired
     protected FrappeWebService frappeWebService;
 
-    public List<D> getAllDocuments(UserErpNext user, D document,  Class<D> modelClass, String[] fields, FrappeFilterComponent filter, FrappeLimiterComponent limiter) throws ERPNexException {
+    public List<D> getAllDocuments(UserErpNext user, D document,  Class<D> modelClass, String[] fields, FrappeFilterComponent filter, FrappeLimiterComponent limiter, FrappeOrderComponent order) throws ERPNexException {
         FrappeResponseParser<D> responseParser = new FrappeResponseParser<>();
         List<D> data = null;
 
@@ -37,9 +38,10 @@ public class FrappeCrudService<D extends FrappeDocument>{
             null,
             HeadersUtils.buildJsonHeader(user), 
             HttpMethod.GET,
-            fields, 
+            fields,
             filter,
-            limiter
+            limiter,
+            order
         );
         
         ResourceListResponse<D> listResponse = responseParser.parseResourceListResponse(response, modelClass);
@@ -50,7 +52,10 @@ public class FrappeCrudService<D extends FrappeDocument>{
     }
 
 
-    public D getDocumentById(UserErpNext user, D document, String id, String[] fields, Class<D> modelClass) throws ERPNexException {
+    public D getDocumentById(UserErpNext user, D document, Class<D> modelClass, String id) throws ERPNexException{
+        return getDocumentById(user, document, modelClass, id,null);
+    }
+    public D getDocumentById(UserErpNext user, D document, Class<D> modelClass, String id, String[] fields) throws ERPNexException {
         if (id == null) {
             throw new ERPNexException("The document id must be setted for fetching data whith getDocumetnById");
         }
@@ -66,6 +71,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
             HttpMethod.GET, 
             fields, 
             null,
+            null,
             null
         );
         ResourceSingleResponse<D> singleResponse = responseParser.parseSingleResourceResponse(response, modelClass);
@@ -74,7 +80,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
         return doc;
     }
     
-    protected D createDocument(UserErpNext user, D document, Object body, Class<D> modClass)throws ERPNexException, Exception {
+    protected D createDocument(UserErpNext user, D document, Class<D> modClass,Object body)throws ERPNexException, Exception {
         FrappeResponseParser<D> parser = new FrappeResponseParser<>();
         document.save_controle();
         ResponseEntity<String> response = frappeWebService.callResource(
@@ -86,6 +92,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
             HttpMethod.POST, 
             null, 
             null,
+            null,
             null
         );
 
@@ -93,7 +100,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
         return singleResponse.getData();
     }
     public D createDocument(UserErpNext user, D document, Class<D> modClass)throws ERPNexException, Exception {
-        return createDocument(user, document, document.as_dict(), modClass);
+        return createDocument(user, document, modClass, document.as_dict());
     }
 
     public D submit(UserErpNext user, D document, Class<D> modClass) throws ERPNexException{
@@ -107,6 +114,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
             map, 
             HeadersUtils.buildJsonHeader(user), 
             HttpMethod.POST,
+            null,
             null,
             null,
             null
