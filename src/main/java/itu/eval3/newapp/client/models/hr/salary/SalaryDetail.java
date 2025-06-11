@@ -3,6 +3,7 @@ package itu.eval3.newapp.client.models.hr.salary;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import itu.eval3.newapp.client.models.action.FrappeDocument;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -37,7 +38,7 @@ public class SalaryDetail extends FrappeDocument{
     }
 
     @Override
-    public Object as_dict() {
+    public Map<String,Object> as_dict() {
         // TODO Auto-generated method stub
         return null;
     }

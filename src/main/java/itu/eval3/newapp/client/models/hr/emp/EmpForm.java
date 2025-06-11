@@ -3,6 +3,7 @@ package itu.eval3.newapp.client.models.hr.emp;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import itu.eval3.newapp.client.models.api.requests.RequestModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -10,8 +11,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class EmpForm {
-
+public class EmpForm implements RequestModel{
     @NotBlank(message = "Le nom est obligatoire")
     @Size(min = 2, message = "Le nom doit contenir au moins 2 caractères")
     public String first_name;

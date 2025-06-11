@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import itu.eval3.newapp.client.models.action.FrappeDocument;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -165,7 +166,8 @@ public class SalarySlip extends FrappeDocument{
     }
 
     @Override
-    public Object as_dict() {
+    public SalaryRequest as_dict() {
+        SalaryRequest salary = new SalaryRequest();
         return null;
     }
 

@@ -5,6 +5,7 @@ import java.sql.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import itu.eval3.newapp.client.models.action.FrappeDocument;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

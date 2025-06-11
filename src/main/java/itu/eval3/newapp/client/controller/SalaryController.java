@@ -16,6 +16,7 @@ import itu.eval3.newapp.client.models.annexe.Company;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.salary.SalaryComponent;
 import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
+import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.SalaryUpdateForm;
@@ -24,6 +25,7 @@ import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.company.CompanyService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
 import itu.eval3.newapp.client.services.hr.salary.SalaryComponentService;
+import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
 import itu.eval3.newapp.client.services.hr.salary.SalaryStructureAssignmentService;
 import itu.eval3.newapp.client.services.hr.salary.SalaryStructureService;
 import jakarta.servlet.http.HttpSession;
@@ -52,6 +54,8 @@ public class SalaryController {
     @Autowired
     private SalaryComponentService componentService;
 
+    @Autowired
+    private SalarySlipService salarySlipService;
 
 
     @GetMapping
@@ -94,12 +98,10 @@ public class SalaryController {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
             Employee employee = empService.getById(user,salaryGeneratorForm.getEmployee());
             Company company = companyService.getById(user,employee.getCompany());
-
-            salaryGeneratorForm.setCompany(company.getName());
-            salaryGeneratorForm.setCurrency(company.getDefaulCurrency());
             
-            List<SalaryStructureAssignment> assignments = assignmentService.createSalaryAssignment(user, salaryGeneratorForm);
-            // assignmentService.submit(user, assignment, SalaryStructureAssignment.class);
+            salaryGeneratorForm.setCompany(company);
+            salarySlipService.generateSalary(user, salaryGeneratorForm);
+
             return "redirect:/hr/salaries";
         } catch (Exception e) {
             throw new RuntimeException(e);

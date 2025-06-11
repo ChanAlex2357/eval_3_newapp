@@ -5,6 +5,7 @@ import java.sql.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import itu.eval3.newapp.client.models.action.FrappeDocument;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -47,7 +48,7 @@ public class SalaryStructureAssignment extends FrappeDocument {
     }
 
     @Override
-    public Object as_dict() {
+    public Map<String,Object> as_dict() {
         return null;
     }
     
