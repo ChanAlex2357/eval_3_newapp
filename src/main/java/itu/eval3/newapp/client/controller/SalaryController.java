@@ -18,6 +18,7 @@ import itu.eval3.newapp.client.models.hr.salary.SalaryComponent;
 import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
+import itu.eval3.newapp.client.models.hr.salary.SalaryUpdateForm;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.company.CompanyService;
@@ -122,11 +123,16 @@ public class SalaryController {
 
         model.addAttribute("components", components);
         model.addAttribute("employees", employees);
-        return "/hr/update-assignment";
+        return "/hr/salary/update-assignment";
     }
 
     @PostMapping("/hr/update/salary")
-    public String udpateSalary(HttpSession session){
+    public String udpateSalary(HttpSession session,@ModelAttribute SalaryUpdateForm salaryUpdateForm){
+        try {
+            
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return "redirect:/hr/salaries";
     }
     

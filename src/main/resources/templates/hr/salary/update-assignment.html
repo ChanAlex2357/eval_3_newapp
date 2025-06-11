@@ -4,31 +4,30 @@
         <h2>Update Salary</h2>
         <form action="#" method="post" th:object="${payrollEntry}">
             <div class="row mb-3">
-
-                <div class="col-md-4">
-                    <label for="company" class="form-label">Condition</label>
-                    <table>
+                <div class="col-12">
+                    <label class="form-label">Condition</label>
+                    <table class="table modern-table rounded-0">
                         <thead>
                             <th>Component</th>
                             <th>Operation</th>
-                            <th></th>
+                            <th>Valeur</th>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
-                                    <select name="condition_component" class="form-select" id="salaryStructure">
+                                    <select name="condition_component" title="condition component" class="form-select">
                                         <option value="">-- Choisir --</option>
                                         <option th:each="c : ${components}" th:value="${c.name}" th:text="${c.name}"></option>
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="condition_operation" class="form-select" id="salaryStructure">
+                                    <select name="condition_operation" class="form-select" title="condition operation">
                                         <option value="sup">Superieur</option>
                                         <option value="inf">Inferieur</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="number" name="condition_value" id="" title="condition value">
+                                    <input class="form-control form-control-sm" type="number" name="condition_value" id="" title="condition value">
                                 </td>                               
                             </tr>
                         </tbody>
@@ -62,14 +61,22 @@
                                 <option th:each="e : ${employees}" th:value="${e.name}" th:text="${e.firstname + ' ' + e.lastname}"></option>
                             </select>
                         </td>
-                        <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button></td>
                     </tr>
                 </tbody>
             </table>
-            <button type="button" class="btn btn-outline-primary mb-3" id="addRowBtn">➕ Ajouter un employé</button>
+            <div class="container">
+                <div class="row justify-content-spaced-between">
+                    <div class="col">
+                        <button type="button" class="btn btn-outline-primary" id="addRowBtn">➕ Ajouter un employé</button>
+                    </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button>
+                    </div>
+                </div>
+            </div>
 
-            <div>
-                <button type="submit" class="btn btn-success">Create</button>
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Update</button>
             </div>
         </form>
     </div>
@@ -77,25 +84,13 @@
     <script>
         let employeeIndex = 1;
         const empRow = document.getElementById("empRow");
-        document.getElementById("addRowBtn").addEventListener("click", function () {
-            const employees = /*[[${employees}]]*/ [];
-            // const row = document.createElement("tr");
-            const row  = empRow.cloneNode(true);
-            
-            // row.innerHTML = `
-            //     <td>
-            //     <select name="employees[${employeeIndex}].employee" class="form-select">
-            //         <option value="">-- Sélectionner --</option>
-            //         ${employees.map(e => `<option value="${e.name}">${e.firstname} ${e.lastname}</option>`).join("")}
-            //     </select>
-            //     <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button></td>
-            //     `;
-                    document.getElementById("employeeBody").appendChild(row);
-                    employeeIndex++;
-                });
-                
-                // </td>
-                // <td><input type="text" name="employees[${employeeIndex}].note" class="form-control"/></td>
+            document.getElementById("addRowBtn").addEventListener("click", function (e){
+                const row  = empRow.cloneNode(true);
+                document.getElementById("employeeBody").appendChild(row);
+                employeeIndex++;
+            }
+        )
+
         function removeRow(btn) {
             btn.closest('tr').remove();
         }

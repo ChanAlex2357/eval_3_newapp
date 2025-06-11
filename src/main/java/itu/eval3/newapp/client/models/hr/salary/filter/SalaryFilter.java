@@ -9,8 +9,7 @@ import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilterList;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import itu.eval3.newapp.client.utils.uri.filters.LikeFilter;
-
-public class SalaryFilter implements FrappeFilterComponent {
+public class SalaryFilter extends FrappeFilterComponent {
     private String employee;
     private String employeeName;
     private String mois;
@@ -37,20 +36,20 @@ public class SalaryFilter implements FrappeFilterComponent {
         }
         integerMois = Integer.parseInt(this.mois);
     }
+
     @Override
-    public FrappeApiFilterList getFilters() {
-        FrappeApiFilter[] filters = new FrappeApiFilter[4];
-        filters[0] = new LikeFilter("employee", employee);
-        filters[1] = new LikeFilter("employee_name", employeeName);
+    public FrappeApiFilterList getFilterList() {
+        FrappeApiFilterList filterList = super.getFilterList();
+        filterList.addFilter(new LikeFilter("employee", employee));
+        filterList.addFilter(new LikeFilter("employee_name", employeeName));
 
         convertMois();
         setDates();
         if (integerMois != 0 && annee != 0) {
-            filters[2] = new FrappeApiFilter("start_date",">=",getStartDate().toString());
-            filters[3] = new FrappeApiFilter("end_date","<=",getEndDate().toString());
+            filterList.addFilter(new FrappeApiFilter("start_date",">=",getStartDate().toString()));
+            filterList.addFilter(new FrappeApiFilter("end_date","<=",getEndDate().toString()));
         }
-
-        return new FrappeApiFilterList(filters);
+        return filterList;
     }
     public Date getEndDate() {
         return endDate;

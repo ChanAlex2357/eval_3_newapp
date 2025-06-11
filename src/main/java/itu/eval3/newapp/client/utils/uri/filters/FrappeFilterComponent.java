@@ -3,22 +3,28 @@ package itu.eval3.newapp.client.utils.uri.filters;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import itu.eval3.newapp.client.utils.uri.FrappeUriComponent;
+import lombok.Data;
 
-public interface FrappeFilterComponent extends FrappeUriComponent{
-    public FrappeApiFilterList getFilters();
+@Data
+public class FrappeFilterComponent implements FrappeUriComponent{
+    public FrappeApiFilterList filterList = new FrappeApiFilterList() ;
 
     @Override
-    default void addToUri(UriComponentsBuilder uriComponentsBuilder) {
-        FrappeApiFilterList filters = getFilters();
+    public void addToUri(UriComponentsBuilder uriComponentsBuilder) {
+        FrappeApiFilterList filters = getFilterList();
         if (filters.hasFilter()) {
-            String filterStr = makeRessourceFiters(filters.getFilters());
+            String filterStr = makeRessourceFilters(filters.getFilters());
             if (filterStr != "") {
                 uriComponentsBuilder.queryParam("filters", filterStr);
             }
         }
     }
 
-    private String makeRessourceFiters(FrappeApiFilter[] filters) {
+    public void addFilter(FrappeApiFilter filter){
+        getFilterList().addFilter(filter);
+    }
+
+    public String makeRessourceFilters(FrappeApiFilter[] filters) {
         if (filters == null || filters.length == 0) {
             return "";
         }

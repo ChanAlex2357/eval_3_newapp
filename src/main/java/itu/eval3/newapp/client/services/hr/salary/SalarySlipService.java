@@ -26,6 +26,7 @@ import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.filters.InFilter;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
 
@@ -125,4 +126,18 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
     }
 
+    public SalarySlip udpateSalary(UserErpNext user,String employee){
+        return null;
+    }
+
+    public List<SalarySlip> findSalaries(UserErpNext user,String[] employees) throws ERPNexException{
+        InFilter empFilter = new InFilter("employee", employees);
+        FrappeFilterComponent filter = new FrappeFilterComponent();
+        filter.addFilter(empFilter);
+
+        List<SalarySlip> salaries = getAll(user,ApiConfig.ALL_FIELDS, filter);
+        return salaries;
+    }
+
+    
 }

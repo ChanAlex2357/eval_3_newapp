@@ -30,6 +30,13 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
             new FrappeOrderComponent("from_date")
         );
     }
+
+    public List<SalaryStructureAssignment> getAllForEmployee(UserErpNext user, String employee) throws ERPNexException {
+        SalaryStructureAssignmentFilter filter = new SalaryStructureAssignmentFilter();
+        filter.setEmployee(employee);
+        return getAll(user, filter);
+    }
+
     public List<SalaryStructureAssignment> createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
         List<SalaryStructureAssignment> results = new ArrayList<>();
          Date start_date = salaryGeneratorForm.getStart_date();
