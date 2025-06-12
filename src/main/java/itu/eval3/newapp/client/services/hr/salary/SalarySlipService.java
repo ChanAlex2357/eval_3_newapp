@@ -152,9 +152,12 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
                 double salary = updateForm.getSalary(salarySlip);
                 // cancel salary assignment and salary
                 SalaryStructureAssignment assignment = cancelFullSalary(user, salarySlip);
+                assignmentService.delete(user, assignment);
+                this.delete(user, salarySlip);
                 // generate new salary Slip
                 SalaryGeneratorForm salaryGeneratorForm = new SalaryGeneratorForm(assignment);
                 assignment.setBase(salary);
+                salaryGeneratorForm.setSalary(salary);
                 createSalaryWithAssignment(user, salaryGeneratorForm, assignment, salarySlip.getStartDate());
             }
         }

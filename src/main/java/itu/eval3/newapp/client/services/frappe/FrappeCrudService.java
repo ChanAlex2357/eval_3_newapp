@@ -111,7 +111,7 @@ public class FrappeCrudService<D extends FrappeDocument>{
             document.getName(),
             body,
             HeadersUtils.buildJsonHeader(user), 
-            HttpMethod.POST,
+            HttpMethod.PUT,
             null,
             null,
             null,
