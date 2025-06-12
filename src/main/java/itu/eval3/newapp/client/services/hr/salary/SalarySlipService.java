@@ -25,6 +25,7 @@ import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
 import itu.eval3.newapp.client.models.hr.salary.SalaryRequest;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
+import itu.eval3.newapp.client.models.hr.salary.SalaryUpdateForm;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.exporter.PdfExporterService;
@@ -139,6 +140,43 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         return null;
     }
 
+    public SalaryStructureAssignment cancelFullSalary(UserErpNext user,SalarySlip salarySlip)  throws ERPNexException {
+        SalaryStructureAssignment assignment = assignmentService.findClosest(
+            user,
+            salarySlip.getEmployee(),salarySlip.getStartDate()
+        );
+        assignmentService.cancel(
+            user, 
+            assignment, 
+            SalaryStructureAssignment.class);
+        cancelSalary(user, salarySlip);
+        return assignment;
+    }
+    
+        
+    public void cancelSalary(UserErpNext user, SalarySlip salarySlip) throws ERPNexException {
+        this.cancel(user, salarySlip, SalarySlip.class);
+    }
+
+    public List<SalarySlip> udpateSalary(UserErpNext user, SalaryUpdateForm updateForm) throws ERPNexException, Exception{
+        List<SalarySlip> salaries = findSalaries(user, updateForm.getEmployees());
+        
+        for (SalarySlip salarySlip : salaries) {
+            if(updateForm.checkCondition(salarySlip)){
+                // Recalculate the salary
+                double salary = updateForm.getSalary(salarySlip);
+                // cancel salary assignment and salary
+                SalaryStructureAssignment assignment = cancelFullSalary(user, salarySlip);
+                // generate new salary Slip
+                SalaryGeneratorForm salaryGeneratorForm = new SalaryGeneratorForm(assignment);
+                assignment.setBase(salary);
+                createSalaryWithAssignment(user, salaryGeneratorForm, assignment, salarySlip.getStartDate());
+            }
+        }
+        
+        return null;
+    }
+
     public SalarySlip createSalary(UserErpNext user, SalaryRequest salaryRequest) throws ERPNexException, Exception {
         SalarySlip salary = createDocument(user, new SalarySlip(), SalarySlip.class, salaryRequest);
         return salary;
@@ -152,6 +190,25 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
         List<SalarySlip> salaries = getAll(user,ApiConfig.ALL_FIELDS, filter);
         return salaries;
+    }
+
+    public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
+        SalaryStructureAssignment assignment =  assignmentService.findLatest(user,salaryGeneratorForm.getEmployee());
+        SalarySlip salary = null;
+        if( salaryGeneratorForm.getSalary() > 0){
+            salary = createSalaryWithAssignment(user, salaryGeneratorForm, assignment, from_date);
+        }
+        else {
+            salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
+        }
+        return salary;
+    }
+
+    public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, Date from_date) throws Exception {
+        salaryGeneratorForm.setSalary_structure(refAssignment.getSalaryStructure());
+        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, from_date);
+        SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
+        return salary;
     }
 
     public List<SalarySlip> generateSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
@@ -170,16 +227,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
                 while (start_month <= end_month ) {
                     try {
                         Date from_date = Date.valueOf(LocalDate.of(start_year, start_month, 1));
-
-                        SalaryStructureAssignment assignment =  assignmentService.findLatestAssignement(user,salaryGeneratorForm.getEmployee());
-                        if( salaryGeneratorForm.getSalary() > 0){
-                            salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
-                            assignment = assignmentService.createSalaryAssignment(user, salaryGeneratorForm, from_date);
-                        }
-
-                        SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
+                        SalarySlip salary = createSalaryWithAssignment(user, salaryGeneratorForm, from_date);
                         results.add(salary);
-
                     } catch (Exception e) {
                         // Skip
                     }

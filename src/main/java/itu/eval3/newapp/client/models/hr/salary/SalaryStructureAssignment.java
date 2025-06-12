@@ -11,7 +11,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SalaryStructureAssignment extends FrappeDocument {
+public class 
+SalaryStructureAssignment extends FrappeDocument {
     @JsonProperty("employee_name")
     public String employeeName;
 

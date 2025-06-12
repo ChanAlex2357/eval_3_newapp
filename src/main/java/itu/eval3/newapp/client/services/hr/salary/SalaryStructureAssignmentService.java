@@ -47,14 +47,38 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
         );
         return assignment;
     }
+
+    
     public SalaryStructureAssignment createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
         return createSalaryAssignment(user, salaryGeneratorForm, salaryGeneratorForm.getStart_date());
     }
 
-    public SalaryStructureAssignment findLatestAssignement(UserErpNext user,String employee) throws ERPNexException {
+    public SalaryStructureAssignment findLatest(UserErpNext user,String employee) throws ERPNexException {
         FrappeFilterComponent filterComponent = new FrappeFilterComponent();
         filterComponent.addFilter(new EqualsFilter("employee", employee));
         FrappeOrderComponent orderComponent = new FrappeOrderComponent("from_date",FrappeOrderDirection.DESC);
+        FrappeLimiterComponent limiterComponent = new FrappeLimiterComponent(0,1);
+
+        List<SalaryStructureAssignment> assignments = getAllDocuments(
+            user, 
+            new SalaryStructureAssignment(), 
+            SalaryStructureAssignment.class, 
+            ApiConfig.ALL_FIELDS, 
+            filterComponent, 
+            limiterComponent, 
+            orderComponent
+        );
+
+        if (assignments.size() > 0) {
+            return assignments.get(0);
+        }
+        return null;
+    }
+
+    public SalaryStructureAssignment findClosest(UserErpNext user, String employee, Date dateRef) throws ERPNexException {
+        FrappeFilterComponent filterComponent = new FrappeFilterComponent();
+        filterComponent.addFilter(new EqualsFilter("employee", employee));
+        FrappeOrderComponent orderComponent = new FrappeOrderComponent("from_date",FrappeOrderDirection.ASC);
         FrappeLimiterComponent limiterComponent = new FrappeLimiterComponent(0,1);
 
         List<SalaryStructureAssignment> assignments = getAllDocuments(

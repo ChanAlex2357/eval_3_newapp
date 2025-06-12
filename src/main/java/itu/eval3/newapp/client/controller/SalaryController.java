@@ -14,6 +14,7 @@ import itu.eval3.newapp.client.models.annexe.Company;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.salary.SalaryComponent;
 import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
+import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
 import itu.eval3.newapp.client.models.hr.salary.SalaryUpdateForm;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
@@ -121,6 +122,8 @@ public class SalaryController {
     @PostMapping("/hr/update/salary")
     public String udpateSalary(HttpSession session,@ModelAttribute SalaryUpdateForm salaryUpdateForm){
         try {
+
+            List<SalarySlip> salarySlips = salarySlipService.udpateSalary(null, salaryUpdateForm);
             
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -6,10 +6,60 @@ import lombok.Data;
 public class SalaryUpdateForm {
     public String condition_component;
     public String condition_operation;
-    public String condition_value;
+    public double condition_value;
 
     public String type_pourcentage;
     public double pourcentage;
 
     public String[] employees;
+
+
+    public SalaryDetail findConditionSalaryComponent(SalarySlip salarySlip) {
+        return findSalaryComponent(salarySlip, condition_component);
+    }
+
+    public SalaryDetail findSalaireBase(SalarySlip salarySlip){
+        return findSalaryComponent(salarySlip, "Salaire Base");
+    }
+
+    public SalaryDetail findSalaryComponent(SalarySlip salarySlip, String component) {
+        for ( SalaryDetail detail : salarySlip.getEarnings()) {
+            if (detail.salaryComponent.equals(component)) {
+                return detail;
+            }   
+        }
+        for ( SalaryDetail detail : salarySlip.getDeductions()) {
+            if (detail.salaryComponent.equals(component)) {
+                return detail;
+            }  
+        }
+        return null;
+    }
+
+    public boolean checkCondition(SalarySlip salarySlip){
+        SalaryDetail detail = findConditionSalaryComponent(salarySlip);
+        if (detail == null) {
+            return false;
+        }
+
+        if (getCondition_operation().equals("sup") && detail.amount > getCondition_value()) {
+            return true;
+        }
+        else if (getCondition_operation().equals("inf") && detail.amount < getCondition_value()) {
+            return true;
+        }
+        return false;
+    }
+
+    public double getSalary(SalarySlip salarySlip){
+        SalaryDetail salaireBase = findSalaireBase(salarySlip);
+        double salary = salaireBase.getAmount();
+        if (type_pourcentage.equals("augmentation")) {
+            salary = salary + (salary * getPourcentage());
+        }
+        else if (type_pourcentage.equals("reduction")) {
+            salary = salary - (salary * getPourcentage());
+        }
+        return salary;
+    }
 }

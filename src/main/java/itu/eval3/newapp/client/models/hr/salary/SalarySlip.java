@@ -146,8 +146,8 @@ public class SalarySlip extends FrappeDocument{
 
 
 
-    private List<SalaryComponent> earnings;
-    private List<SalaryComponent> deductions;
+    private List<SalaryDetail> earnings;
+    private List<SalaryDetail> deductions;
 
     public SalarySlip(){
         super("Salary Slip");

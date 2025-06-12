@@ -15,6 +15,28 @@ public class SalaryGeneratorForm {
     public String currency;
     public double salary;
 
+    public SalaryGeneratorForm(SalaryStructureAssignment assignment) {
+        this(
+            assignment.getSalaryStructure(),
+            assignment.getEmployee(),
+            assignment.getFromDate(),
+            assignment.getFromDate(),
+            assignment.getCompany(),
+            assignment.getCurrency(),
+            assignment.getBase()
+        );
+    }
+    public SalaryGeneratorForm(){}
+    public SalaryGeneratorForm(String salary_structure, String employee, Date start_date, Date end_date, String company,
+            String currency, double salary) {
+        this.salary_structure = salary_structure;
+        this.employee = employee;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.company = company;
+        this.currency = currency;
+        this.salary = salary;
+    }
 
     public void setCompany(Company company){
         this.setCompany(company.getName());
