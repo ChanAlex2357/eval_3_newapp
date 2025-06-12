@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
+import itu.eval3.newapp.client.models.api.responses.method.MethodResponse;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceListResponse;
 import itu.eval3.newapp.client.models.api.responses.resources.ResourceSingleResponse;
 import itu.eval3.newapp.client.models.user.UserErpNext;
@@ -120,15 +121,31 @@ public class FrappeCrudService<D extends FrappeDocument>{
         return singleResponse.getData();
    }
 
-   public D cancel(UserErpNext user, D document, Class<D> moClass) throws ERPNexException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("docstatus", 2);
-        return updateDocument(user, document, moClass, map);
-   }
+    public boolean delete(UserErpNext user, D document) throws ERPNexException {
+        this.callAction(user, document,"delete");
+        return true;
+    }
+
+    public D cancel(UserErpNext user, D document, Class<D> moClass) throws ERPNexException {
+        FrappeResponseParser<D> parser = new FrappeResponseParser<>();
+        ResponseEntity<String> response = this.callAction(user, document,"cancel");
+        MethodResponse<D> methodResponse = parser.parseMehtodeResponse(response, moClass);
+        return methodResponse.getMessage();
+    }
+
 
     public D submit(UserErpNext user, D document, Class<D> modClass) throws ERPNexException{
         Map<String, Object> map = new HashMap<>();
         map.put("docstatus", 1);
         return updateDocument(user, document, modClass, map);
    }
+
+   protected ResponseEntity<String> callAction(UserErpNext user, D document, String docAction) throws ERPNexException {
+        String method = "frappe.client."+docAction;
+        Map<String, Object> map = new HashMap<>();
+        map.put("doctype", document.getDoctype());
+        map.put("name", document.getName());
+        
+        return frappeWebService.callMethod(user, method,HeadersUtils.buildJsonHeader(user), HttpMethod.POST, map);
+    }
 }

@@ -23,7 +23,6 @@ import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.company.CompanyService;
 import itu.eval3.newapp.client.services.gender.GenderService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
-import itu.eval3.newapp.client.services.hr.salary.SalarySlipService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,9 +38,6 @@ public class EmpController {
     private CompanyService companyService;
     @Autowired
     private GenderService genderService;
-    
-    @Autowired
-    private SalarySlipService salarySlipService;
 
     @GetMapping
     public String list(HttpSession session,Model model){
@@ -74,8 +70,6 @@ public class EmpController {
             if (employee == null ) { // Erreur pour un employee inexistant
                 throw new Exception("Employee "+id+" est introuvable");
             }
-            
-            salaries = salarySlipService.getAllByEmployee(user, employee);
             
         } catch (Exception e) {
             model.addAttribute("error_msg", e.getMessage());
@@ -122,11 +116,9 @@ public class EmpController {
                             
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
-            // if (bindingResult.hasErrors()) {
-                model.addAttribute("companies", companyService.getAll(user));
-                model.addAttribute("genders", genderService.getAll(user));
-            //     return "hr/employee/create";
-            // }
+            model.addAttribute("companies", companyService.getAll(user));
+            model.addAttribute("genders", genderService.getAll(user));
+
             Employee savedEmployee = empService.createEmployee(user, employee);
             return "redirect:/hr/employees/"+savedEmployee.getName();
         } catch (Exception e) {

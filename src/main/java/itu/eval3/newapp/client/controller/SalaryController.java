@@ -119,11 +119,11 @@ public class SalaryController {
         return "/hr/salary/update-assignment";
     }
 
-    @PostMapping("/hr/update/salary")
+    @PostMapping("/update/salary")
     public String udpateSalary(HttpSession session,@ModelAttribute SalaryUpdateForm salaryUpdateForm){
         try {
-
-            List<SalarySlip> salarySlips = salarySlipService.udpateSalary(null, salaryUpdateForm);
+            UserErpNext user = (UserErpNext) session.getAttribute("user");
+            List<SalarySlip> salarySlips = salarySlipService.udpateSalary(user, salaryUpdateForm);
             
         } catch (Exception e) {
             throw new RuntimeException(e);

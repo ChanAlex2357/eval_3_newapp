@@ -2,7 +2,7 @@
 <th:block th:fragment="content">
     <div class="container mt-4">
         <h2>Update Salary</h2>
-        <form action="#" method="post" th:object="${payrollEntry}">
+        <form th:action="@{/hr/salaries/update/salary}" method="post" th:object="${payrollEntry}">
             <div class="row mb-3">
                 <div class="col-12">
                     <label class="form-label">Condition</label>

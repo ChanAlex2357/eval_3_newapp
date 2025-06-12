@@ -133,7 +133,6 @@ public class SalaryFilter extends FrappeFilterComponent {
         body.put("employee_name", getEmployeeName());
         body.put("start_date", getStartDate().toString());
         body.put("end_date", getEndDate().toString());
-
         return body;
     }
     

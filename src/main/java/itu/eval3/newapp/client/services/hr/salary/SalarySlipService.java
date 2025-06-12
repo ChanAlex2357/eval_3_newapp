@@ -47,29 +47,6 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     @Autowired
     private SalaryStructureAssignmentService assignmentService;
 
-    public List<SalarySlip> getAllByEmployee(UserErpNext user, String idEmployee, String[] fields, FrappeFilterComponent filter) throws ERPNexException{
-        List<SalarySlip> data = getAllDocuments(
-            user, 
-            new SalarySlip(),
-            SalarySlip.class,
-            fields,
-            filter,
-            FrappeLimiterComponent.NOLIMITER,
-            POSTING_DATE_ORDER
-        );
-
-        return data;
-    }
-
-    public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp, String[] fields) throws ERPNexException{
-        FrappeFilterComponent filter = new SalaryFilter(emp);
-        return getAllByEmployee(user, emp.getName(),fields,filter);
-    }
-    
-    public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp) throws ERPNexException{
-        return getAllByEmployee(user, emp,ApiConfig.ALL_FIELDS);
-    }
-
     public List<SalarySlip> getAll(UserErpNext user,String[] fields,FrappeFilterComponent filter) throws ERPNexException {
         return getAllDocuments(
             user,
@@ -84,9 +61,17 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
     public SalariesRegisterReport getAllDetails(UserErpNext user, SalaryFilter filter) throws ERPNexException {
         FrappeResponseParser<SalariesRegisterReport> parser = new FrappeResponseParser<>();
-
-        ResponseEntity<String> response =frappeWebService.callMethod(user, "eval_app.api.get_salary_slip_with_details",HeadersUtils.buildJsonHeader(user),HttpMethod.GET, filter.getRequesBody());
-
+        Map<String,Object> body = null;
+        if (filter != null) {
+            body = filter.getRequesBody();
+        }
+        ResponseEntity<String> response =frappeWebService.callMethod(
+            user, 
+            "eval_app.api.get_salary_slip_with_details",
+            HeadersUtils.buildJsonHeader(user),
+            HttpMethod.GET, 
+            body
+        );
         MethodApiResponse<SalariesRegisterReport> jsonResponse = parser.parseMethodApiResponse(response, SalariesRegisterReport.class);
         SalariesRegisterReport salariesRegisterReport = jsonResponse.getApiResponse().getData();
         return salariesRegisterReport;
@@ -152,7 +137,6 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         cancelSalary(user, salarySlip);
         return assignment;
     }
-    
         
     public void cancelSalary(UserErpNext user, SalarySlip salarySlip) throws ERPNexException {
         this.cancel(user, salarySlip, SalarySlip.class);
@@ -162,6 +146,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         List<SalarySlip> salaries = findSalaries(user, updateForm.getEmployees());
         
         for (SalarySlip salarySlip : salaries) {
+            salarySlip = getById(user, salarySlip);
             if(updateForm.checkCondition(salarySlip)){
                 // Recalculate the salary
                 double salary = updateForm.getSalary(salarySlip);
@@ -181,7 +166,6 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         SalarySlip salary = createDocument(user, new SalarySlip(), SalarySlip.class, salaryRequest);
         return salary;
     }
-
 
     public List<SalarySlip> findSalaries(UserErpNext user,String[] employees) throws ERPNexException, Exception{
         InFilter empFilter = new InFilter("employee", employees);
