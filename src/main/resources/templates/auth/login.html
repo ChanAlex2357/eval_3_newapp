@@ -1,39 +1,43 @@
 
 <div th:replace="~{layouts/vanilla :: layout(title='Newapp | Login', content=~{::content})}">
     <th:block th:fragment="content">
-        <div class="card w-50 mx-auto mt-5">
+        <div class="card col-4 mx-auto mt-5 border-0 rounded-0">
             <div class="card-body">
-                <form th:action="@{/auth/login}" id="loginForm" method="post">
-                    <div>
-                        <h2 class="text-center">Login to Newapp</h2>
-                        <div th:if="${err != null}" class="alert alert-danger">
-                            <p th:text="${err}"></p>
-                        </div>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label class="form-label" for="username">Username:</label>
-                        <input class="form-control" type="text" id="username" name="usr" required>
-                    </div>
-                    <div class="form-group mt-3">
-                        <label class="form-label" for="password">Password:</label>
-                        <input class="form-control" type="password" id="password" name="pwd" required>
-                    </div>
-
-                    <div class=" form-group mt-4">
-                        <button class="btn btn-primary form-control" id="loginLabel" type="submit">
-                            <span class="label" > Login </span>
-                        </button>
-                        <button id="spinner" type="button" title="spinner" class="btn btn-primary d-none form-control">
-                            <div class="spinner-container p-0">
-                                <div class="spinner-border text-white"  role="status">
-
-                                </div>
+                <div class="container">
+                    <form th:action="@{/auth/login}" id="loginForm" method="post">
+                        <div>
+                            <div class="text-center py-4">
+                                <h2 class="text-center">WELCOME BACK</h2>
                             </div>
-                        </button>
-                    </div>
-                </form>
-                <p th:if="${param.error}">Invalid username or password.</p>
-                <p th:if="${param.logout}">You have been logged out.</p>
+                            <div th:if="${err != null}" class="alert alert-danger">
+                                <p th:text="${err}"></p>
+                            </div>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label" for="username">Username:</label>
+                            <input class="form-control form-control-sm" type="text" id="username" name="usr" required>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label class="form-label" for="password">Password:</label>
+                            <input class="form-control form-control-sm" type="password" id="password" name="pwd" required>
+                        </div>
+    
+                        <div class=" form-group mt-5">
+                            <button class="btn btn-primary form-control form-control-sm" id="loginLabel" type="submit">
+                                <span class="label" > Login </span>
+                            </button>
+                            <button id="spinner" type="button" title="spinner" class="btn btn-primary d-none form-control form-control-sm">
+                                <div class="spinner-container p-0">
+                                    <div class="spinner-border text-white"  role="status">
+
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </form>
+                    <p th:if="${param.error}">Invalid username or password.</p>
+                    <p th:if="${param.logout}">You have been logged out.</p>
+                </div>
             </div>
         </div>
         <script>

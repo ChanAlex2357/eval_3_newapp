@@ -56,7 +56,8 @@
         </div>
 
         <script type="module">
-            import { downloadSalaryPdf, fetchSalaries, getRowSpinner, getSpinner, formatCurrency, formatDate} from '/js/metier.js';
+            import {getRowSpinner} from '/js/services/spinner.js';
+
             document.addEventListener("DOMContentLoaded",function(){
                 const import_form = document.getElementById("import-form");
                 const logsBody = document.getElementById("logsBody");
@@ -68,10 +69,10 @@
                     const collapseId = `detailLog${order}`;
 
                     let status = "Neutre";
-                    if(log_data.status == 1){
+                    if(log_data.error_count <= 0){
                         status = `<span class="badge bg-success">Success</span>`
                     }
-                    else if (log_data.status == -1){
+                    else if (log_data.error_count > 0){
                         status = `<span class="badge bg-danger">Erreur</span>`
                     }
                     else {

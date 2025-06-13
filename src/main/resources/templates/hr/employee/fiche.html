@@ -14,102 +14,77 @@
             <!-- Contenu principal -->
             <div th:unless="${employee == null}" class="row g-4">
                 <!-- Colonne 1: Informations de l'employé -->
-                <div class="col-lg-4 col-md-12">
-                    <div class="modern-card">
+                <div class="col-lg-12">
+                    <div class="modern-card rounded-0">
                         <!-- En-tête du profil -->
-                        <div class="profile-header text-center">
-                            <div class="profile-avatar mx-auto">
-                                <i class="bi bi-person"></i>
+                         <div class="row">
+                            <div class="profile-header rounded-0 text-center col-4">
+                                <div class="profile-avatar  mx-auto">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <h3 class="mb-1" th:text="${employee.getFirstname() + ' ' + employee.getLastname()}">Nom Prénom
+                                </h3>
+                                <p class="mb-0 opacity-75" th:text="${employee.getName()}" id="emp_name"
+                                    th:attr="data-employee-id=${employee.name}">ID Employé</p>
                             </div>
-                            <h3 class="mb-1" th:text="${employee.getFirstname() + ' ' + employee.getLastname()}">Nom Prénom
-                            </h3>
-                            <p class="mb-0 opacity-75" th:text="${employee.getName()}" id="emp_name"
-                                th:attr="data-employee-id=${employee.name}">ID Employé</p>
-                        </div>
-
-                        <!-- Informations détaillées -->
-                        <div class="info-card">
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="bi bi-exclamation-lg"></i>
+    
+                            <!-- Informations détaillées -->
+                            <div class="info-card col">
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-exclamation-lg"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="info-label">Genre</div>
+                                        <div class="info-value" th:text="${employee.getGender()}">Masculin</div>
+                                    </div>
                                 </div>
-                                <div class="flex-grow-1">
-                                    <div class="info-label">Genre</div>
-                                    <div class="info-value" th:text="${employee.getGender()}">Masculin</div>
+    
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-calendar"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="info-label">Date d'embauche</div>
+                                        <div class="info-value" th:text="${employee.getJoinDate()}">01/01/2023</div>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="bi bi-calendar"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="info-label">Date d'embauche</div>
-                                    <div class="info-value" th:text="${employee.getJoinDate()}">01/01/2023</div>
-                                </div>
-                            </div>
-
-                            <div class="info-item">
-                                <div class="info-icon">
-                                    <i class="bi bi-check2-circle"></i>
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="info-label">Statut</div>
-                                    <div class="info-value">
-                                        <span class="badge-status bg-success text-white">Actif</span>
+    
+                                <div class="info-item">
+                                    <div class="info-icon">
+                                        <i class="bi bi-check2-circle"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="info-label">Statut</div>
+                                        <div class="info-value">
+                                            <span class="badge-status bg-success text-white">Actif</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                         </div>
                     </div>
                 </div>
 
                 <!-- Colonne 2: Fiches de paie et historique -->
-                <div class="col-lg-8 col-md-12">
+                <div class="col-lg-12 col-md-12">
                     <div class="row g-4">
-                        <!-- Fiches de paie -->
+                        <!-- Historique de salaire -->
                         <div class="col-12">
-                            <div class="card">
-                                <div class="section-header">
-                                    <i class="fas fa-file-invoice-dollar"></i>
-                                    Fiches de paie
-                                </div>
-                                <div class="">
-                                    <table class="table modern-table" id="salaryTable">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col" class="">Sr.No</th>
-                                                <th scope="col" class="">Période</th>
-                                                <th scope="col" class="">Salaire net</th>
-                                                <th scope="col" class="">Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="salariesBody">
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Historique des salaires
-                        <div class="col-12">
-                            <div class="modern-card">
-                                <div class="section-header">
+                            <div class="modern-card rounded-0">
+                                <div class="section-header rounded-0">
                                     <i class="fas fa-chart-line"></i>
-                                    Historique des salaires
+                                    Historique des salaires de base
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table modern-table">
+                                    <table class="table modern-table rounded-0">
                                         <thead>
                                             <tr>
-                                                <th scope="col">Référence</th>
-                                                <th scope="col">Date début</th>
-                                                <th scope="col">Salaire</th>
-                                                <th scope="col">Statut</th>
+                                                <th scope="col" class="text-center">Date début</th>
+                                                <th scope="col" class="text-center">Salaire de base</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="history-table">
                                             <tr>
                                                 <td colspan="4">
                                                     <div class="empty-state">
@@ -122,20 +97,57 @@
                                     </table>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
+                        <!-- Fiches de paie -->
+                        <div class="col-12">
+                            <div class="card rounded-0">
+                                <div class="section-header">
+                                    <i class="fas fa-file-invoice-dollar"></i>
+                                    Fiches de paie
+                                </div>
+                                <div class="">
+                                    <table class="table modern-table rounded-0" id="salaryTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="">Sr.No</th>
+                                                <th scope="col" class="">Période</th>
+                                                <th scope="col" class="">Salaire Brut</th>
+                                                <th scope="col" class="">Deductions</th>
+                                                <th scope="col" class="">Salaire net</th>
+                                                <th scope="col" class="">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="salariesBody">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
 
         <script type="module">
-            import { downloadSalaryPdf, fetchSalaries, getSpinner, formatCurrency, formatDate } from '/js/metier.js'
-
+            import {formatCurrency, formatDate, downloadSalaryPdf} from '/js/services/utils.js';
+            import {getRowSpinner, getSpinner} from '/js/services/spinner.js';
+            import {fetchSalaries} from '/js/services/salaryService.js';
+            import {fetchAssignments, renderAssignmentsTable} from '/js/services/assignmentService.js';
+            
             async function fetchData() {
                 const emp_name = document.getElementById("emp_name").dataset.employeeId;
                 try {
                     const data = await fetchSalaries({ "employee": emp_name });
                     renderSalariesTable(data.salaries);
+
+                    console.log(emp_name);
+                    const assignmentsData = await fetchAssignments({"employee":emp_name});
+                    console.log(assignmentsData);
+
+                    renderAssignmentsTable(assignmentsData,"history-table")
+                    
                 } catch (error) {
                     console.error('Erreur lors du chargement des salaires:', error);
                     renderErrorState();
@@ -169,13 +181,11 @@
                             <i class="fas fa-calendar-alt text-muted me-1"></i>
                             ${salary.period}
                         </td>
-                        <td class="">
-                            <span class="badge bg-success col-10">
-                                ${formatCurrency(salary.net_pay)}
-                            </span>
-                        </td>
+                        <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
+                        <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>
+                        <td><span class="badge border col-12 bg-success text-white">${formatCurrency(salary.net_pay.toFixed(2))}</span></td>
                         <td class="p-0">
-                            <div class="row justify-content-start">
+                            <div class="row justify-content-center">
                                 <button class="col-2 border-0 btn btn-sm" onclick="downloadSalaryPdf(this,'${salary.name}')">
                                     <span class="label"><i class="bi bi-download"></i></span>
                                     <div class="spinner text-center d-none">

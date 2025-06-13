@@ -36,7 +36,7 @@
                                     </select>
                                 </div>
                                 <div class="col-2">
-                                    <input type="date" title="employee-hire-date" th:field="*{joinDate}" class="form-control form-control-sm">
+                                    <input type="date" title="employee-hire-date" placeholder="Date d'embauche" th:field="*{joinDate}" class="form-control form-control-sm">
                                 </div>
                             </div>
                             <div class="col-1">
@@ -78,7 +78,7 @@
         </div>
     
         <script type="module">
-            import { fetchEmployees, renderEmployeeTable } from '/js/metier.js';
+            import { fetchEmployees, renderEmployeeTable } from '/js/services/employeeService.js';
 
             document.addEventListener("DOMContentLoaded", async function () {
                 const employees = await fetchEmployees();

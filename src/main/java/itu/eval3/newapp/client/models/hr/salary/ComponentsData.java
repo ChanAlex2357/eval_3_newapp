@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class ComponentsData {
-    Map<String,Float> earnings;
-    Map<String,Float> deductions;
-    Map<String,Float> all;
+    Map<String,Double> earnings;
+    Map<String,Double> deductions;
+    Map<String,Double> all;
 }

@@ -59,9 +59,9 @@
                         </div>    
                         <table class="table table-sm">
                             <thead>
-                                <th scope="col" class="text-center">Somme Eanings</th>
+                                <th scope="col" class="text-center">Somme Salaire Brut</th>
                                 <th scope="col" class="text-center">Somme Deductions</th>
-                                <th scope="col" class="text-center">Somme Salaire</th>
+                                <th scope="col" class="text-center">Somme Salaire Net</th>
                             <tbody id="totalBody">
                                 <tr>
                                     <td>0</td>
@@ -79,8 +79,8 @@
                         </div>   
                         <table class="table table-hover table-sm modern-table">
                             <thead>
-                                <th scope="col">Sr.No</th>
-                                <th scope="col">Fullname</th>
+                                <!-- <th scope="col">Sr.No</th> -->
+                                <th scope="col">Employee</th>
                                 <th scope="col">Mois</th>
                                 <th scope="col">Salaire Brut</th>
                                 <th scope="col">Deductions</th>
@@ -96,7 +96,9 @@
             </div>
         </div>
         <script type="module">
-            import { downloadSalaryPdf, fetchSalaries, getRowSpinner, getSpinner, formatCurrency, formatDate} from '/js/metier.js';
+            import {formatCurrency, formatDate, downloadSalaryPdf} from '/js/services/utils.js';
+            import {getRowSpinner, getSpinner} from '/js/services/spinner.js';
+            import {fetchSalaries} from '/js/services/salaryService.js';
 
             document.addEventListener("DOMContentLoaded", () => {
                 const filterForm = document.getElementById("salaryFilter");
@@ -111,8 +113,6 @@
 
                     const formData = new FormData(filterForm);
                     const queryParams = {};
-
-                    console.log(formData);
                     
                     formData.forEach((value, key) => {
                         queryParams[key] = value;
@@ -123,7 +123,9 @@
                     
                     renderSalariesTable(data || []);
                     const month_idx = parseInt(selectedOption.value);
-                    month.innerHTML = `${months_str[month_idx-1]} ${selectedYear.value}`;
+                    if (month_idx){
+                        month.innerHTML = `${months_str[month_idx-1]} ${selectedYear.value}`;
+                    }
                 }
                 window.setEmpFilter = function (emp_name) {
                     const filter = document.getElementById("emp_filter");
@@ -190,8 +192,10 @@
                         const row = document.createElement('tr');
                         const collapseId = `salary-details-${index}`;
                         row.innerHTML = `
-                            <td ><strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong></td>
-                            <td>${salary.employee_name}</td>
+                            <td >
+                                <strong class="pointer" onclick="setEmpFilter('${salary.employee}')">${salary.employee}</strong> - 
+                                ${salary.employee_name}
+                            </td>
                             <td>${salary.period} </td>
                             <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.gross_pay.toFixed(2))}</span></td>
                             <td><span class="badge border col-12 bg-white text-dark">${formatCurrency(salary.total_deduction.toFixed(2))}</span></td>

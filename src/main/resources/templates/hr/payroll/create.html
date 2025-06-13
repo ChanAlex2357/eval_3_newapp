@@ -1,0 +1,90 @@
+<div th:replace="~{layouts/default :: layout(title='Nouveau Payroll Entry', content=~{::content})}">
+<th:block th:fragment="content">
+    <div class="container mt-4">
+        <h2>Créer un Payroll Entry</h2>
+        <form action="#" method="post" th:object="${payrollEntry}">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="company" class="form-label">Société</label>
+                    <select th:field="*{company}" title="company" class="form-select">
+                        <option value="">-- Choisir --</option>
+                        <option th:each="c : ${companies}" th:value="${c.name}" th:text="${c.name}"></option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="startDate" class="form-label">Date Début</label>
+                    <input type="date" name="start_date" id="startDate" class="form-control"/>
+                </div>
+                <div class="col-md-4">
+                    <label for="endDate" class="form-label">Date Fin</label>
+                    <input type="date" name="end_date" class="form-control" id="endDate"/>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="salaryStructure" class="form-label">Structure de Salaire</label>
+                    <select name="salary_structure" class="form-select" id="salaryStructure">
+                        <option value="">-- Choisir --</option>
+                        <option th:each="s : ${salaryStructures}" th:value="${s.name}" th:text="${s.name}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <h5>Employés concernés</h5>
+            <table class="table table-bordered" id="employeeTable">
+                <thead>
+                    <tr>
+                        <th>Employé</th>
+                        <th>Note</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeBody">
+                    <tr id="empRow">
+                        <td>
+                            <select name="employees[]" class="form-select" title="employee">
+                                <option value="">-- Sélectionner --</option>
+                                <option th:each="e : ${employees}" th:value="${e.name}" th:text="${e.firstname + ' ' + e.lastname}"></option>
+                            </select>
+                        </td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-outline-primary mb-3" id="addRowBtn">➕ Ajouter un employé</button>
+
+            <div>
+                <button type="submit" class="btn btn-success">Create</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let employeeIndex = 1;
+        const empRow = document.getElementById("empRow");
+        document.getElementById("addRowBtn").addEventListener("click", function () {
+            const employees = /*[[${employees}]]*/ [];
+            // const row = document.createElement("tr");
+            const row  = empRow.cloneNode(true);
+            
+            // row.innerHTML = `
+            //     <td>
+            //     <select name="employees[${employeeIndex}].employee" class="form-select">
+            //         <option value="">-- Sélectionner --</option>
+            //         ${employees.map(e => `<option value="${e.name}">${e.firstname} ${e.lastname}</option>`).join("")}
+            //     </select>
+            //     <td><button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button></td>
+            //     `;
+                    document.getElementById("employeeBody").appendChild(row);
+                    employeeIndex++;
+                });
+                
+                // </td>
+                // <td><input type="text" name="employees[${employeeIndex}].note" class="form-control"/></td>
+        function removeRow(btn) {
+            btn.closest('tr').remove();
+        }
+    </script>
+</th:block>
+</div>

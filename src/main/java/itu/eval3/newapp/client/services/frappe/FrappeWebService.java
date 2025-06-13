@@ -23,7 +23,9 @@ import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.exceptions.ErpNextCallException;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
 import itu.eval3.newapp.client.models.user.UserErpNext;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
+import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -135,18 +137,17 @@ public class FrappeWebService {
      * @param filter un filtre pour definir la contrainte des donnees a recuperer
      *
      * */
-    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpHeaders headers,HttpMethod method, String[] fields, FrappeFilter filter) throws ERPNexException {
-        String url = apiConfig.getResourceUrl(document.getDoctype(), id, fields, filter != null ? filter.getFilters().getFilters() : null);
+    public ResponseEntity<String> callResource(UserErpNext user,FrappeDocument document,String id,Object body,HttpHeaders headers,HttpMethod method, String[] fields, FrappeFilterComponent filter,FrappeLimiterComponent limiter, FrappeOrderComponent order) throws ERPNexException {
+        String url = apiConfig.getResourceUrl(document.getDoctype(), id, fields, filter,limiter, order);
         log.info("Targeting api {} document at URL: {}", document.getDoctype(), url);
         ResponseEntity <String> response = null;
         try {
             response = frappeCall(user, url,headers ,method, body);
         } catch (Exception e) {
-            ErpNextCallException callException = new ErpNextCallException("Error while calling ressource to "+document.getDoctype(), url, method,ErpCallExceptionType.SRC, e);
+            ErpNextCallException callException = new ErpNextCallException("Error while calling ressource to "+document.getDoctype()+" : "+e.getMessage(), url, method,ErpCallExceptionType.SRC, e);
             throw  ERPNextExceptionBuilder.handle(callException, response);
         }
 
         return response;
     }
-
 }

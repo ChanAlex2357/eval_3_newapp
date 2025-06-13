@@ -3,6 +3,7 @@ package itu.eval3.newapp.client.models.hr.salary;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import itu.eval3.newapp.client.models.action.FrappeDocument;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,12 +24,18 @@ public class SalaryComponent extends FrappeDocument{
 
 
     @Override
-    public void save_controle() {
+    public void save_controle() throws Exception {
         
     }
 
     @Override
     public void update_cotnrole() {
     
+    }
+
+    @Override
+    public Map<String,Object> as_dict() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

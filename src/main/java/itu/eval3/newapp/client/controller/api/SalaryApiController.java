@@ -22,7 +22,6 @@ public class SalaryApiController {
     @Autowired
     private SalarySlipService salarySlipService;
 
-
     @GetMapping
     public ResponseEntity<?> getSalaries(HttpSession session,@ModelAttribute("salary_filter") SalaryFilter salaryFilter ){
         SalariesRegisterReport salariesReport = new SalariesRegisterReport();
@@ -47,5 +46,7 @@ public class SalaryApiController {
             return ResponseEntity.badRequest().body(ApiResponseBuilder.DFAULT_BUILDER.error(exc));
         }
     }
+
+
 
 }

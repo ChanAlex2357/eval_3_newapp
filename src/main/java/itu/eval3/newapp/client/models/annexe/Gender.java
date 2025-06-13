@@ -1,6 +1,7 @@
 package itu.eval3.newapp.client.models.annexe;
 
 import itu.eval3.newapp.client.models.action.FrappeDocument;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +16,12 @@ public class Gender extends FrappeDocument{
     }
 
     @Override
-    public void save_controle() {
+    public void save_controle() throws Exception{
+    }
+
+    @Override
+    public Map<String,Object> as_dict() {
+        return null;
     }
     
 }

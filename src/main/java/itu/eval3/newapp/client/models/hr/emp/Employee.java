@@ -72,7 +72,21 @@ public class Employee extends FrappeDocument{
     public void update_cotnrole() {}
 
     @Override
-    public void save_controle() {}
+    public void save_controle() throws Exception {
+        
+    }
+
+    @Override
+    public EmpForm as_dict() {
+        EmpForm empForm = new EmpForm();
+        empForm.setCompany(company);
+        empForm.setDate_of_birth(getBirthDate().toString());
+        empForm.setDate_of_joining(getJoinDate().toString());
+        empForm.setFirst_name(getFirstname());
+        empForm.setLast_name(getLastname());
+
+        return empForm;
+    }
 
     public String getFullName(){
         return firstname +" "+ lastname;

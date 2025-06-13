@@ -1,6 +1,9 @@
 package itu.eval3.newapp.client.services.hr.salary;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,92 +12,96 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-
-import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 
 import itu.eval3.newapp.client.config.ApiConfig;
+import itu.eval3.newapp.client.enums.FrappeOrderDirection;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.salary.DashboardData;
 import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
+import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
+import itu.eval3.newapp.client.models.hr.salary.SalaryRequest;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
+import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
+import itu.eval3.newapp.client.models.hr.salary.SalaryUpdateForm;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.exporter.PdfExporterService;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.filters.InFilter;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
+import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
 
 @Service
 public class SalarySlipService extends FrappeCrudService<SalarySlip> {
+    private final FrappeOrderComponent POSTING_DATE_ORDER = new FrappeOrderComponent("posting_date", FrappeOrderDirection.ASC);
     
-    @Autowired
-    private TemplateEngine templateEngine;
     @Autowired
     private PdfExporterService pdfExporterService;
 
-    public List<SalarySlip> getAllByEmployee(UserErpNext user, String idEmployee, String[] fields, FrappeFilter filter) throws ERPNexException{
-        List<SalarySlip> data = getAllDocuments(
-            user, 
+    @Autowired
+    private SalaryStructureAssignmentService assignmentService;
+
+    public List<SalarySlip> getAll(UserErpNext user,String[] fields,FrappeFilterComponent filter) throws ERPNexException {
+        return getAllDocuments(
+            user,
             new SalarySlip(),
-            fields,
-            filter,
-            SalarySlip.class
+            SalarySlip.class,
+            ApiConfig.ALL_FIELDS, 
+            filter, 
+            FrappeLimiterComponent.NOLIMITER,
+            POSTING_DATE_ORDER
         );
-
-        return data;
-    }
-
-    public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp, String[] fields) throws ERPNexException{
-        FrappeFilter filter = new SalaryFilter(emp);
-        return getAllByEmployee(user, emp.getName(),fields,filter);
-    }
-    public List<SalarySlip> getAllByEmployee(UserErpNext user, Employee emp) throws ERPNexException{
-        return getAllByEmployee(user, emp,ApiConfig.ALL_FIELDS);
-    }
-
-    public List<SalarySlip> getAll(UserErpNext user,String[] fields,FrappeFilter filter) throws ERPNexException {
-        return getAllDocuments(user,new SalarySlip(),ApiConfig.ALL_FIELDS, filter, SalarySlip.class);
     }
 
     public SalariesRegisterReport getAllDetails(UserErpNext user, SalaryFilter filter) throws ERPNexException {
         FrappeResponseParser<SalariesRegisterReport> parser = new FrappeResponseParser<>();
-
-        ResponseEntity<String> response =frappeWebService.callMethod(user, "eval_app.api.get_salary_slip_with_details",HeadersUtils.buildJsonHeader(user),HttpMethod.GET, filter.getRequesBody());
-
+        Map<String,Object> body = null;
+        if (filter != null) {
+            body = filter.getRequesBody();
+        }
+        ResponseEntity<String> response =frappeWebService.callMethod(
+            user, 
+            "eval_app.api.get_salary_slip_with_details",
+            HeadersUtils.buildJsonHeader(user),
+            HttpMethod.GET, 
+            body
+        );
         MethodApiResponse<SalariesRegisterReport> jsonResponse = parser.parseMethodApiResponse(response, SalariesRegisterReport.class);
         SalariesRegisterReport salariesRegisterReport = jsonResponse.getApiResponse().getData();
         return salariesRegisterReport;
     }
 
     public SalarySlip getById(UserErpNext user, String id) throws ERPNexException {
-        return getDocumentById(user, new SalarySlip(), id, null, SalarySlip.class);
+        return getDocumentById(
+            user, 
+            new SalarySlip(), 
+            SalarySlip.class,
+            id, 
+            null 
+        );
     }
 
     public ByteArrayOutputStream generateBulletinDePaiePdf(SalarySlip salarySlip) throws Exception {
-        Context context = new Context();
-        context.setVariable("salarySlip", salarySlip); // ton objet Java
-
-        String html = templateEngine.process("pdf/bulletin-paie", context);
-
-        // Convertir HTML → PDF
-        ByteArrayOutputStream pdfStream = new ByteArrayOutputStream();
-        PdfRendererBuilder builder = new PdfRendererBuilder();
-        builder.useFastMode();
-        builder.withHtmlContent(html, null);
-        builder.toStream(pdfStream);
-        builder.run();
-
-        return pdfStream;
+        return pdfExporterService.generatePdfFromTemplate(
+            salarySlip, 
+            "salarySlip", 
+            "pdf/bulletin-paie"
+        );
     }
 
     public ResponseEntity<byte[]> exportBulletinPaie(SalarySlip salarySlipInstance) throws Exception{
-        return pdfExporterService.exportData(generateBulletinDePaiePdf(salarySlipInstance).toByteArray(),"bulletin-paie-"+salarySlipInstance.getName()+"-"+salarySlipInstance.getStartDate());
+        return pdfExporterService.exportData(
+            salarySlipInstance, 
+            "salarySlip", 
+            "pdf/bulletin-paie",
+            "bulletin-paie-"+salarySlipInstance.getName()+"-"+salarySlipInstance.getStartDate()
+        );
     }
 
     public SalarySlip getById(UserErpNext user, SalarySlip salary) throws ERPNexException{
@@ -114,4 +121,113 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
     }
 
+    public SalarySlip udpateSalary(UserErpNext user,String employee){
+        return null;
+    }
+
+    public SalaryStructureAssignment cancelFullSalary(UserErpNext user,SalarySlip salarySlip)  throws ERPNexException {
+        SalaryStructureAssignment assignment = assignmentService.findClosest(
+            user,
+            salarySlip.getEmployee(),salarySlip.getStartDate()
+        );
+        assignmentService.cancel(
+            user, 
+            assignment, 
+            SalaryStructureAssignment.class);
+        cancelSalary(user, salarySlip);
+        return assignment;
+    }
+        
+    public void cancelSalary(UserErpNext user, SalarySlip salarySlip) throws ERPNexException {
+        this.cancel(user, salarySlip, SalarySlip.class);
+    }
+
+    public List<SalarySlip> udpateSalary(UserErpNext user, SalaryUpdateForm updateForm) throws ERPNexException, Exception{
+        List<SalarySlip> salaries = findSalaries(user, updateForm.getEmployees());
+        
+        for (SalarySlip salarySlip : salaries) {
+            salarySlip = getById(user, salarySlip);
+            if(updateForm.checkCondition(salarySlip)){
+                // Recalculate the salary
+                double salary = updateForm.getSalary(salarySlip);
+                // cancel salary assignment and salary
+                SalaryStructureAssignment assignment = cancelFullSalary(user, salarySlip);
+                assignmentService.delete(user, assignment);
+                this.delete(user, salarySlip);
+                // generate new salary Slip
+                SalaryGeneratorForm salaryGeneratorForm = new SalaryGeneratorForm(assignment);
+                assignment.setBase(salary);
+                salaryGeneratorForm.setSalary(salary);
+                createSalaryWithAssignment(user, salaryGeneratorForm, assignment, salarySlip.getStartDate());
+            }
+        }
+        
+        return null;
+    }
+
+    public SalarySlip createSalary(UserErpNext user, SalaryRequest salaryRequest) throws ERPNexException, Exception {
+        SalarySlip salary = createDocument(user, new SalarySlip(), SalarySlip.class, salaryRequest);
+        return salary;
+    }
+
+    public List<SalarySlip> findSalaries(UserErpNext user,String[] employees) throws ERPNexException, Exception{
+        InFilter empFilter = new InFilter("employee", employees);
+        FrappeFilterComponent filter = new FrappeFilterComponent();
+        filter.addFilter(empFilter);
+
+        List<SalarySlip> salaries = getAll(user,ApiConfig.ALL_FIELDS, filter);
+        return salaries;
+    }
+
+    public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
+        SalaryStructureAssignment assignment =  assignmentService.findLatest(user,salaryGeneratorForm.getEmployee());
+        SalarySlip salary = null;
+        if( salaryGeneratorForm.getSalary() > 0){
+            salary = createSalaryWithAssignment(user, salaryGeneratorForm, assignment, from_date);
+        }
+        else {
+            salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
+        }
+        return salary;
+    }
+
+    public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, Date from_date) throws Exception {
+        salaryGeneratorForm.setSalary_structure(refAssignment.getSalaryStructure());
+        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, from_date);
+        SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
+        return salary;
+    }
+
+    public List<SalarySlip> generateSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
+        List<SalarySlip> results = new ArrayList<>();
+
+        Date start_date = salaryGeneratorForm.getStart_date();
+        int start_year = start_date.toLocalDate().getYear();
+        int start_month = start_date.toLocalDate().getMonthValue();
+
+        Date end_date = salaryGeneratorForm.getEnd_date();
+        int end_year = end_date.toLocalDate().getYear();
+        int end_month = end_date.toLocalDate().getMonthValue();
+
+        try {
+            if (start_month != end_month && start_year == end_year) {
+                while (start_month <= end_month ) {
+                    try {
+                        Date from_date = Date.valueOf(LocalDate.of(start_year, start_month, 1));
+                        SalarySlip salary = createSalaryWithAssignment(user, salaryGeneratorForm, from_date);
+                        results.add(salary);
+                    } catch (Exception e) {
+                        // Skip
+                    }
+                    finally {
+                        start_month += 1;
+                    }
+                };
+            }
+        } catch (Exception e) {
+            e.printStackTrace();   
+        }
+
+        return results;
+    }
 }
