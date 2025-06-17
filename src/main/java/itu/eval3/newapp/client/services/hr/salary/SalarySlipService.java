@@ -29,6 +29,7 @@ import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.exporter.PdfExporterService;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
+import itu.eval3.newapp.client.utils.DateUtils;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
 import itu.eval3.newapp.client.utils.parser.FrappeResponseParser;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
@@ -312,29 +313,22 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     public List<SalarySlip> generateSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
         List<SalarySlip> results = new ArrayList<>();
 
-        Date start_date = salaryGeneratorForm.getStart_date();
-        int start_year = start_date.toLocalDate().getYear();
-        int start_month = start_date.toLocalDate().getMonthValue();
-
-        Date end_date = salaryGeneratorForm.getEnd_date();
-        int end_year = end_date.toLocalDate().getYear();
-        int end_month = end_date.toLocalDate().getMonthValue();
+        Date start_date = DateUtils.getStartOfMonth(salaryGeneratorForm.getStart_date());
+        Date end_date = DateUtils.getStartOfMonth(salaryGeneratorForm.getEnd_date());
+        
 
         try {
-            if (start_month != end_month && start_year == end_year) {
-                while (start_month <= end_month ) {
-                    try {
-                        Date from_date = Date.valueOf(LocalDate.of(start_year, start_month, 1));
-                        SalarySlip salary = createSalary(user, salaryGeneratorForm, from_date);
-                        results.add(salary);
-                    } catch (Exception e) {
-                        // Skip
-                    }
-                    finally {
-                        start_month += 1;
-                    }
-                };
-            }
+            while (start_date.compareTo(end_date) <= 0) {
+                try {
+                    SalarySlip salary = createSalary(user, salaryGeneratorForm, start_date);
+                    results.add(salary);
+                } catch (Exception e) {
+                    // Skip
+                }
+                finally {
+                    start_date.toLocalDate().plusMonths(1);
+                }
+            };
         } catch (Exception e) {
             e.printStackTrace();   
         }
