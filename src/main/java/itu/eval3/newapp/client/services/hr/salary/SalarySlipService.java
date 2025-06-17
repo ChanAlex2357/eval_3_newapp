@@ -18,7 +18,6 @@ import itu.eval3.newapp.client.enums.FrappeOrderDirection;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
-import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.salary.DashboardData;
 import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
 import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
@@ -47,6 +46,14 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     @Autowired
     private SalaryStructureAssignmentService assignmentService;
 
+    /**
+     * Recupere la liste de tous les fiches de paies filtrer et avec les attributs souhaiter
+     * @param user L'utilisateur connecter
+     * @param fields La liste des attributs a recuperer
+     * @param filter Les filtres a appliquer
+     * @return Une liste des fiches de paies
+     * @throws ERPNexException
+     */
     public List<SalarySlip> getAll(UserErpNext user,String[] fields,FrappeFilterComponent filter) throws ERPNexException {
         return getAllDocuments(
             user,
@@ -59,6 +66,14 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         );
     }
 
+    /**
+     * Recuperer la listes des fiches paies avec les details earnings et deductions
+     * a partir d'une method api personaliser
+     * @param user utilisateur connecter
+     * @param filter filtre de donnees
+     * @return liste des fiches de paies avec les details
+     * @throws ERPNexException
+     */
     public SalariesRegisterReport getAllDetails(UserErpNext user, SalaryFilter filter) throws ERPNexException {
         FrappeResponseParser<SalariesRegisterReport> parser = new FrappeResponseParser<>();
         Map<String,Object> body = null;
@@ -77,6 +92,13 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         return salariesRegisterReport;
     }
 
+    /**
+     * Recuperer une fiche de paie specifique par son id
+     * @param user utilisateur connecter
+     * @param id identifiant du fiche de paie
+     * @return
+     * @throws ERPNexException
+     */
     public SalarySlip getById(UserErpNext user, String id) throws ERPNexException {
         return getDocumentById(
             user, 
@@ -87,6 +109,24 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         );
     }
 
+    /**
+     * Recuperer les details d'une fiche paie par l'id d'une instance de fiche de paie
+     * @param user utilisateur connecter
+     * @param salary la fiche de paie source
+     * @return une fiche de paie complete
+     * @throws ERPNexException
+     */
+    public SalarySlip getById(UserErpNext user, SalarySlip salary) throws ERPNexException{
+        SalarySlip s = getById(user, salary.getName());
+        return s;
+    }
+
+    /**
+     * Genere le pdf d'une fiche de paie
+     * @param salarySlip la fiche de paie source de donnee pour le pdf
+     * @return le pdf sous forme de ByteArrayOutputStream contenant les informations du pdf
+     * @throws Exception
+     */
     public ByteArrayOutputStream generateBulletinDePaiePdf(SalarySlip salarySlip) throws Exception {
         return pdfExporterService.generatePdfFromTemplate(
             salarySlip, 
@@ -95,6 +135,12 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         );
     }
 
+    /**
+     * Exporter le pdf d'une fiche paie par reponse api apres generation
+     * @param salarySlipInstance
+     * @return la reponse api contenant le pdf
+     * @throws Exception
+     */
     public ResponseEntity<byte[]> exportBulletinPaie(SalarySlip salarySlipInstance) throws Exception{
         return pdfExporterService.exportData(
             salarySlipInstance, 
@@ -104,11 +150,13 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         );
     }
 
-    public SalarySlip getById(UserErpNext user, SalarySlip salary) throws ERPNexException{
-        SalarySlip s = getById(user, salary.getName());
-        return s;
-    }
-
+    /**
+     * Recuperer les donnee de reporting pour le dashboard
+     * @param user utilisateur connecter
+     * @param year l'annee du dashboard
+     * @return les donnees de dashboard a l'annee demander
+     * @throws ERPNexException
+     */
     public ApiResponse<DashboardData> getDashboardData(UserErpNext user, int year) throws ERPNexException {
         FrappeResponseParser<DashboardData> parser = new FrappeResponseParser<>();
         Map<String,Object> body = new HashMap<>();
@@ -121,19 +169,33 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
     }
 
-    public SalarySlip udpateSalary(UserErpNext user,String employee){
-        return null;
+    public SalarySlip udpateSalary(UserErpNext user, SalarySlip salarySlip, SalaryUpdateForm updateForm) throws Exception{
+        // Recalculate the salary
+        double salary = updateForm.getUpdatedSalary(salarySlip);
+        
+        // cancel salary_slip and assigned  salary_assignment
+        SalaryStructureAssignment assignment = assignmentService.findAssignedAssignement(user, salarySlip);
+        assignmentService.cancelAssignement(user, assignment);
+        cancelSalary(user, salarySlip);
+
+        // delete salary_slip and assigned salary_assignement
+        assignmentService.delete(user, assignment);
+        this.delete(user, salarySlip);
+
+        // generate new salary Slip
+        assignment.setBase(salary);
+        SalaryGeneratorForm salaryGeneratorForm = new SalaryGeneratorForm(assignment);
+
+        return createSalaryWithAssignment(user, salaryGeneratorForm, assignment, salarySlip.getStartDate());
     }
 
     public SalaryStructureAssignment cancelFullSalary(UserErpNext user,SalarySlip salarySlip)  throws ERPNexException {
         SalaryStructureAssignment assignment = assignmentService.findClosest(
             user,
-            salarySlip.getEmployee(),salarySlip.getStartDate()
+            salarySlip.getEmployee(),
+            salarySlip.getStartDate()
         );
-        assignmentService.cancel(
-            user, 
-            assignment, 
-            SalaryStructureAssignment.class);
+        assignmentService.cancelAssignement(user, assignment);
         cancelSalary(user, salarySlip);
         return assignment;
     }
@@ -148,20 +210,9 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         for (SalarySlip salarySlip : salaries) {
             salarySlip = getById(user, salarySlip);
             if(updateForm.checkCondition(salarySlip)){
-                // Recalculate the salary
-                double salary = updateForm.getSalary(salarySlip);
-                // cancel salary assignment and salary
-                SalaryStructureAssignment assignment = cancelFullSalary(user, salarySlip);
-                assignmentService.delete(user, assignment);
-                this.delete(user, salarySlip);
-                // generate new salary Slip
-                SalaryGeneratorForm salaryGeneratorForm = new SalaryGeneratorForm(assignment);
-                assignment.setBase(salary);
-                salaryGeneratorForm.setSalary(salary);
-                createSalaryWithAssignment(user, salaryGeneratorForm, assignment, salarySlip.getStartDate());
+                udpateSalary(user, salarySlip, updateForm);
             }
         }
-        
         return null;
     }
 
@@ -180,8 +231,9 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     }
 
     public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
-        SalaryStructureAssignment assignment =  assignmentService.findLatest(user,salaryGeneratorForm.getEmployee());
+        SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);
         SalarySlip salary = null;
+        
         if( salaryGeneratorForm.getSalary() > 0){
             salary = createSalaryWithAssignment(user, salaryGeneratorForm, assignment, from_date);
         }
@@ -192,8 +244,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     }
 
     public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, Date from_date) throws Exception {
-        salaryGeneratorForm.setSalary_structure(refAssignment.getSalaryStructure());
-        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, from_date);
+        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, refAssignment);
         SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
         return salary;
     }
