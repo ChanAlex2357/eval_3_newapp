@@ -50,13 +50,9 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
         return assignment;
     }
 
-    public SalaryStructureAssignment createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, Date from_date) throws Exception{
-        salaryGeneratorForm.setSalary_structure(refAssignment.getSalaryStructure());
-        return createSalaryAssignment(user, salaryGeneratorForm, from_date);
-    }
-
     public SalaryStructureAssignment createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment) throws Exception {
-        return createSalaryAssignment(user, salaryGeneratorForm, refAssignment, refAssignment.getFromDate());
+        salaryGeneratorForm.setSalary_structure(refAssignment.getSalaryStructure());
+        return createSalaryAssignment(user, salaryGeneratorForm, refAssignment.getFromDate());
     }
   
     public SalaryStructureAssignment findLatest(UserErpNext user,String employee) throws ERPNexException {

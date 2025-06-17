@@ -196,7 +196,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         assignment.setBase(salary);
         SalaryGeneratorForm salaryGeneratorForm = new SalaryGeneratorForm(assignment);
 
-        return createSalary(user, salaryGeneratorForm, assignment, salarySlip);
+        return createSalaryWithAssignment(user, salaryGeneratorForm, assignment, salarySlip);
     }
 
     /**
@@ -261,9 +261,12 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
         SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);
         SalarySlip salary = null;
-        
+        if (assignment == null) {
+            
+        }
+        salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
         if( salaryGeneratorForm.getSalary() > 0){
-            salary = createSalary(user, salaryGeneratorForm, assignment, from_date);
+            salary = createSalaryWithAssignment(user, salaryGeneratorForm, from_date);
         }
         else {
             salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
@@ -281,8 +284,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
      * @return
      * @throws Exception
      */
-    public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, Date from_date) throws Exception {
-        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, refAssignment, from_date);
+    public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
+        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, from_date);
         SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
         return salary;
     }
@@ -297,7 +300,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
      * @return
      * @throws Exception
      */
-    public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, SalarySlip refSalary) throws Exception {
+    public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, SalarySlip refSalary) throws Exception {
         assignmentService.createSalaryAssignment(user, salaryGeneratorForm, refAssignment);
         SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(refSalary.getPostingDate()));
         return salary;
@@ -315,7 +318,6 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
         Date start_date = DateUtils.getStartOfMonth(salaryGeneratorForm.getStart_date());
         Date end_date = DateUtils.getStartOfMonth(salaryGeneratorForm.getEnd_date());
-        
 
         try {
             while (start_date.compareTo(end_date) <= 0) {
@@ -323,10 +325,10 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
                     SalarySlip salary = createSalary(user, salaryGeneratorForm, start_date);
                     results.add(salary);
                 } catch (Exception e) {
-                    // Skip
+                    e.printStackTrace();
                 }
                 finally {
-                    start_date.toLocalDate().plusMonths(1);
+                    start_date = Date.valueOf(start_date.toLocalDate().plusMonths(1));
                 }
             };
         } catch (Exception e) {
