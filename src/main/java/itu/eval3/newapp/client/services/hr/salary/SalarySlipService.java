@@ -120,7 +120,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         SalarySlip s = getById(user, salary.getName());
         return s;
     }
-
+    
     /**
      * Genere le pdf d'une fiche de paie
      * @param salarySlip la fiche de paie source de donnee pour le pdf
@@ -169,6 +169,15 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
     }
 
+
+    /**
+     * Met a jour une fiche de paie selon les critere de mise a jour
+     * @param user
+     * @param salarySlip
+     * @param updateForm
+     * @return
+     * @throws Exception
+     */
     public SalarySlip udpateSalary(UserErpNext user, SalarySlip salarySlip, SalaryUpdateForm updateForm) throws Exception{
         // Recalculate the salary
         double salary = updateForm.getUpdatedSalary(salarySlip);
@@ -186,7 +195,151 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         assignment.setBase(salary);
         SalaryGeneratorForm salaryGeneratorForm = new SalaryGeneratorForm(assignment);
 
-        return createSalaryWithAssignment(user, salaryGeneratorForm, assignment, salarySlip.getStartDate());
+        return createSalary(user, salaryGeneratorForm, assignment, salarySlip);
+    }
+
+    /**
+     * Met a jour un lot de fiche paie pour un group d'employee
+     * @param user
+     * @param updateForm
+     * @return
+     * @throws ERPNexException
+     * @throws Exception
+     */
+    public List<SalarySlip> udpateSalary(UserErpNext user, SalaryUpdateForm updateForm) throws ERPNexException, Exception{
+        List<SalarySlip> salaries = findSalaries(user, updateForm.getEmployees());
+        List<SalarySlip> updatedSalarySlips = new ArrayList<>();
+
+        for (SalarySlip salarySlip : salaries) {
+            salarySlip = getById(user, salarySlip);
+            if(updateForm.checkCondition(salarySlip)){
+                updatedSalarySlips.add(udpateSalary(user, salarySlip, updateForm));
+            }
+        }
+        return updatedSalarySlips;
+    }
+
+    /**
+     * Recupere les salary slips existantes pour un lot d'employees
+     * @param user
+     * @param employees
+     * @return
+     * @throws ERPNexException
+     * @throws Exception
+     */
+    public List<SalarySlip> findSalaries(UserErpNext user,String[] employees) throws ERPNexException, Exception{
+        InFilter empFilter = new InFilter("employee", employees);
+        FrappeFilterComponent filter = new FrappeFilterComponent();
+        filter.addFilter(empFilter);
+
+        List<SalarySlip> salaries = getAll(user,ApiConfig.ALL_FIELDS, filter);
+        return salaries;
+    }
+
+    /**
+     * Creation d'une fiche de paie selon la requete donnee
+     * @param user
+     * @param salaryRequest
+     * @return
+     * @throws ERPNexException
+     * @throws Exception
+     */
+    public SalarySlip createSalary(UserErpNext user, SalaryRequest salaryRequest) throws ERPNexException, Exception {
+        SalarySlip salary = createDocument(user, new SalarySlip(), SalarySlip.class, salaryRequest);
+        return salary;
+    }
+
+    /**
+     * Cree une nouveau salary slip avec son assignement pour une periode donnee avec un control mis a jour de salaire
+     * @param user
+     * @param salaryGeneratorForm
+     * @param from_date
+     * @return
+     * @throws Exception
+     */
+    public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
+        SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);
+        SalarySlip salary = null;
+        
+        if( salaryGeneratorForm.getSalary() > 0){
+            salary = createSalary(user, salaryGeneratorForm, assignment, from_date);
+        }
+        else {
+            salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
+        }
+        return salary;
+    }
+
+    /**
+     * Cree une salary slip a une periode donnee sans ecraser des donnees existantes,
+     * le ref assignement utiliser pour utiliser des donnees par defaut provenant de la precedente periode
+     * @param user
+     * @param salaryGeneratorForm
+     * @param refAssignment
+     * @param from_date
+     * @return
+     * @throws Exception
+     */
+    public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, Date from_date) throws Exception {
+        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, refAssignment, from_date);
+        SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
+        return salary;
+    }
+
+    /**
+     * Cree un salary slip a partir d'un ref assignment et salary slip, 
+     * utilisee pour remplacer des doc existants a des dates precises
+     * @param user
+     * @param salaryGeneratorForm
+     * @param refAssignment
+     * @param refSalary
+     * @return
+     * @throws Exception
+     */
+    public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, SalarySlip refSalary) throws Exception {
+        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, refAssignment);
+        SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(refSalary.getPostingDate()));
+        return salary;
+    }
+
+    /**
+     * Generation de salaire pour un lot d'employee dans une periode donnee
+     * @param user
+     * @param salaryGeneratorForm
+     * @return
+     * @throws Exception
+     */
+    public List<SalarySlip> generateSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
+        List<SalarySlip> results = new ArrayList<>();
+
+        Date start_date = salaryGeneratorForm.getStart_date();
+        int start_year = start_date.toLocalDate().getYear();
+        int start_month = start_date.toLocalDate().getMonthValue();
+
+        Date end_date = salaryGeneratorForm.getEnd_date();
+        int end_year = end_date.toLocalDate().getYear();
+        int end_month = end_date.toLocalDate().getMonthValue();
+
+        try {
+            if (start_month != end_month && start_year == end_year) {
+                while (start_month <= end_month ) {
+                    try {
+                        Date from_date = Date.valueOf(LocalDate.of(start_year, start_month, 1));
+                        SalarySlip salary = createSalary(user, salaryGeneratorForm, from_date);
+                        results.add(salary);
+                    } catch (Exception e) {
+                        // Skip
+                    }
+                    finally {
+                        start_month += 1;
+                    }
+                };
+            }
+        } catch (Exception e) {
+            e.printStackTrace();   
+        }
+
+        return results;
     }
 
     public SalaryStructureAssignment cancelFullSalary(UserErpNext user,SalarySlip salarySlip)  throws ERPNexException {
@@ -204,81 +357,4 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         this.cancel(user, salarySlip, SalarySlip.class);
     }
 
-    public List<SalarySlip> udpateSalary(UserErpNext user, SalaryUpdateForm updateForm) throws ERPNexException, Exception{
-        List<SalarySlip> salaries = findSalaries(user, updateForm.getEmployees());
-        
-        for (SalarySlip salarySlip : salaries) {
-            salarySlip = getById(user, salarySlip);
-            if(updateForm.checkCondition(salarySlip)){
-                udpateSalary(user, salarySlip, updateForm);
-            }
-        }
-        return null;
-    }
-
-    public SalarySlip createSalary(UserErpNext user, SalaryRequest salaryRequest) throws ERPNexException, Exception {
-        SalarySlip salary = createDocument(user, new SalarySlip(), SalarySlip.class, salaryRequest);
-        return salary;
-    }
-
-    public List<SalarySlip> findSalaries(UserErpNext user,String[] employees) throws ERPNexException, Exception{
-        InFilter empFilter = new InFilter("employee", employees);
-        FrappeFilterComponent filter = new FrappeFilterComponent();
-        filter.addFilter(empFilter);
-
-        List<SalarySlip> salaries = getAll(user,ApiConfig.ALL_FIELDS, filter);
-        return salaries;
-    }
-
-    public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
-        SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);
-        SalarySlip salary = null;
-        
-        if( salaryGeneratorForm.getSalary() > 0){
-            salary = createSalaryWithAssignment(user, salaryGeneratorForm, assignment, from_date);
-        }
-        else {
-            salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
-        }
-        return salary;
-    }
-
-    public SalarySlip createSalaryWithAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, Date from_date) throws Exception {
-        assignmentService.createSalaryAssignment(user, salaryGeneratorForm, refAssignment);
-        SalarySlip salary = createSalary(user, salaryGeneratorForm.getSalaryDict(from_date));
-        return salary;
-    }
-
-    public List<SalarySlip> generateSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
-        List<SalarySlip> results = new ArrayList<>();
-
-        Date start_date = salaryGeneratorForm.getStart_date();
-        int start_year = start_date.toLocalDate().getYear();
-        int start_month = start_date.toLocalDate().getMonthValue();
-
-        Date end_date = salaryGeneratorForm.getEnd_date();
-        int end_year = end_date.toLocalDate().getYear();
-        int end_month = end_date.toLocalDate().getMonthValue();
-
-        try {
-            if (start_month != end_month && start_year == end_year) {
-                while (start_month <= end_month ) {
-                    try {
-                        Date from_date = Date.valueOf(LocalDate.of(start_year, start_month, 1));
-                        SalarySlip salary = createSalaryWithAssignment(user, salaryGeneratorForm, from_date);
-                        results.add(salary);
-                    } catch (Exception e) {
-                        // Skip
-                    }
-                    finally {
-                        start_month += 1;
-                    }
-                };
-            }
-        } catch (Exception e) {
-            e.printStackTrace();   
-        }
-
-        return results;
-    }
 }

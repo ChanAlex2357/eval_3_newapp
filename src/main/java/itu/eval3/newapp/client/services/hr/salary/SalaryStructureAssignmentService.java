@@ -50,15 +50,8 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
         return assignment;
     }
 
-    public SalaryStructureAssignment createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
-        return createSalaryAssignment(user, salaryGeneratorForm, salaryGeneratorForm.getStart_date());
-    }
-
     public SalaryStructureAssignment createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment, Date from_date) throws Exception{
         salaryGeneratorForm.setSalary_structure(refAssignment.getSalaryStructure());
-        if (refAssignment.getFromDate().equals(from_date) && refAssignment.getDocstatus() == 1) {
-            return refAssignment;
-        }
         return createSalaryAssignment(user, salaryGeneratorForm, from_date);
     }
 
@@ -66,7 +59,6 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
         return createSalaryAssignment(user, salaryGeneratorForm, refAssignment, refAssignment.getFromDate());
     }
   
-
     public SalaryStructureAssignment findLatest(UserErpNext user,String employee) throws ERPNexException {
         FrappeFilterComponent filterComponent = new FrappeFilterComponent();
         filterComponent.addFilter(new EqualsFilter("employee", employee));
