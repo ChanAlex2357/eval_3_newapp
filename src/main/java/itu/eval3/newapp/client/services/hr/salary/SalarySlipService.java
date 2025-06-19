@@ -23,6 +23,7 @@ import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
 import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
 import itu.eval3.newapp.client.models.hr.salary.SalaryRequest;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
+import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.SalaryUpdateForm;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
@@ -46,6 +47,9 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
 
     @Autowired
     private SalaryStructureAssignmentService assignmentService;
+
+    @Autowired
+    private SalaryStructureService structureService;
 
     /**
      * Recupere la liste de tous les fiches de paies filtrer et avec les attributs souhaiter
@@ -189,8 +193,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         cancelSalary(user, salarySlip);
 
         // delete salary_slip and assigned salary_assignement
-        assignmentService.delete(user, assignment);
-        this.delete(user, salarySlip);
+        // assignmentService.delete(user, assignment);
+        // this.delete(user, salarySlip);
 
         // generate new salary Slip
         assignment.setBase(salary);
@@ -260,11 +264,23 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
      */
     public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
         SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);
-        SalarySlip salary = null;
+        
+        // Check ref assignment for salary structure
         if (assignment == null) {
-            
+            List<SalaryStructure> structures = structureService.getAll(user);
+            if (structures == null || structures.size() == 0) {
+                throw new Exception("Impossible to create salary without salary structure and assignment");
+            }
+            salaryGeneratorForm.setSalary_structure(structures.get(0).getName());
         }
-        salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
+        else {
+            salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
+        }
+        return createSalary(user, salaryGeneratorForm, assignment, from_date);
+    }
+
+    public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment assignment, Date from_date) throws Exception {
+        SalarySlip salary = null;
         if( salaryGeneratorForm.getSalary() > 0){
             salary = createSalaryWithAssignment(user, salaryGeneratorForm, from_date);
         }
@@ -315,14 +331,19 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
      */
     public List<SalarySlip> generateSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
         List<SalarySlip> results = new ArrayList<>();
-
         Date start_date = DateUtils.getStartOfMonth(salaryGeneratorForm.getStart_date());
         Date end_date = DateUtils.getStartOfMonth(salaryGeneratorForm.getEnd_date());
 
+        SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(), start_date);
+        // Check ref assignment for salary structure
+        if (assignment == null && salaryGeneratorForm.getSalary() == 0) {
+            throw new Exception("Impossible to create salary without salary structure and assignment");
+        }
+        salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
         try {
             while (start_date.compareTo(end_date) <= 0) {
                 try {
-                    SalarySlip salary = createSalary(user, salaryGeneratorForm, start_date);
+                    SalarySlip salary = createSalary(user, salaryGeneratorForm, assignment, start_date);
                     results.add(salary);
                 } catch (Exception e) {
                     e.printStackTrace();

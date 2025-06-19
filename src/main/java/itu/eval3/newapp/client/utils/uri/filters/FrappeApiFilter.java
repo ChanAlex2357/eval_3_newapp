@@ -1,5 +1,6 @@
 package itu.eval3.newapp.client.utils.uri.filters;
 
+
 public class FrappeApiFilter {
     private String fieldname;
     private String operator;
@@ -9,6 +10,10 @@ public class FrappeApiFilter {
         setFieldname(fieldname);
         setOperator(opt);
         setVaule(value);
+    }
+
+    public FrappeApiFilter(String fieldname, String opt, double value){
+        this(fieldname, opt, ""+value);
     }
 
     public String getFilterStr(){
