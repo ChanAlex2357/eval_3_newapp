@@ -255,31 +255,15 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     }
 
     /**
-     * Cree une nouveau salary slip avec son assignement pour une periode donnee avec un control mis a jour de salaire
+    * Cree une nouveau salary slip avec son assignement pour une periode donnee avec un control mis a jour de salaire
      * @param user
      * @param salaryGeneratorForm
      * @param from_date
      * @return
      * @throws Exception
      */
+    
     public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
-        SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);
-        
-        // Check ref assignment for salary structure
-        if (assignment == null) {
-            List<SalaryStructure> structures = structureService.getAll(user);
-            if (structures == null || structures.size() == 0) {
-                throw new Exception("Impossible to create salary without salary structure and assignment");
-            }
-            salaryGeneratorForm.setSalary_structure(structures.get(0).getName());
-        }
-        else {
-            salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
-        }
-        return createSalary(user, salaryGeneratorForm, assignment, from_date);
-    }
-
-    public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment assignment, Date from_date) throws Exception {
         SalarySlip salary = null;
         if( salaryGeneratorForm.getSalary() > 0){
             salary = createSalaryWithAssignment(user, salaryGeneratorForm, from_date);
@@ -289,6 +273,22 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         }
         return salary;
     }
+    // public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
+    //     SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);
+        
+    //     // Check ref assignment for salary structure
+    //     if (assignment == null) {
+    //         List<SalaryStructure> structures = structureService.getAll(user);
+    //         if (structures == null || structures.size() == 0) {
+    //             throw new Exception("Impossible to create salary without salary structure and assignment");
+    //         }
+    //         salaryGeneratorForm.setSalary_structure(structures.get(0).getName());
+    //     }
+    //     else {
+    //         salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
+    //     }
+    //     return createSalary(user, salaryGeneratorForm, assignment, from_date);
+    // }
 
     /**
      * Cree une salary slip a une periode donnee sans ecraser des donnees existantes,
@@ -343,7 +343,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         try {
             while (start_date.compareTo(end_date) <= 0) {
                 try {
-                    SalarySlip salary = createSalary(user, salaryGeneratorForm, assignment, start_date);
+                    SalarySlip salary = createSalary(user, salaryGeneratorForm, start_date);
+                    submit(user, salary, SalarySlip.class);
                     results.add(salary);
                 } catch (Exception e) {
                     e.printStackTrace();
