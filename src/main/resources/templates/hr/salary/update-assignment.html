@@ -84,12 +84,11 @@
     <script>
         let employeeIndex = 1;
         const empRow = document.getElementById("empRow");
-            document.getElementById("addRowBtn").addEventListener("click", function (e){
-                const row  = empRow.cloneNode(true);
-                document.getElementById("employeeBody").appendChild(row);
-                employeeIndex++;
-            }
-        )
+        document.getElementById("addRowBtn").addEventListener("click", function (e){
+            const row  = empRow.cloneNode(true);
+            document.getElementById("employeeBody").appendChild(row);
+            employeeIndex++;
+        })
 
         function removeRow(btn) {
             btn.closest('tr').remove();
