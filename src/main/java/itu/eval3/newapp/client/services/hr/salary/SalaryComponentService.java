@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.hr.salary.SalaryComponent;
+import itu.eval3.newapp.client.models.hr.salary.form.SalaryComponentForm;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
@@ -23,6 +24,12 @@ public class SalaryComponentService extends FrappeCrudService<SalaryComponent>{
             FrappeLimiterComponent.NOLIMITER,
             null
         );
+    }
+
+    public SalaryComponent create(UserErpNext user, SalaryComponentForm componentForm) throws Exception {
+        componentForm.checkFormula();
+        SalaryComponent component = createDocument(user, new SalaryComponent(), SalaryComponent.class, componentForm);
+        return component;
     }
     
 }
