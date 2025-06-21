@@ -251,6 +251,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
      */
     public SalarySlip createSalary(UserErpNext user, SalaryRequest salaryRequest) throws ERPNexException, Exception {
         SalarySlip salary = createDocument(user, new SalarySlip(), SalarySlip.class, salaryRequest);
+        submit(user, salary, SalarySlip.class);
         return salary;
     }
 
@@ -274,9 +275,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         return salary;
     }
     // public SalarySlip createSalary(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception {
-    //     SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);
-        
-    //     // Check ref assignment for salary structure
+    //     SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(),from_date);  
+        // Check ref assignment for salary structure
     //     if (assignment == null) {
     //         List<SalaryStructure> structures = structureService.getAll(user);
     //         if (structures == null || structures.size() == 0) {
@@ -344,7 +344,6 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
             while (start_date.compareTo(end_date) <= 0) {
                 try {
                     SalarySlip salary = createSalary(user, salaryGeneratorForm, start_date);
-                    submit(user, salary, SalarySlip.class);
                     results.add(salary);
                 } catch (Exception e) {
                     e.printStackTrace();

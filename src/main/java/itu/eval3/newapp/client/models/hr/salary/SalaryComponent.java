@@ -17,11 +17,14 @@ public class SalaryComponent extends FrappeDocument{
     public double amount;
     @JsonProperty("year_to_date")
     public double yearToDate;
+    public String abbr;
+    public String condition;
+    @JsonProperty("amount_based_on_formula")
+    public boolean amountBasedOnFormula;
 
     public SalaryComponent(){
         super("Salary Component");
     }
-
 
     @Override
     public void save_controle() throws Exception {
@@ -35,7 +38,6 @@ public class SalaryComponent extends FrappeDocument{
 
     @Override
     public Map<String,Object> as_dict() {
-        // TODO Auto-generated method stub
         return null;
     }
 }
