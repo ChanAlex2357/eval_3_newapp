@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.api.requests.LoginRequest;
-import itu.eval3.newapp.client.models.user.UserApiDTO;
+import itu.eval3.newapp.client.models.user.LoginResponse;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.auth.AuthService;
 import jakarta.servlet.http.HttpSession;
@@ -39,7 +39,7 @@ public class AuthController {
             return "redirect:/auth/login";
         }
         try {
-            UserApiDTO userResponse = authService.callLogin(credentials);
+            LoginResponse userResponse = authService.callLogin(credentials);
             
             UserErpNext user = userResponse.getUser();
             session.setAttribute("user", user);

@@ -24,7 +24,7 @@ import itu.eval3.newapp.client.services.hr.salary.SalaryStructureService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/payrolls")
+@RequestMapping("/hr/payrolls")
 public class PayrollEntryController {
     @Autowired
     private PayrollEntryService payrollEntryService;

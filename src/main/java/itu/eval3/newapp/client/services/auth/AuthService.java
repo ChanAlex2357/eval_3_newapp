@@ -8,7 +8,7 @@ import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.api.requests.LoginRequest;
 import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
 import itu.eval3.newapp.client.models.api.responses.method.MethodApiResponse;
-import itu.eval3.newapp.client.models.user.UserApiDTO;
+import itu.eval3.newapp.client.models.user.LoginResponse;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeWebService;
 import itu.eval3.newapp.client.utils.http.HeadersUtils;
@@ -19,14 +19,14 @@ public class AuthService {
     @Autowired
     private FrappeWebService frappeService;
 
-    public UserApiDTO callLogin(LoginRequest loginRequest) throws ERPNexException {
-        FrappeResponseParser<UserApiDTO> userParser = new FrappeResponseParser<>(); // Cree un parser de UserApiDto
+    public LoginResponse callLogin(LoginRequest loginRequest) throws ERPNexException {
+        FrappeResponseParser<LoginResponse> userParser = new FrappeResponseParser<>(); // Cree un parser de UserApiDto
 
         ResponseEntity<String> respone = frappeService.callMethod(UserErpNext.GUEST, "eval_app.api.login",HeadersUtils.buildJsonHeader(null), HttpMethod.POST, loginRequest);  // Faire appel au method login par web service 
 
-        MethodApiResponse<UserApiDTO> userResponse = userParser.parseMethodApiResponse(respone, UserApiDTO.class);  // parser la reponse obtenu
+        MethodApiResponse<LoginResponse> userResponse = userParser.parseMethodApiResponse(respone, LoginResponse.class);  // parser la reponse obtenu
         
-        ApiResponse<UserApiDTO> userApiResponse = userResponse.getApiResponse();
+        ApiResponse<LoginResponse> userApiResponse = userResponse.getApiResponse();
         if (userApiResponse.isSuccess() == false) {
             throw new ERPNexException("Invalid Credentials. Please check it and try again", respone, null);
         }

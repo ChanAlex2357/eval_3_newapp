@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Configuration
 @Data
-@ConfigurationProperties(prefix = "api")
+@ConfigurationProperties(prefix = "erpnext.api")
 public class ApiConfig {
     private String baseUrl;
     private String loginEndpoint;
