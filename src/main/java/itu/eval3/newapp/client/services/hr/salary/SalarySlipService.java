@@ -2,7 +2,6 @@ package itu.eval3.newapp.client.services.hr.salary;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +22,7 @@ import itu.eval3.newapp.client.models.hr.salary.SalariesRegisterReport;
 import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
 import itu.eval3.newapp.client.models.hr.salary.SalaryRequest;
 import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
-import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
+// import itu.eval3.newapp.client.models.hr.salary.SalaryStructure;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.SalaryUpdateForm;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryFilter;
@@ -48,8 +47,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     @Autowired
     private SalaryStructureAssignmentService assignmentService;
 
-    @Autowired
-    private SalaryStructureService structureService;
+    // @Autowired
+    // private SalaryStructureService structureService;
 
     /**
      * Recupere la liste de tous les fiches de paies filtrer et avec les attributs souhaiter
@@ -189,17 +188,20 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         
         // cancel salary_slip and assigned  salary_assignment
         SalaryStructureAssignment assignment = assignmentService.findAssignedAssignement(user, salarySlip);
-        assignmentService.cancelAssignement(user, assignment);
-        cancelSalary(user, salarySlip);
-
         // delete salary_slip and assigned salary_assignement
-        // assignmentService.delete(user, assignment);
-        // this.delete(user, salarySlip);
+        if (salarySlip.getStartDate().compareTo(assignment.fromDate) == 0) {
+            assignmentService.cancelAssignement(user, assignment);
+            assignmentService.delete(user, assignment);
+        }
+        else {
+            assignment.setFromDate(salarySlip.getStartDate());
+        }
+        cancelSalary(user, salarySlip);
+        this.delete(user, salarySlip);
 
         // generate new salary Slip
         assignment.setBase(salary);
         SalaryGeneratorForm salaryGeneratorForm = new SalaryGeneratorForm(assignment);
-
         return createSalaryWithAssignment(user, salaryGeneratorForm, assignment, salarySlip);
     }
 
