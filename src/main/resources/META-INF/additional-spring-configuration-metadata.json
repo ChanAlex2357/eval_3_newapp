@@ -1,0 +1,22 @@
+{"properties": [
+  {
+    "name": "erpnext.api.timeout",
+    "type": "java.lang.String",
+    "description": "A description for 'erpnext.api.timeout'"
+  },
+  {
+    "name": "erpnext.api.ressource",
+    "type": "java.lang.String",
+    "description": "A description for 'erpnext.api.ressource'"
+  },
+  {
+    "name": "erpnext.api.base-url",
+    "type": "java.lang.String",
+    "description": "A description for 'erpnext.api.base-url'"
+  },
+  {
+    "name": "erpnext.api.method",
+    "type": "java.lang.String",
+    "description": "A description for 'erpnext.api.method'"
+  }
+]}
