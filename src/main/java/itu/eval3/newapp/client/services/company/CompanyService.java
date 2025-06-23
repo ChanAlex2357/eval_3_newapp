@@ -10,6 +10,7 @@ import itu.eval3.newapp.client.models.annexe.Company;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.filters.LikeFilter;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 
 @Service
@@ -30,7 +31,9 @@ public class CompanyService extends FrappeCrudService<Company>{
     }
 
     public List<Company> getAll(UserErpNext user) throws ERPNexException{
-        return getAll(user,null);
+        FrappeFilterComponent filterComponent = new FrappeFilterComponent();
+        filterComponent.addFilter(new LikeFilter("company_name", "Itu Eval", true));
+        return getAll(user,filterComponent);
     }   
 
     public Company getById(UserErpNext user, String id) throws ERPNexException {
