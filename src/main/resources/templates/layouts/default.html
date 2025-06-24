@@ -13,7 +13,7 @@
     <script th:src="@{/js/yearpicker.js}" async></script>
     <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/js/chart.umd.js}"></script>
-    <script th:src="@{/js/index.global.min.js}"></script>
+    <script th:src="@{/js/index.global.js}"></script>
 </head>
 
 <body class="bg-light">
@@ -81,6 +81,7 @@
                     <div class="border mt-3">
                         <div>
                             <button type="button" id="reset-btn" title="reset-button" class="btn btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                            <a th:href="@{/calendar}"><i class="bi bi-calendar"></i></a>
                         </div>
                     </div>
             

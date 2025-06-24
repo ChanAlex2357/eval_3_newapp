@@ -1,3 +1,5 @@
+# **Idées aléatoires pour l'application RH et paie**
+
 Très bonne question — maintenant que ton application couvre les **fonctionnalités fondamentales** liées aux employés et aux salaires (création, mise à jour, statistiques), tu peux naturellement l'étendre vers des **fonctionnalités avancées de gestion RH et paie**. Voici des **axes stratégiques de développement** :
 
 ---

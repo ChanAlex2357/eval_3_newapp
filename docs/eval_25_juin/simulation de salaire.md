@@ -1,3 +1,5 @@
+# Simulation de salaire dans ERPNext
+
 Très bonne orientation !
 
 La **prévisualisation ou simulation du salaire** est une **fonctionnalité métier puissante**, car elle permet :
