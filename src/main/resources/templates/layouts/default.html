@@ -13,6 +13,7 @@
     <script th:src="@{/js/yearpicker.js}" async></script>
     <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/js/chart.umd.js}"></script>
+    <script th:src="@{/js/index.global.js}"></script>
 </head>
 
 <body class="bg-light">
@@ -59,6 +60,18 @@
                             <a class="nav-link text-dark " th:href="@{/hr/salaries/update/salary}">
                                 <i class="bi px-2 text-secondary bi-coin"></i>Update
                             </a>
+                            <hr>
+                            <a class="nav-link text-dark " th:href="@{/hr/salary/components/create}">
+                                <i class="bi px-2 text-secondary bi-coin"></i>Create Component
+                            </a>
+                            <hr>
+                            <a class="nav-link text-dark " th:href="@{/hr/salary/structure/create}">
+                                <i class="bi px-2 text-secondary bi-coin"></i>Create Structure
+                            </a>
+                            <hr>
+                            <a class="nav-link text-dark " th:href="@{/hr/payrolls/create}">
+                                <i class="bi px-2 text-secondary bi-coin"></i>Create Payroll Entry
+                            </a>
                         <b class="border-bottom">Data Management</b>
                             <a class="nav-link text-dark " th:href="@{/import/v3}">
                                 <i class="bi px-2 text-secondary bi-folder"></i> Import
@@ -68,6 +81,7 @@
                     <div class="border mt-3">
                         <div>
                             <button type="button" id="reset-btn" title="reset-button" class="btn btn-outline-danger border-0"><i class="bi bi-trash"></i></button>
+                            <a th:href="@{/calendar}"><i class="bi bi-calendar"></i></a>
                         </div>
                     </div>
             
@@ -86,9 +100,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // console.log("Document loaded, initializing yearpicker...");
-            // $('.yearpicker').yearpicker();
-
             function acivateOverlay(label = "Loading..."){
                 const overlay = document.getElementById("overlay");
                 const over_text = document.getElementById("over-text");
@@ -127,14 +138,13 @@
                         deacivateOverlay();
                     })
                 } else {
-                // Code to execute if the user clicked "Cancel"
-                console.log("User clicked Cancel.");
+                    // Code to execute if the user clicked "Cancel"
+                    console.log("User clicked Cancel.");
                 }
             })
         });
-
-
     </script>
+
 </body>
 
 </html>

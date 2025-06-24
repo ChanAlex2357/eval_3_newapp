@@ -14,7 +14,6 @@ public class SalaryUpdateForm {
 
     public String[] employees;
 
-
     public SalaryDetail findConditionSalaryComponent(SalarySlip salarySlip) {
         return SalaryComponentFinder.findSalaryComponent(salarySlip, condition_component);
     }

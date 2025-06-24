@@ -39,8 +39,8 @@ export function renderEmployeeTable(data, tableId = 'empTable') {
             <td>${employee.gender}</td>
             <td>${formatDate(new Date(employee.date_of_joining).toLocaleDateString())}</td>
             <td>${employee.company}</td>
-            <td>${employee.designation}</td>
             `;
+            // <td>${employee.designation}</td>
             // <td>
             //     <a href="/hr/employees/${employee.id}/edit" class="btn btn-primary">Edit</a>
             //     <a href="/hr/employees/${employee.id}/delete" class="btn btn-danger">Delete</a>

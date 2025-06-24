@@ -4,7 +4,7 @@ import itu.eval3.newapp.client.models.api.responses.ResponseModel;
 import lombok.Data;
 
 @Data
-public class UserApiDTO implements ResponseModel{
+public class LoginResponse implements ResponseModel{
     private String sid;
     private String api_key;
     private String api_secret;

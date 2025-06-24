@@ -24,13 +24,12 @@ import itu.eval3.newapp.client.services.hr.salary.SalaryStructureService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/payrolls")
+@RequestMapping("/hr/payrolls")
 public class PayrollEntryController {
     @Autowired
     private PayrollEntryService payrollEntryService;
     @Autowired
     private CompanyService companyService;
-
     @Autowired
     private EmpService empService;
 
@@ -64,11 +63,6 @@ public class PayrollEntryController {
     public String doCreate(HttpSession session, @ModelAttribute PayrollEntryForm payrollForm) {
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
-            
-            Company company = companyService.getById(user, payrollForm.company);
-
-            payrollForm.setPayroll_payable_account(company.getDefaultPayableAccount());
-
 
             payrollEntryService.createPayrollEntry(user, payrollForm);
             return "redirect:/";

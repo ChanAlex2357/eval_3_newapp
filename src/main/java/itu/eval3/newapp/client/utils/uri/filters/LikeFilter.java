@@ -2,9 +2,13 @@ package itu.eval3.newapp.client.utils.uri.filters;
 
 public class LikeFilter extends FrappeApiFilter{
 
-    public LikeFilter(String fieldname,String value) {
-        super(fieldname, "like", value);
+    public LikeFilter(String fieldname, String value, boolean not) {
+        super(fieldname, buildOpt(not), value);
         surroundLikeValue();
+    }
+
+    public LikeFilter(String fieldname,String value) {
+        this(fieldname, value, false);
     }
 
     public void surroundLikeValue(){
@@ -12,5 +16,12 @@ public class LikeFilter extends FrappeApiFilter{
             setVaule("%"+getVaule()+"%");
         }
     }
+
+    public  static String buildOpt(boolean not){
+        if (not) {
+            return "not like";
+        }
+        return "like";
+    } 
     
 }

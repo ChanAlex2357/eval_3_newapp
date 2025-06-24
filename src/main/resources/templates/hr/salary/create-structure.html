@@ -1,0 +1,114 @@
+<div th:replace="~{layouts/default :: layout(title='Assignement Salary',content=~{::content})}">
+    <th:block th:fragment="content">
+        <div class="row">
+            <div class="container">
+                <div class="row">
+                    <h2>Create Salary Structure</h2>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mx-auto">
+                        <form th:action="@{/hr/salary/strucutre/create}">
+                            <div class="row">
+                                <div class="form-group mt-3 col">
+                                    <label for="structure_name" class="form-label">Name <span class="text-danger">*</span></label>
+                                    <input type="text"  name="structure_name" id="structure_name" class="form-control form-control-sm" >
+                                </div>
+                                <div class="form-group mt-3 col">
+                                    <label for="company" class="form-label">Company</label>
+                                    <select name="company" id="company" class="form-select form-select-sm">
+                                        <option th:each=" comp : ${companies}" th:value="${comp.name}">
+                                            <span th:text="${comp.name}"></span>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group mt-3 col">
+                                    <label for="frequency" class="form-label">Payroll frequency</label>
+                                    <select name="payroll_frequency" id="frequency" class="form-select form-select-sm">
+                                        <option value="Monthly"> Monthly </option>
+                                        <option value="Fortnightly"> Fortnightly </option>
+                                        <option value="Bimonthly"> Bimonthly </option>
+                                        <option value="Weekly"> Weekly </option>
+                                        <option value="Daily"> Daily </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group mt-3">
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <h3>Earnings</h3>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button title="add-earning" type="button" class="btn btn-dark table-row-adder" id="earning-adder" data-table-body="#earning-body" ><i class="bi bi-plus"></i></button>
+                                            </div>
+                                        </div>
+                                        <table class="table modern-table">
+                                            <thead>
+                                                <th scope="col">Component</th>
+                                            </thead>
+                                            <tbody id="earning-body">
+                                                <tr class="component-row" id="earning-row">
+                                                    <td>
+                                                        <select name="earnings[]" title="earning" class="form-select form-select-sm">
+                                                            <option th:each=" comp : ${earnings}" th:value="${comp.name}"><span th:text="${comp.name}"></span></option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group mt-3">
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <h3>Deductions</h3>
+                                            </div>
+                                            <div class="col-auto">
+                                                <button type="button" class="btn btn-dark table-row-adder" id="deduction-adder" data-table-body="#deduction-body" title="add-deduction"><i class="bi bi-plus"></i></button>
+                                            </div>
+                                        </div>
+                                        <table class="table modern-table">
+                                            <thead>
+                                                <th scope="col">Component</th>
+                                            </thead>
+                                            <tbody id="deduction-body">
+                                                <tr class="component-row" id="deduction-row">
+                                                    <td>
+                                                        <select name="deductions[]" title="deduction" class="form-select form-select-sm">
+                                                            <option th:each=" comp : ${deductions}" th:value="${comp.name}"><span th:text="${comp.name}"></span></option>
+                                                        </select>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function dynamiseTableRow(adder_id, row_id){
+                const row = document.getElementById(row_id)
+                const rowAdder = document.getElementById(adder_id);   
+                rowAdder.addEventListener("click",function(e){
+                    e.preventDefault();
+                    const tbody_id = rowAdder.getAttribute("data-table-body")
+                    const tbody = document.querySelector(tbody_id)
+                    tbody.appendChild(row.cloneNode(true));
+                })
+            }
+            dynamiseTableRow("earning-adder","earning-row")
+            dynamiseTableRow("deduction-adder","deduction-row")
+
+
+        </script>
+    </th:block>
+</div>

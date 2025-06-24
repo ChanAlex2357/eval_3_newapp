@@ -27,6 +27,9 @@ public class Company extends FrappeDocument {
     public String country;
 
     @JsonProperty("payroll_payable_account")
+    public String payrollPayableAccount;
+
+    @JsonProperty("default_payable_account")
     public String defaultPayableAccount;
 
     public Company() {
