@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.leave.LeaveAllocation;
@@ -17,8 +16,6 @@ import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
 import itu.eval3.newapp.client.utils.NumberUtils;
-import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
-import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 
 @Service
 public class LeaveApplService extends FrappeCrudService<LeaveApplication>{

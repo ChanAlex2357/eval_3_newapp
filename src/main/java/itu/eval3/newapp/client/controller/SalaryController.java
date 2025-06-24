@@ -97,14 +97,14 @@ public class SalaryController {
             return "redirect:/hr/salaries";
         } catch (Exception e) {
             List<Employee> employees = null;
-            List<SalaryStructure> salaryStructures = null;
+            // List<SalaryStructure> salaryStructures = null;
             try {
                 employees = empService.getAll(user, null);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
             model.addAttribute("employees", employees);
-        model.addAttribute("salaryForm", salaryGeneratorForm);
+            model.addAttribute("salaryForm", salaryGeneratorForm);
             model.addAttribute("err_message", e.getMessage());
             return "hr/salary/create-assigenment";
         }
