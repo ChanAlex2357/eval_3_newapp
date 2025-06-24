@@ -6,12 +6,15 @@ import java.util.Map;
 import org.springframework.http.ResponseEntity;
 
 import itu.eval3.newapp.client.builder.ApiResponseBuilder;
+import itu.eval3.newapp.client.models.api.responses.FrappeErrorResponse;
 import itu.eval3.newapp.client.models.api.responses.custom.ApiResponse;
 
 public class ERPNexException extends Exception {
     private ApiResponse<String> apiResponse;
     private ResponseEntity<String> response;
     private ErpNextCallException callException;
+    private FrappeErrorResponse errorDetails;
+
 
     public ERPNexException(String message , Throwable e){
         super(message, e);
@@ -64,5 +67,23 @@ public class ERPNexException extends Exception {
     private void buildApiResponse(){
         ApiResponseBuilder<String> responseBuilder = new ApiResponseBuilder<>();
         this.apiResponse = responseBuilder.error(this.getMessage(),this.getLogMap());
+    }
+    public ApiResponse<String> getApiResponse() {
+        return apiResponse;
+    }
+    public void setApiResponse(ApiResponse<String> apiResponse) {
+        this.apiResponse = apiResponse;
+    }
+    public ResponseEntity<String> getResponse() {
+        return response;
+    }
+    public ErpNextCallException getCallException() {
+        return callException;
+    }
+    public FrappeErrorResponse getErrorDetails() {
+        return errorDetails;
+    }
+    public void setErrorDetails(FrappeErrorResponse errorDetails) {
+        this.errorDetails = errorDetails;
     }
 }

@@ -57,7 +57,7 @@
                     <tr id="empRow">
                         <td>
                             <select name="employees[]" class="form-select" title="employee">
-                                <option value="">-- Sélectionner --</option>
+                                <option value="all">Tous les employees</option>
                                 <option th:each="e : ${employees}" th:value="${e.name}" th:text="${e.firstname + ' ' + e.lastname}"></option>
                             </select>
                         </td>
