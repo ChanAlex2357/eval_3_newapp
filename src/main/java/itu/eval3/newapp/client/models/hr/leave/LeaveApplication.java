@@ -1,4 +1,4 @@
-package itu.eval3.newapp.client.models.leave;
+package itu.eval3.newapp.client.models.hr.leave;
 
 import java.sql.Date;
 import java.util.HashMap;
@@ -55,7 +55,6 @@ public class LeaveApplication extends FrappeDocument {
         dict.put("from_date", fromDate.toString());
         dict.put("to_date", toDate.toString());
         dict.put("status", "Approved");
-
         return dict;
     }
 }

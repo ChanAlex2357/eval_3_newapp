@@ -26,6 +26,16 @@ public class DateUtils {
         return Date.valueOf(LocalDate.of(localDate.getYear(), localDate.getMonth(), 1));
     }
 
+    public static Date getStartOfYear(Date ref){
+        LocalDate localDate = LocalDate.of(ref.toLocalDate().getYear(), 1, 1);
+        return Date.valueOf(localDate);
+    }
+
+    public static Date getEndOfYear(Date ref) {
+        LocalDate localDate = LocalDate.of(ref.toLocalDate().getYear(), 12, 31);
+        return Date.valueOf(localDate);
+    }
+
     /**
      * Convertit un LocalDate en java.sql.Date
      */

@@ -1,4 +1,4 @@
-package itu.eval3.newapp.client.models.leave;
+package itu.eval3.newapp.client.models.hr.leave;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

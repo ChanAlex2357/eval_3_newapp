@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 
 import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
-import itu.eval3.newapp.client.models.leave.LeaveApplication;
-import itu.eval3.newapp.client.models.leave.LeaveBalanceDTO;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
-import itu.eval3.newapp.client.models.leave.LeaveAllocation;
+import itu.eval3.newapp.client.models.hr.leave.LeaveAllocation;
+import itu.eval3.newapp.client.models.hr.leave.LeaveApplication;
+import itu.eval3.newapp.client.models.hr.leave.LeaveBalanceDTO;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;

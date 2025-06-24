@@ -1,9 +1,9 @@
 package itu.eval3.newapp.client.controller;
 
 import itu.eval3.newapp.client.exceptions.ERPNexException;
-import itu.eval3.newapp.client.models.leave.LeaveApplication;
-import itu.eval3.newapp.client.models.leave.LeaveBalanceDTO;
-import itu.eval3.newapp.client.models.leave.LeaveType;
+import itu.eval3.newapp.client.models.hr.leave.LeaveApplication;
+import itu.eval3.newapp.client.models.hr.leave.LeaveBalanceDTO;
+import itu.eval3.newapp.client.models.hr.leave.LeaveType;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.hr.leave.LeaveService;
 import itu.eval3.newapp.client.services.hr.leave.LeaveTypeService;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
-import itu.eval3.newapp.client.models.leave.LeaveType;
+import itu.eval3.newapp.client.models.hr.leave.LeaveType;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 
