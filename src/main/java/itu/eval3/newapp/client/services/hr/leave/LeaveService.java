@@ -3,15 +3,18 @@ package itu.eval3.newapp.client.services.hr.leave;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.leave.LeaveApplication;
 import itu.eval3.newapp.client.models.leave.LeaveBalanceDTO;
+import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.leave.LeaveAllocation;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
+import itu.eval3.newapp.client.services.hr.emp.EmpService;
 import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 
@@ -20,6 +23,8 @@ public class LeaveService {
 
     private final FrappeCrudService<LeaveApplication> leaveAppCrud;
     private final FrappeCrudService<LeaveAllocation> leaveAllocCrud;
+    @Autowired
+    private EmpService empService;
 
     public LeaveService(FrappeCrudService<LeaveApplication> leaveAppCrud,
                         FrappeCrudService<LeaveAllocation> leaveAllocCrud) {
@@ -28,6 +33,8 @@ public class LeaveService {
     }
 
     public LeaveApplication createLeave(UserErpNext user, LeaveApplication leave) throws Exception {
+        Employee emp = empService.getById(user, leave.getEmployee());
+        leave.setCompany(emp.getCompany());
         return leaveAppCrud.createDocument(user, leave, LeaveApplication.class);
     }
 

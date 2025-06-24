@@ -1,7 +1,16 @@
 <div th:replace="~{layouts/default :: layout ( title='Import Csv', content=~{::content} )}">
     <th:block th:fragment="content">
         <div class="container">
-            <h2>Import CSV</h2>
+            <div class="row">
+                <div class="col">
+                    <h2>Import CSV</h2>
+                </div>
+                <div class="col-auto text-center align-items-center">
+                    <button type="button" id="reset-btn" title="reset-button" class="btn btn-outline-danger btn-sm">
+                        <i class="bi bi-trash"></i>Reinitialiser
+                    </button>
+                </div>
+            </div>
             <hr>
             <div class="card card-body modern-card mb-3">
                 <form th:action="@{/import/v3}" method="post" th:object="${importer}" id="import-form" enctype="multipart/form-data">

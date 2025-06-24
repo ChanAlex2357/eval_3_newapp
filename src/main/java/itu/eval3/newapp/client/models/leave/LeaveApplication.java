@@ -1,6 +1,8 @@
 package itu.eval3.newapp.client.models.leave;
 
 import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import itu.eval3.newapp.client.models.action.FrappeDocument;
@@ -12,6 +14,7 @@ import lombok.EqualsAndHashCode;
 public class LeaveApplication extends FrappeDocument {
 
     private String employee;
+    private String company;
 
     @JsonProperty("employee_name")
     private String employeeName;
@@ -43,6 +46,16 @@ public class LeaveApplication extends FrappeDocument {
 
     @Override
     public Object as_dict() {
-        return this;
+        Map<String,Object> dict = new HashMap<>();
+        dict.put("naming_series", getNamingSeries());
+        dict.put("employee", employee);
+        dict.put("company", company);
+        dict.put("reason", reason);
+        dict.put("leave_type", leaveType);
+        dict.put("from_date", fromDate.toString());
+        dict.put("to_date", toDate.toString());
+        dict.put("status", "Approved");
+
+        return dict;
     }
 }
