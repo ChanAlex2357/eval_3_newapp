@@ -19,39 +19,29 @@ import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 
 @Service
-public class LeaveService {
+public class LeaveApplService extends FrappeCrudService<LeaveApplication>{
 
-    private final FrappeCrudService<LeaveApplication> leaveAppCrud;
-    private final FrappeCrudService<LeaveAllocation> leaveAllocCrud;
+    @Autowired
+    private LeaveAllocService leaveAllocCrud;
     @Autowired
     private EmpService empService;
 
-    public LeaveService(FrappeCrudService<LeaveApplication> leaveAppCrud,
-                        FrappeCrudService<LeaveAllocation> leaveAllocCrud) {
-        this.leaveAppCrud = leaveAppCrud;
-        this.leaveAllocCrud = leaveAllocCrud;
-    }
-
+    
     public LeaveApplication createLeave(UserErpNext user, LeaveApplication leave) throws Exception {
         Employee emp = empService.getById(user, leave.getEmployee());
         leave.setCompany(emp.getCompany());
-        return leaveAppCrud.createDocument(user, leave, LeaveApplication.class);
+        List<LeaveAllocation> allocations = leaveAllocCrud.getAllocations(user, emp, leave);
+        if (allocations.isEmpty()) {
+            throw new Exception("Aucune allocation trouver entre '"+leave.getEmployee()+"' et '"+leave.getLeaveType()+"'");
+        }
+        LeaveApplication target = this.createDocument(user, leave, LeaveApplication.class);
+        submit(user, target, LeaveApplication.class);
+        return target;
     }
 
     public List<LeaveBalanceDTO> getLeaveBalance(UserErpNext user, String employeeId) throws ERPNexException {
         List<LeaveBalanceDTO> result = new ArrayList<>();
-        FrappeFilterComponent filter = new FrappeFilterComponent();
-        filter.addFilter(new EqualsFilter("employee",employeeId));
-
-        List<LeaveAllocation> allocations = leaveAllocCrud.getAllDocuments(
-            user,
-            new LeaveAllocation(),
-            LeaveAllocation.class,
-            ApiConfig.ALL_FIELDS,
-            filter,
-            null,
-            null
-        );
+        List<LeaveAllocation> allocations = leaveAllocCrud.getAllcotions(user, employeeId);
 
         for (LeaveAllocation alloc : allocations) {
             double allocated = alloc.getTotalLeavesAllocated() != null ? alloc.getTotalLeavesAllocated() : 0;

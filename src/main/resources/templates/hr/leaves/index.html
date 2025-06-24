@@ -8,7 +8,7 @@
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label for="employee">Employé</label>
-                            <input type="text" class="form-control" th:field="*{employee}"  required>
+                            <input type="text" id="employee" class="form-control" th:field="*{employee}"  required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="leaveType">Type de congé</label>
@@ -24,25 +24,25 @@
                     <div class="row mb-2">
                         <div class="col-md-6">
                             <label for="fromDate">Date début</label>
-                            <input type="date" class="form-control" th:field="*{fromDate}" required>
+                            <input type="date" id="fromDate" class="form-control" th:field="*{fromDate}" required>
                         </div>
                         <div class="col-md-6">
                             <label for="toDate">Date fin</label>
-                            <input type="date" class="form-control" th:field="*{toDate}" required>
+                            <input type="date" id="toDate" class="form-control" th:field="*{toDate}" required>
                         </div>
                     </div>
 
                     <div class="mb-2">
                         <label for="reason">Motif</label>
-                        <input type="text" class="form-control" th:field="*{reason}">
+                        <input type="text" id="reason" class="form-control" th:field="*{reason}">
                     </div>
 
                     <div class="mb-2 form-check">
-                        <input type="checkbox" class="form-check-input" th:field="*{halfDay}">
-                        <label class="form-check-label" for="halfDay">Demi-journée ?</label>
+                        <input type="checkbox" id="halfDay" class="form-check-input" th:field="*{halfDay}">
+                        <label class="form-check-label"  for="halfDay">Demi-journée ?</label>
                     </div>
 
-                    <button class="btn btn-primary">Soumettre</button>
+                    <button type="submit" class="btn btn-primary">Soumettre</button>
                 </form>
 
                 <hr>

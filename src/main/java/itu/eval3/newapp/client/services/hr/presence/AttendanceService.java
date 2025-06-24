@@ -14,40 +14,68 @@ import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
+import itu.eval3.newapp.client.utils.uri.filters.BetweenFilter;
+import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 
 @Service
 public class AttendanceService extends FrappeCrudService<Attendance> {
+
     @Autowired
     private EmpService empService;
 
-    public List<Attendance> generateAttendances(UserErpNext user, AttendanceForm attendanceForm) throws ERPNexException{
+    /**
+     * Génère une série de présences ou absences entre 2 dates pour un employé donné.
+     */
+    public List<Attendance> generateAttendances(UserErpNext user, AttendanceForm form) throws ERPNexException {
         List<Attendance> results = new ArrayList<>();
-        Employee emp = empService.getById(user, attendanceForm.getEmployee());
+        Employee emp = empService.getById(user, form.getEmployee());
 
-        Date start_date = attendanceForm.getStartDate();
-        Date end_date = attendanceForm.getEndDate();
+        Date current = form.getStartDate();
+        Date end = form.getEndDate();
 
-        while (start_date.compareTo(end_date) <= 0) {
+        while (!current.after(end)) {
             try {
                 Attendance attendance = new Attendance();
                 attendance.setEmployee(emp);
-                attendance.setStatus(attendanceForm.getAttendanceType());
-                attendance = creatAttendance(user, attendance, start_date);
+                attendance.setStatus(form.getAttendanceType());
+                attendance.setAttendanceDate(current);
+
+                attendance = createDocument(user, attendance, Attendance.class);
                 attendance = submit(user, attendance, Attendance.class);
+
                 results.add(attendance);
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println("Erreur lors de la génération d'une présence à la date " + current + ": " + e.getMessage());
+            } finally {
+                current = Date.valueOf(current.toLocalDate().plusDays(1));
             }
-            finally {
-                start_date = Date.valueOf(start_date.toLocalDate().plusDays(1));
-            }
-        };
+        }
         return results;
     }
-    
-    public Attendance creatAttendance(UserErpNext user , Attendance target, Date date) throws ERPNexException, Exception{
+
+    /**
+     * Récupère les présences pour un employé, avec option de filtrage par période.
+     */
+    public List<Attendance> getAttendancesByEmployee(UserErpNext user, String employeeId, Date startDate, Date endDate) throws ERPNexException {
+        Attendance dummy = new Attendance();
+
+        FrappeFilterComponent filter = new FrappeFilterComponent();
+
+            filter.addFilter(new EqualsFilter("employee", employeeId));
+
+        if (startDate != null && endDate != null) {
+            filter.addFilter(new BetweenFilter("attendance_date", startDate, endDate));
+        }
+
+        return getAllDocuments(user, dummy, Attendance.class, null, filter, null, null);
+    }
+
+    /**
+     * Crée une présence simple à une date donnée
+     */
+    public Attendance creatAttendance(UserErpNext user, Attendance target, Date date) throws ERPNexException, Exception {
         target.setAttendanceDate(date);
-        Attendance data = createDocument(user, target, Attendance.class);
-        return data;
+        return createDocument(user, target, Attendance.class);
     }
 }

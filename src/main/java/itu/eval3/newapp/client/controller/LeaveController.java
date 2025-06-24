@@ -5,7 +5,7 @@ import itu.eval3.newapp.client.models.hr.leave.LeaveApplication;
 import itu.eval3.newapp.client.models.hr.leave.LeaveBalanceDTO;
 import itu.eval3.newapp.client.models.hr.leave.LeaveType;
 import itu.eval3.newapp.client.models.user.UserErpNext;
-import itu.eval3.newapp.client.services.hr.leave.LeaveService;
+import itu.eval3.newapp.client.services.hr.leave.LeaveApplService;
 import itu.eval3.newapp.client.services.hr.leave.LeaveTypeService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
 public class LeaveController {
 
     @Autowired
-    private LeaveService leaveService;
+    private LeaveApplService leaveService;
 
     @Autowired
     private LeaveTypeService leaveTypeService;

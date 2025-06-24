@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.leave.LeaveAllocation;
@@ -13,24 +14,17 @@ import itu.eval3.newapp.client.models.hr.leave.LeaveApplication;
 import itu.eval3.newapp.client.models.hr.leave.LeaveType;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
-import itu.eval3.newapp.client.services.hr.emp.EmpService;
 import itu.eval3.newapp.client.utils.DateUtils;
 import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 
 @Service
-public class LeaveApplicationService {
-
-    @Autowired
-    private EmpService empService;
-
-    @Autowired
-    private FrappeCrudService<LeaveApplication> leaveAppCrud;
+public class LeaveAllocService {
 
     @Autowired
     private FrappeCrudService<LeaveAllocation> leaveAllocCrud;
-    public List<LeaveAllocation> getAllocation(UserErpNext user , Employee emp, LeaveApplication leave) throws ERPNexException {
+    public List<LeaveAllocation> getAllocations(UserErpNext user , Employee emp, LeaveApplication leave) throws ERPNexException {
         FrappeFilterComponent filter = new FrappeFilterComponent();
         filter.addFilter(new EqualsFilter("employee", emp.getName()));
         filter.addFilter(new EqualsFilter("leave_type", leave.getLeaveType()));
@@ -48,8 +42,30 @@ public class LeaveApplicationService {
         );
         return existing;
     }
+
+    public List<LeaveAllocation> getAllocations(UserErpNext user, Employee emp) throws ERPNexException {
+        return getAllcotions(user, emp.getName());
+    }
+
+    public List<LeaveAllocation> getAllcotions(UserErpNext user, String employeeId) throws ERPNexException {
+        FrappeFilterComponent filter = new FrappeFilterComponent();
+        filter.addFilter(new EqualsFilter("employee",employeeId));
+
+        List<LeaveAllocation> allocations = leaveAllocCrud.getAllDocuments(
+            user,
+            new LeaveAllocation(),
+            LeaveAllocation.class,
+            ApiConfig.ALL_FIELDS,
+            filter,
+            null,
+            null
+        );
+        return allocations;
+    }
+
+
     public LeaveAllocation ensureLeaveAllocation(UserErpNext user, Employee emp, LeaveApplication leave) throws Exception {
-        List<LeaveAllocation> existing = getAllocation(user, emp, leave);
+        List<LeaveAllocation> existing = getAllocations(user, emp, leave);
         if (existing.isEmpty()) {
             return createLeaveAllocation(user, emp, leave);
         }
