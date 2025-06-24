@@ -43,9 +43,15 @@ public class SalaryGeneratorForm {
         this.setCurrency(company.getDefaulCurrency());
     }
 
-    public Map<String, Object> getAssignmentDict(){
+    public Map<String, Object> getAssignmentDict() throws Exception{
         Map<String, Object> map = new HashMap<>();
+        if (employee == null) {
+            throw new Exception("No employee assigned for assignement");
+        }
         map.put("employee",employee);
+        if (salary_structure == null) {
+            throw new Exception("No salary strucutre assigned for assignment");
+        }
         map.put("salary_structure", salary_structure);
         map.put("base", salary);
         map.put("from_date", start_date.toString());
@@ -55,7 +61,7 @@ public class SalaryGeneratorForm {
         return map;
     }
 
-    public Map<String, Object> getAssignmentDict(Date from_date){
+    public Map<String, Object> getAssignmentDict(Date from_date) throws Exception{
         Map<String, Object> map = getAssignmentDict();
         map.replace("from_date", from_date.toString());
         return map;

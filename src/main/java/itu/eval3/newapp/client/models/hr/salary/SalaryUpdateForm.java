@@ -1,5 +1,6 @@
 package itu.eval3.newapp.client.models.hr.salary;
 
+import itu.eval3.newapp.client.utils.SalaryComponentFinder;
 import lombok.Data;
 
 @Data
@@ -15,25 +16,7 @@ public class SalaryUpdateForm {
 
 
     public SalaryDetail findConditionSalaryComponent(SalarySlip salarySlip) {
-        return findSalaryComponent(salarySlip, condition_component);
-    }
-
-    public SalaryDetail findSalaireBase(SalarySlip salarySlip){
-        return findSalaryComponent(salarySlip, "Salaire Base");
-    }
-
-    public SalaryDetail findSalaryComponent(SalarySlip salarySlip, String component) {
-        for ( SalaryDetail detail : salarySlip.getEarnings()) {
-            if (detail.salaryComponent.equals(component)) {
-                return detail;
-            }   
-        }
-        for ( SalaryDetail detail : salarySlip.getDeductions()) {
-            if (detail.salaryComponent.equals(component)) {
-                return detail;
-            }  
-        }
-        return null;
+        return SalaryComponentFinder.findSalaryComponent(salarySlip, condition_component);
     }
 
     public boolean checkCondition(SalarySlip salarySlip){
@@ -51,8 +34,8 @@ public class SalaryUpdateForm {
         return false;
     }
 
-    public double getSalary(SalarySlip salarySlip){
-        SalaryDetail salaireBase = findSalaireBase(salarySlip);
+    public double getUpdatedSalary(SalarySlip salarySlip){
+        SalaryDetail salaireBase = SalaryComponentFinder.findSalaireBase(salarySlip);
         double salary = salaireBase.getAmount();
         if (type_pourcentage.equals("augmentation")) {
             salary = salary + (salary * getPourcentage());

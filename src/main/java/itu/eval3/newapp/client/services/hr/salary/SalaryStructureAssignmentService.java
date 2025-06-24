@@ -9,11 +9,13 @@ import itu.eval3.newapp.client.config.ApiConfig;
 import itu.eval3.newapp.client.enums.FrappeOrderDirection;
 import itu.eval3.newapp.client.exceptions.ERPNexException;
 import itu.eval3.newapp.client.models.hr.salary.SalaryGeneratorForm;
+import itu.eval3.newapp.client.models.hr.salary.SalarySlip;
 import itu.eval3.newapp.client.models.hr.salary.SalaryStructureAssignment;
 import itu.eval3.newapp.client.models.hr.salary.filter.SalaryStructureAssignmentFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
 import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
@@ -39,7 +41,7 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
     }
 
     public SalaryStructureAssignment createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, Date from_date) throws Exception{
-        SalaryStructureAssignment assignment = createDocument(
+        SalaryStructureAssignment assignment = createDocument (
             user,
             new SalaryStructureAssignment(),
             SalaryStructureAssignment.class,
@@ -48,11 +50,11 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
         return assignment;
     }
 
-    
-    public SalaryStructureAssignment createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm) throws Exception {
-        return createSalaryAssignment(user, salaryGeneratorForm, salaryGeneratorForm.getStart_date());
+    public SalaryStructureAssignment createSalaryAssignment(UserErpNext user, SalaryGeneratorForm salaryGeneratorForm, SalaryStructureAssignment refAssignment) throws Exception {
+        salaryGeneratorForm.setSalary_structure(refAssignment.getSalaryStructure());
+        return createSalaryAssignment(user, salaryGeneratorForm, refAssignment.getFromDate());
     }
-
+  
     public SalaryStructureAssignment findLatest(UserErpNext user,String employee) throws ERPNexException {
         FrappeFilterComponent filterComponent = new FrappeFilterComponent();
         filterComponent.addFilter(new EqualsFilter("employee", employee));
@@ -78,7 +80,9 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
     public SalaryStructureAssignment findClosest(UserErpNext user, String employee, Date dateRef) throws ERPNexException {
         FrappeFilterComponent filterComponent = new FrappeFilterComponent();
         filterComponent.addFilter(new EqualsFilter("employee", employee));
-        FrappeOrderComponent orderComponent = new FrappeOrderComponent("from_date",FrappeOrderDirection.ASC);
+        filterComponent.addFilter(new FrappeApiFilter("from_date", "<=", dateRef.toString()));
+        
+        FrappeOrderComponent orderComponent = new FrappeOrderComponent("from_date",FrappeOrderDirection.DESC);
         FrappeLimiterComponent limiterComponent = new FrappeLimiterComponent(0,1);
 
         List<SalaryStructureAssignment> assignments = getAllDocuments(
@@ -95,5 +99,17 @@ public class SalaryStructureAssignmentService extends FrappeCrudService<SalarySt
             return assignments.get(0);
         }
         return null;
+    }
+
+    public SalaryStructureAssignment findAssignedAssignement(UserErpNext user, SalarySlip salarySlip) throws ERPNexException {
+        return findClosest(
+            user,
+            salarySlip.getEmployee(),
+            salarySlip.getStartDate()
+        );
+    }
+
+    public SalaryStructureAssignment cancelAssignement(UserErpNext user, SalaryStructureAssignment salaryStructureAssignment) throws ERPNexException{
+        return this.cancel(user, salaryStructureAssignment, SalaryStructureAssignment.class);
     }
 }

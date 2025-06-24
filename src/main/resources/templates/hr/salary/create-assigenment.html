@@ -4,24 +4,26 @@
             <div class="container">
                 <div class="col-12">
                     <form th:action="@{/hr/salaries/create/assignement}" method="post">
-                        <div class="form-group">
-                            <label for="sal-date" class="form-label">Date debut</label>
-                            <input type="date" name="start_date" id="sal-date" class="form-control form-control-sm">
+                        <div class="row">
+                            <div class="form-group col">
+                                <label for="sal-date" class="form-label">Date debut</label>
+                                <input type="date" name="start_date" id="sal-date" class="form-control form-control-sm">
+                            </div>
+                            <div class="form-group col">
+                                <label for="sal-date" class="form-label">Date fin</label>
+                                <input type="date" name="end_date" id="sal-date" class="form-control form-control-sm">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="sal-date" class="form-label">Date fin</label>
-                            <input type="date" name="end_date" id="sal-date" class="form-control form-control-sm">
-                        </div>
-                        <div>
+                        <!-- <div>
                             <label for="salaryStructure" class="form-label">Structure de Salaire</label>
                             <select name="salary_structure" class="form-select" id="salaryStructure">
                                 <option value="">-- Choisir --</option>
                                 <option th:each="s : ${salaryStructures}" th:value="${s.name}" th:text="${s.name}"></option>
                             </select>
-                        </div>
+                        </div> -->
                         <div>
                             <label for="">Employee</label>
-                            <select name="employee" class="form-select" title="employee">
+                            <select name="employee" class="form-select form-select-sm" title="employee">
                                 <option value="">-- Sélectionner --</option>
                                 <option th:each="e : ${employees}" th:value="${e.name}" th:text="${e.firstname + ' ' + e.lastname}"></option>
                             </select>

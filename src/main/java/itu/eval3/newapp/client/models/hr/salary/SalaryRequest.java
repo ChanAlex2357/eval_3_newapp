@@ -9,7 +9,6 @@ public class SalaryRequest {
     public String currency;
     public String company;
     public String payroll_frequency = "Monthly";
-    public int docstatus = 1;
     public String salary_structure;
     public String start_date;
 
