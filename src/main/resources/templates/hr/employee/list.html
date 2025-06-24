@@ -18,17 +18,25 @@
                                     <input type="text" th:field="*{lastname}" placeholder="Lastname" class="form-control form-control-sm">
                                 </div>
                                 <div class="col-2">
-                                    <input type="text" th:field="*{company}" placeholder="Company" class="form-control form-control-sm">
+                                    <!-- <input type="text" th:field="*{company}" placeholder="Company" class="form-control form-control-sm"> -->
+                                    <select th:field="*{company}" id="" title="Company" class="form-select form-select-sm">
+                                        <option value=""> -- Tous les company</option>
+                                        <option th:each=" comp : ${companies}" th:value="${comp.name}">
+                                            <span th:text="${comp.name}"></span>
+                                        </option>
+                                    </select>
+                                    
                                 </div>
                                 <div class="col-2">
                                     <select class="form-select-sm form-select" id="" title="Gender" th:field="*{gender}">
-                                        <option value="">-- Tous les genres --</option>
-                                        <option value="Male">Masculin</option>
-                                        <option value="Female">Feminin</option>
+                                        <option value="">-- Tous les genres</option>
+                                        <option th:each="g : ${genders}" th:value="${g.name}">
+                                            <span th:text="${g.name}"></span>
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-2">
-                                    <input type="date" title="employee-hire-date" th:field="*{joinDate}" class="form-control form-control-sm">
+                                    <input type="date" title="employee-hire-date" placeholder="Date d'embauche" th:field="*{joinDate}" class="form-control form-control-sm">
                                 </div>
                             </div>
                             <div class="col-1">
@@ -49,7 +57,7 @@
                             <th scope="col">Genre</th>
                             <th scope="col">Date d'embauche</th>
                             <th scope="col">Company</th>
-                            <th scope="col">Poste</th>
+                            <!-- <th scope="col">Poste</th> -->
                             <!-- <th scope="col">Actions</th> -->
                         </tr>
                     </thead>
@@ -70,7 +78,7 @@
         </div>
     
         <script type="module">
-            import { fetchEmployees, renderEmployeeTable } from '/js/metier.js';
+            import { fetchEmployees, renderEmployeeTable } from '/js/services/employeeService.js';
 
             document.addEventListener("DOMContentLoaded", async function () {
                 const employees = await fetchEmployees();

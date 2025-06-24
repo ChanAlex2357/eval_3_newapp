@@ -13,7 +13,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SalarySlip extends FrappeDocument{
-
     private String employee;
     private String company;
     private String designation;
@@ -147,15 +146,15 @@ public class SalarySlip extends FrappeDocument{
 
 
 
-    private List<SalaryComponent> earnings;
-    private List<SalaryComponent> deductions;
+    private List<SalaryDetail> earnings;
+    private List<SalaryDetail> deductions;
 
     public SalarySlip(){
         super("Salary Slip");
     }
 
     @Override
-    public void save_controle() {
+    public void save_controle() throws Exception {
         
     }
     
@@ -164,21 +163,13 @@ public class SalarySlip extends FrappeDocument{
         
     }
 
-    public String getUriName(){
-        return this.getName().replaceAll("/", "__");
+    @Override
+    public SalaryRequest as_dict() {
+        return null;
     }
 
-    public String getPeriod(){
-        String result = "mm / yyyy";
-        if (startDate != null) {
-            result = getStartDate().toLocalDate().getMonth().name();
-            result += " "+getStartDate().toLocalDate().getYear();
-        }
-        else if (endDate != null) {
-            result = getEndDate().toLocalDate().getMonth().name();
-            result += " "+getEndDate().toLocalDate().getYear();
-        }
-        return result;
+    public String getUriName(){
+        return this.getName().replaceAll("/", "__");
     }
 
 }

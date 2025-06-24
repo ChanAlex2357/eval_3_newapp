@@ -10,7 +10,7 @@ import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.emp.filter.EmpFilter;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class EmpApiController {
     @GetMapping
     public ResponseEntity<?> getEmployees(HttpSession session, @ModelAttribute("emp_filter") EmpFilter empFilter) {
         ApiResponseBuilder<List<Employee>> responseBuilder = new ApiResponseBuilder<>();
-        FrappeFilter filter = empFilter; // Fitre pour les donnees
+        FrappeFilterComponent filter = empFilter; // Fitre pour les donnees
         
         try {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
@@ -56,5 +56,5 @@ public class EmpApiController {
             return ResponseEntity.badRequest().body(responseBuilder.error(e));
         }
     }
-    
+
 }

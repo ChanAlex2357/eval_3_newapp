@@ -2,15 +2,17 @@ package itu.eval3.newapp.client.models.hr.emp.filter;
 
 import java.sql.Date;
 
-import itu.eval3.newapp.client.utils.filters.EqualsFilter;
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilter;
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilterList;
-import itu.eval3.newapp.client.utils.filters.FrappeFilter;
-import itu.eval3.newapp.client.utils.filters.LikeFilter;
+import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeApiFilterList;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.filters.LikeFilter;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class EmpFilter implements FrappeFilter {
+@EqualsAndHashCode(callSuper = false)
+public class EmpFilter extends FrappeFilterComponent {
     public String empName;
     public String firstname;
     public String lastname;
@@ -31,7 +33,9 @@ public class EmpFilter implements FrappeFilter {
 
 
     @Override
-    public FrappeApiFilterList getFilters() {
+    public FrappeApiFilterList getFilterList() {
+        FrappeApiFilterList filterList = super.getFilterList();
+
         FrappeApiFilter[] filters = new FrappeApiFilter[6];
         filters[0] = new LikeFilter("first_name", firstname);
         filters[1] = new LikeFilter("last_name", lastname);
@@ -42,8 +46,8 @@ public class EmpFilter implements FrappeFilter {
             filters[5] = new FrappeApiFilter("date_of_joining", ">=", this.joinDate.toString());
         }
         
-        FrappeApiFilterList apiFilterList = new FrappeApiFilterList(filters);
-        return apiFilterList;
+        filterList.addFilters(filters);
+        return filterList;
     }
     
 }

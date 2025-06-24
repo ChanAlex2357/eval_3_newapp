@@ -44,7 +44,7 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col" class="text-center">Mois</th>
-                                                    <th scope="col" class="text-center">Total Salaires</th>
+                                                    <th scope="col" class="text-center">Total Salaire Net</th>
                                                     <th scope="col" class="text-center">Actions</th>
                                                 </tr>
                                             </thead>
@@ -77,10 +77,14 @@
             <div  class="visibility-hidden"></div>
         </div>
         <script type="module">
-            import { formatCurrency, fetchDashboardData, getRowSpinner} from '/js/metier.js';
+            import {fetchDashboardData} from '/js/services/dashboardService.js';
+            import {formatCurrency} from '/js/services/utils.js';
+            import {getRowSpinner} from '/js/services/spinner.js';
+
             document.addEventListener("DOMContentLoaded", (e) => {
                 const filterForm = document.getElementById("filterForm");
                 const salaryStatsBody = document.getElementById("salaryStatsBody");
+                let salaryChart;
                 function renderDashboard(data){
                     const months = data.months;
                     const year = data.year;
@@ -104,7 +108,7 @@
                             <td class="text-center"> 
                                 <a href="/hr/salaries?annee=${year}&mois=${month_num}" class="">
                                     <button class="col-4 btn btn-success badge">
-                                        ${formatCurrency(month.total_salary)}
+                                        ${formatCurrency(month.total_salary.toFixed(2))}
                                     </button>
                                 </a>
                             </td>
@@ -130,7 +134,7 @@
                                                     <tbody class="">
                                                         <tr class="">
                                                             <td class="text-center text-dark ">
-                                                                Total Gains <span class="mx-3 badge bg-dark text-white border">${formatCurrency(t_e)}</span>
+                                                                Total Salaire Brut <span class="mx-3 badge bg-dark text-white border">${formatCurrency(t_e)}</span>
                                                             </td>
                                                             <td class="text-center text-dark ">
                                                                 Total Deductions<span class="badge mx-3 bg-dark text-white border">${formatCurrency(t_d)}</span>
@@ -156,7 +160,7 @@
                     }
                     function getComponentsTable(data) {
                         const table = document.createElement('table');
-                        table.className = "table table-bordered table-sm modern-table"; // ✅ Correct
+                        table.className = "table table-bordered table-sm modern-table";
 
                         table.innerHTML = `
                             <tbody>
@@ -214,8 +218,11 @@
                     const ctx = document.getElementById("salaryEvolutionChart");
 
                     const { labels, datasets} = extractMonthsComponentData(data);
+                    if(salaryChart){
+                        salaryChart.destroy()
+                    }
 
-                    const salaryChart = new Chart(ctx, {
+                    salaryChart = new Chart(ctx, {
                         type: ['bar'],
                         data: {
                             labels: labels,
@@ -270,7 +277,7 @@
                         data: data,
                         borderColor: randomColor(),
                         backgroundColor: randomColor(0.7),
-                        tension: 0.3,
+                        tension: 1,
                         fill: false
                     }));
                     datasets.push({
@@ -280,7 +287,6 @@
                         backgroundColor: 'rgb(75, 192, 192)',
                         tension: 0.3,
                         fill: false,
-                        pointRadius: 5
                     })
 
                     return { labels, datasets};

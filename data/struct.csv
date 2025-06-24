@@ -1,0 +1,12 @@
+salary structure,name,Abbr,type,valeur,company
+gasy1,Salaire Base,SB,earning,base,My Company
+gasy1,Indemnité,IND,earning,SB * 0.3,My Company
+gasy1,Taxe sociale,TS,deduction,(SB + IND) * 0.2,My Company
+gasy1,Erreur Type,ERR,bonus,SB * 0.1,My Company
+gasy2,Prime CNAPS,PCN,charge,SB * 0.2,My Company
+gasy2,Cotisation Santé,CS,deduction,(SB + PCN) * 0.05,My Company
+gasy2,Prime Productivité,PP,gain,SB * 0.25,My Company
+gasy3,Salaire Fixe,SF,earning,base,My Company
+gasy3,Prime Logement,PL,earning,SF * 0.12,My Company
+gasy3,Réduction IR,RIR,reduction,SF * 0.05,My Company
+gasy3,Cotisation Vie,VL,deduction,SF * 0.08,My Company

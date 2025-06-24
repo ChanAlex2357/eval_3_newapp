@@ -3,13 +3,14 @@ package itu.eval3.newapp.client.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import itu.eval3.newapp.client.utils.filters.FrappeApiFilter;
+import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
+import itu.eval3.newapp.client.utils.uri.limiter.FrappeLimiterComponent;
+import itu.eval3.newapp.client.utils.uri.order.FrappeOrderComponent;
 import lombok.Data;
 
 @Configuration
 @Data
-@ConfigurationProperties(prefix = "api")
+@ConfigurationProperties(prefix = "erpnext.api")
 public class ApiConfig {
     private String baseUrl;
     private String loginEndpoint;
@@ -23,30 +24,6 @@ public class ApiConfig {
     public String getMethodBaseUrl() { return baseUrl + method; }
 
     public String getMethodUrl(String methodPath) { return getMethodBaseUrl() + "/" + methodPath; }
-
-    private String makeRessourceFiters(FrappeApiFilter[] filters) {
-        if (filters == null || filters.length == 0) {
-            return "";
-        }
-        String filtersStr = "[";
-        int order = 0;
-         for (int i = 0; i < filters.length; i++) {
-            if (filters[i] == null) {
-                continue;
-            }
-            String temp_str = filters[i].getFilterStr(order);
-            if (temp_str != "") {
-                order += 1;
-                filtersStr += temp_str;
-            }
-        }
- 
-        filtersStr += "]";
-        if (filtersStr.equals("[]")) {
-            return "";
-        }
-        return filtersStr;
-     }
  
     private String makeResourceFields(String[] fields){
         if (fields == null || fields.length == 0) {
@@ -72,40 +49,38 @@ public class ApiConfig {
  
     
     // *********** RESOURCES URLS ****************
-    public String getResourceUrl(String doctype,String id,String[] fields, FrappeApiFilter[] filters ){
+    
+    public String getResourceUrl(String doctype,String id,String[] fields, FrappeFilterComponent filter, FrappeLimiterComponent limiter, FrappeOrderComponent order){
         String uri = baseUrl + ressource +"/"+ doctype ;
 
         if (id != null && id != "") {
             uri += "/"+id;
         }
 
-        String fieldsStr = makeResourceFields(fields); 
-        String filterSrt = makeRessourceFiters(filters);       
-        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
+        String fieldsStr = makeResourceFields(fields);
         
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(uri);
+        // Fields
         if (fieldsStr != "") {
             uriComponentsBuilder.queryParam("fields", fieldsStr);
         }
-        
-        if (filterSrt  != "" ) {
-            uriComponentsBuilder.queryParam("filters", filterSrt);
+        // Filters
+        if (filter  != null ) {
+            filter.addToUri(uriComponentsBuilder);
         }
+        // Limitation
+        if (limiter!= null) {
+            limiter.addToUri(uriComponentsBuilder);
+        }
+        // Ordering
+        if (order != null) {
+            order.addToUri(uriComponentsBuilder);
+        }
+        
+        
 
         uri = uriComponentsBuilder.build().toUriString();
 
         return uri;
-    }
-
-    public String getResourceWithAllFieldsUrl(String doctype,FrappeApiFilter[] filters){
-        return getResourceUrl(doctype,null, ALL_FIELDS,filters);
-    }
-
-    
-    public String getResourceUrl(String doctype,String id) {
-        return getResourceUrl(doctype,id,null,null);
-    }
-
-    public String getResourceWithAllFieldsUrl(String doctype){
-        return getResourceWithAllFieldsUrl(doctype,null);
     }
 }

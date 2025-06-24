@@ -3,54 +3,71 @@
 <head>
     <meta charset="UTF-8"/>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            color: #333;
-            margin: 40px;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            width: 150px;
-            height: 80px;
-            border: 1px dashed #ccc;
-            text-align: center;
-            line-height: 80px;
-            font-size: 12px;
-            color: #aaa;
-        }
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 6px;
-            text-align: left;
-        }
-        .no-border td {
-            border: none;
-            padding: 2px 4px;
-        }
-        .section-title {
-            background-color: #f2f2f2;
-            padding: 5px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-        .total-row {
-            font-weight: bold;
-            background-color: #f9f9f9;
-        }
+
+    body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        color: #333;
+        margin: 40px;
+    }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+    }
+    .title {
+        text-align: right;
+    }
+    .logo {
+        width: 150px;
+        height: 80px;
+        border: 1px dashed #ccc;
+        text-align: center;
+        line-height: 80px;
+        font-size: 12px;
+        color: #aaa;
+        
+    }
+    h1 {
+        text-align: center;
+        margin: 20px 0;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        text-align: left;
+    }
+    .no-border td {
+        border: none;
+        padding: 2px 4px;
+    }
+    .section-title {
+        color: #464646;
+        padding: 5px;
+        font-weight: bold;
+        margin-top: 15px;
+    }
+    .total-row {
+        font-weight: bold;
+        background-color: #f9f9f9;
+    }
+
+    .details-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .element-details{
+        flex-grow: 1;
+    }
+
     </style>
 </head>
 <body>
@@ -59,12 +76,13 @@
     <div class="logo">
         Logo
     </div>
-    <div style="text-align:right;">
+    <div class="title">
         <div><strong>Entreprise :</strong> <span th:text="${salarySlip.company}">Itu Eval</span></div>
         <div><strong>Période :</strong> <span th:text="${salarySlip.startDate}"></span> au <span th:text="${salarySlip.endDate}"></span></div>
         <div><strong>Structure :</strong> <span th:text="${salarySlip.salaryStructure}"></span></div>
     </div>
-</header>
+</header> 
+
 
 <h1>Bulletin de Paie</h1>
 
@@ -72,12 +90,10 @@
     <tr>
         <td><strong>Employé :</strong> <span th:text="${salarySlip.employeeName}"></span></td>
         <td><strong>Code :</strong> <span th:text="${salarySlip.employee}"></span></td>
-    </tr>
-    <tr>
         <td><strong>Poste :</strong> <span th:text="${salarySlip.designation}"></span></td>
         <td><strong>Date :</strong> <span th:text="${salarySlip.postingDate}"></span></td>
     </tr>
-</table>
+</table> 
 
 <div class="section-title">Détails de présence</div>
 <table>
@@ -95,50 +111,52 @@
     </tr>
 </table>
 
-<div class="section-title">Gains</div>
-<table>
-    <tr>
-        <th>Composant</th>
-        <th>Montant (€)</th>
-        <th>Cumul Annuel (€)</th>
-    </tr>
-    <tr th:each="e : ${salarySlip.earnings}">
-        <td th:text="${e.salaryComponent}">Basic</td>
-        <td th:text="${#numbers.formatDecimal(e.amount, 1, 'COMMA', 2, 'POINT')}">4400.00</td>
-        <td th:text="${#numbers.formatDecimal(e.yearToDate, 1, 'COMMA', 2, 'POINT')}">4400.00</td>
-    </tr>
-</table>
-
-<div class="section-title">Déductions</div>
-<table>
-    <tr>
-        <th>Composant</th>
-        <th>Montant (€)</th>
-        <th>Cumul Annuel (€)</th>
-    </tr>
-    <tr th:each="d : ${salarySlip.deductions}">
-        <td th:text="${d.salaryComponent}">---</td>
-        <td th:text="${#numbers.formatDecimal(d.amount, 1, 'COMMA', 2, 'POINT')}">---</td>
-        <td th:text="${#numbers.formatDecimal(d.yearToDate, 1, 'COMMA', 2, 'POINT')}">---</td>
-    </tr>
-    <tr th:if="${#lists.isEmpty(salarySlip.deductions)}">
-        <td colspan="3" style="text-align:center;">Aucune déduction</td>
-    </tr>
-</table>
+<div class="details-container">
+    <div class="element-details">
+        <div class="section-title">Gains</div>
+        <table>
+            <tr>
+                <th>Composant</th>
+                <th>Montant (Ar)</th>
+            </tr>
+            <tr th:each="e : ${salarySlip.earnings}">
+                <td th:text="${e.salaryComponent}">Basic</td>
+                <td th:text="${#numbers.formatDecimal(e.amount, 1, 'COMMA', 2, 'POINT')}">4400.00</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(salarySlip.earnings)}">
+                <td colspan="3">Aucune déduction</td>
+            </tr>
+        </table>
+    </div>
+    <div class="element-details">
+        <div class="section-title">Déductions</div>
+        <table>
+            <tr>
+                <th>Composant</th>
+                <th>Montant (Ar)</th>
+            </tr>
+            <tr th:each="d : ${salarySlip.deductions}">
+                <td th:text="${d.salaryComponent}">---</td>
+                <td th:text="${#numbers.formatDecimal(d.amount, 1, 'COMMA', 2, 'POINT')}">---</td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(salarySlip.deductions)}">
+                <td colspan="3">Aucune déduction</td>
+            </tr>
+        </table>
+    </div>
+</div>
 
 <div class="section-title">Résumé</div>
 <table>
     <tr class="total-row">
         <td>Salaire Brut</td>
-        <td colspan="2" th:text="${#numbers.formatDecimal(salarySlip.grossPay, 1, 'COMMA', 2, 'POINT')} + ' €'">4400.00 €</td>
-    </tr>
-    <tr class="total-row">
         <td>Déductions</td>
-        <td colspan="2" th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 1, 'COMMA', 2, 'POINT')} + ' €'">0.00 €</td>
+        <td>Net à Payer</td>
     </tr>
     <tr class="total-row">
-        <td>Net à Payer</td>
-        <td colspan="2" th:text="${#numbers.formatDecimal(salarySlip.netPay, 1, 'COMMA', 2, 'POINT')} + ' €'">4400.00 €</td>
+        <td  th:text="${#numbers.formatDecimal(salarySlip.grossPay, 1, 'COMMA', 2, 'POINT')} + ' Ar'">4400.00 Ar</td>
+        <td  th:text="${#numbers.formatDecimal(salarySlip.totalDeduction, 1, 'COMMA', 2, 'POINT')} + ' Ar'">0.00 Ar</td>
+        <td  th:text="${#numbers.formatDecimal(salarySlip.netPay, 1, 'COMMA', 2, 'POINT')} + ' Ar'">4400.00 Ar</td>
     </tr>
 </table>
 
