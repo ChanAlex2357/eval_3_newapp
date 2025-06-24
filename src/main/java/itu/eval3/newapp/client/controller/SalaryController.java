@@ -73,20 +73,21 @@ public class SalaryController {
             UserErpNext user = (UserErpNext) session.getAttribute("user");
             employees = empService.getAll(user, null);
 
-            salaryStructures = salaryStructureService.getAll(user);
+            // salaryStructures = salaryStructureService.getAll(user);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         model.addAttribute("employees", employees);
         model.addAttribute("salaryStructures", salaryStructures);
+        model.addAttribute("salaryForm", new SalaryGeneratorForm());
         return "hr/salary/create-assigenment";
     }
 
     @PostMapping("/create/assignement")
-    public String doCreate(HttpSession session , @ModelAttribute SalaryGeneratorForm salaryGeneratorForm) {
+    public String doCreate(HttpSession session , @ModelAttribute SalaryGeneratorForm salaryGeneratorForm, Model model) {
         
+        UserErpNext user = (UserErpNext) session.getAttribute("user");
         try {
-            UserErpNext user = (UserErpNext) session.getAttribute("user");
             Employee employee = empService.getById(user,salaryGeneratorForm.getEmployee());
             Company company = companyService.getById(user,employee.getCompany());
             
@@ -95,7 +96,17 @@ public class SalaryController {
 
             return "redirect:/hr/salaries";
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            List<Employee> employees = null;
+            List<SalaryStructure> salaryStructures = null;
+            try {
+                employees = empService.getAll(user, null);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            model.addAttribute("employees", employees);
+        model.addAttribute("salaryForm", salaryGeneratorForm);
+            model.addAttribute("err_message", e.getMessage());
+            return "hr/salary/create-assigenment";
         }
     }
 

@@ -3,15 +3,18 @@
         <div class="row">
             <div class="container">
                 <div class="col-12">
-                    <form th:action="@{/hr/salaries/create/assignement}" method="post">
-                        <div class="row">
+                    <div th:if="${err_message != null}" class="alert alert-danger">
+                        <span th:text="${err_message}"></span>
+                    </div>
+                    <form th:action="@{/hr/salaries/create/assignement}" method="post" th:object="${salaryForm}">
+                        <div class="row mb-3">
                             <div class="form-group col">
                                 <label for="sal-date" class="form-label">Date debut</label>
-                                <input type="date" name="start_date" id="sal-date" class="form-control form-control-sm">
+                                <input type="date" th:field="*{start_date}" id="sal-date" class="form-control form-control-sm">
                             </div>
                             <div class="form-group col">
                                 <label for="sal-date" class="form-label">Date fin</label>
-                                <input type="date" name="end_date" id="sal-date" class="form-control form-control-sm">
+                                <input type="date" th:field="*{end_date}" id="sal-date" class="form-control form-control-sm">
                             </div>
                         </div>
                         <!-- <div>
@@ -21,16 +24,16 @@
                                 <option th:each="s : ${salaryStructures}" th:value="${s.name}" th:text="${s.name}"></option>
                             </select>
                         </div> -->
-                        <div>
-                            <label for="">Employee</label>
-                            <select name="employee" class="form-select form-select-sm" title="employee">
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="">Employee</label>
+                            <select th:field="*{employee}" class="form-select form-select-sm" title="employee">
                                 <option value="">-- Sélectionner --</option>
                                 <option th:each="e : ${employees}" th:value="${e.name}" th:text="${e.firstname + ' ' + e.lastname}"></option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="">Salaire</label>
-                            <input type="number" class="form-control form-control-sm" value="0"  name="salary" title="salary" id="">
+                        <div class="form-group mb-3">
+                            <label class="form-label" for="">Salaire</label>
+                            <input type="number" class="form-control form-control-sm" value="0"  th:field="*{salary}"  title="salary" id="">
                         </div>
                         <div>
                             <button type="submit" class="btn btn-primary">Generate</button>

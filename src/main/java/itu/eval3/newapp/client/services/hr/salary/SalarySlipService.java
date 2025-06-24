@@ -344,7 +344,7 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(), start_date);
         // Check ref assignment for salary structure
         if (assignment == null && salaryGeneratorForm.getSalary() == 0) {
-            throw new Exception("Impossible to create salary without salary structure and assignment");
+            throw new Exception("Impossible de generer les salaires sans une assignment de reference <= '"+start_date.toString()+"'");
         }
         if (assignment == null) {
             salaryGeneratorForm.setSalary_structure(structureService.getAll(user).get(0).getName());

@@ -38,7 +38,7 @@ public class SalaryUpdateForm {
         SalaryDetail salaireBase = SalaryComponentFinder.findSalaireBase(salarySlip);
         double salary = salaireBase.getAmount();
 
-        int signe = NumberUtils.getSigne(salary);
+        int signe = NumberUtils.getSigne(getPourcentage());
         if (signe < 0) {
             salary = salary - (salary * getPourcentageProportion());
         }

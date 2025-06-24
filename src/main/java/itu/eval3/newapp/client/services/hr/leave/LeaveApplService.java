@@ -12,15 +12,18 @@ import itu.eval3.newapp.client.models.hr.emp.Employee;
 import itu.eval3.newapp.client.models.hr.leave.LeaveAllocation;
 import itu.eval3.newapp.client.models.hr.leave.LeaveApplication;
 import itu.eval3.newapp.client.models.hr.leave.LeaveBalanceDTO;
+import itu.eval3.newapp.client.models.hr.leave.LeaveLedgerEntry;
 import itu.eval3.newapp.client.models.user.UserErpNext;
 import itu.eval3.newapp.client.services.frappe.FrappeCrudService;
 import itu.eval3.newapp.client.services.hr.emp.EmpService;
+import itu.eval3.newapp.client.utils.NumberUtils;
 import itu.eval3.newapp.client.utils.uri.filters.EqualsFilter;
 import itu.eval3.newapp.client.utils.uri.filters.FrappeFilterComponent;
 
 @Service
 public class LeaveApplService extends FrappeCrudService<LeaveApplication>{
-
+    @Autowired
+    private LeaveLedgerService ledgerService;
     @Autowired
     private LeaveAllocService leaveAllocCrud;
     @Autowired
@@ -43,9 +46,17 @@ public class LeaveApplService extends FrappeCrudService<LeaveApplication>{
         List<LeaveBalanceDTO> result = new ArrayList<>();
         List<LeaveAllocation> allocations = leaveAllocCrud.getAllcotions(user, employeeId);
 
+        
         for (LeaveAllocation alloc : allocations) {
+            List<LeaveLedgerEntry> entries = ledgerService.getEntriesForEmployee(user, employeeId,alloc.getLeaveType());
+
             double allocated = alloc.getTotalLeavesAllocated() != null ? alloc.getTotalLeavesAllocated() : 0;
-            double taken = alloc.getLeavesTaken() != null ? alloc.getLeavesTaken() : 0;
+            double taken = 0;
+            for (LeaveLedgerEntry entry : entries) {
+                if (entry.getLeaves() < 0) {
+                    taken +=  NumberUtils.abs(entry.getLeaves());
+                }
+            }
             result.add(new LeaveBalanceDTO(
                 alloc.getLeaveType(),
                 allocated,
