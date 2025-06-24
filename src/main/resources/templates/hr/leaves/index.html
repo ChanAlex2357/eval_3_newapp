@@ -1,0 +1,69 @@
+<div th:replace="~{layouts/default :: layout(title='Assignement Salary',content=~{::content})}">
+    <th:block th:fragment="content">
+        <div class="row">
+            <div class="container">
+
+                <h3>Demande de congé</h3>
+                <form th:action="@{/hr/leaves}" th:object="${leaveForm}" method="post">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label for="employee">Employé</label>
+                            <input type="text" class="form-control" th:field="*{employee}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="leaveType">Type de congé</label>
+                            <input type="text" class="form-control" th:field="*{leaveType}" required>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label for="fromDate">Date début</label>
+                            <input type="date" class="form-control" th:field="*{fromDate}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="toDate">Date fin</label>
+                            <input type="date" class="form-control" th:field="*{toDate}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="reason">Motif</label>
+                        <input type="text" class="form-control" th:field="*{reason}">
+                    </div>
+
+                    <div class="mb-2 form-check">
+                        <input type="checkbox" class="form-check-input" th:field="*{halfDay}">
+                        <label class="form-check-label" for="halfDay">Demi-journée ?</label>
+                    </div>
+
+                    <button class="btn btn-primary">Soumettre</button>
+                </form>
+
+                <hr>
+                <div th:if="${balances}">
+                    <h4>Congés restants</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Alloué</th>
+                                <th>Pris</th>
+                                <th>Restant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="bal : ${balances}">
+                                <td th:text="${bal.leaveType}"></td>
+                                <td th:text="${bal.allocated}"></td>
+                                <td th:text="${bal.taken}"></td>
+                                <td th:text="${bal.remaining}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </th:block>
+</div>
