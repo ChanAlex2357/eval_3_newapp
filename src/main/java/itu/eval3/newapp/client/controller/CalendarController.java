@@ -33,6 +33,7 @@ public class CalendarController {
         List<Employee> employees = new ArrayList<>();
         try {
             employees = empService.getAll((UserErpNext)session.getAttribute("user"),null);
+            calendarService.findAll();
         } catch (Exception e) {
             e.printStackTrace();
         }

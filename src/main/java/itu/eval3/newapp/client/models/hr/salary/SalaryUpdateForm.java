@@ -1,5 +1,6 @@
 package itu.eval3.newapp.client.models.hr.salary;
 
+import itu.eval3.newapp.client.utils.NumberUtils;
 import itu.eval3.newapp.client.utils.SalaryComponentFinder;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ public class SalaryUpdateForm {
     public String condition_operation;
     public double condition_value;
 
-    public String type_pourcentage;
+    // public String type_pourcentage;
     public double pourcentage;
 
     public String[] employees;
@@ -36,12 +37,18 @@ public class SalaryUpdateForm {
     public double getUpdatedSalary(SalarySlip salarySlip){
         SalaryDetail salaireBase = SalaryComponentFinder.findSalaireBase(salarySlip);
         double salary = salaireBase.getAmount();
-        if (type_pourcentage.equals("augmentation")) {
-            salary = salary + (salary * getPourcentage());
+
+        int signe = NumberUtils.getSigne(getPourcentage());
+        if (signe < 0) {
+            salary = salary - (salary * getPourcentageProportion());
         }
-        else if (type_pourcentage.equals("reduction")) {
-            salary = salary - (salary * getPourcentage());
+        else {
+            salary = salary + (salary * getPourcentageProportion());
         }
         return salary;
+    }
+
+    public double getPourcentageProportion(){
+        return NumberUtils.abs(getPourcentage()) / 100;
     }
 }

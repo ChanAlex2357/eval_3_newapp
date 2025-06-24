@@ -1,0 +1,44 @@
+<div th:replace="~{layouts/default :: layout(title='Assignement Salary',content=~{::content})}">
+    <th:block th:fragment="content">
+        <div class="row">
+            <div class="container">
+                <form method="post" th:action="@{/hr/checkin/presence}">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="employeeInput">Employee</label>
+                            <select name="employee" class="form-select" id="employeeInput" required>
+                                <option th:each="emp : ${employees}" 
+                                        th:value="${emp.getName()}" 
+                                        th:text="${emp.getFullName()}">
+                                </option>
+                            </select>
+                        </div>
+                    
+                        <div class="col-md-4">
+                            <label for="startDateInput">Start Date</label>
+                            <input type="date" id="startDateInput" name="startDate" class="form-control" required>
+                        </div>
+                    
+                        <div class="col-md-4">
+                            <label for="endDateInput">End Date</label>
+                            <input type="date" id="endDateInput" name="endDate" class="form-control" required>
+                        </div>
+                    
+                        <div class="col-md-4">
+                            <label for="attendanceTypeInput">Status</label>
+                            <select name="attendanceType" class="form-select" id="attendanceTypeInput" required>
+                                <option th:each="et : ${attendanceTypes}" 
+                                        th:value="${et.name()}" 
+                                        th:text="${et.name()}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-success"><span>Submit</span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </th:block>
+</div>

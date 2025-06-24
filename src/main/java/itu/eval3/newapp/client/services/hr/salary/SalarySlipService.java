@@ -47,8 +47,8 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
     @Autowired
     private SalaryStructureAssignmentService assignmentService;
 
-    // @Autowired
-    // private SalaryStructureService structureService;
+    @Autowired
+    private SalaryStructureService structureService;
 
     /**
      * Recupere la liste de tous les fiches de paies filtrer et avec les attributs souhaiter
@@ -235,9 +235,14 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
      * @throws Exception
      */
     public List<SalarySlip> findSalaries(UserErpNext user,String[] employees) throws ERPNexException, Exception{
-        InFilter empFilter = new InFilter("employee", employees);
         FrappeFilterComponent filter = new FrappeFilterComponent();
-        filter.addFilter(empFilter);
+        if (employees.length == 0 || employees[0].equals("all")) {
+            
+        }
+        else{
+            InFilter empFilter = new InFilter("employee", employees);
+            filter.addFilter(empFilter);
+        }
 
         List<SalarySlip> salaries = getAll(user,ApiConfig.ALL_FIELDS, filter);
         return salaries;
@@ -339,9 +344,14 @@ public class SalarySlipService extends FrappeCrudService<SalarySlip> {
         SalaryStructureAssignment assignment =  assignmentService.findClosest(user,salaryGeneratorForm.getEmployee(), start_date);
         // Check ref assignment for salary structure
         if (assignment == null && salaryGeneratorForm.getSalary() == 0) {
-            throw new Exception("Impossible to create salary without salary structure and assignment");
+            throw new Exception("Impossible de generer les salaires sans une assignment de reference <= '"+start_date.toString()+"'");
         }
-        salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
+        if (assignment == null) {
+            salaryGeneratorForm.setSalary_structure(structureService.getAll(user).get(0).getName());
+        }
+        else {
+            salaryGeneratorForm.setSalary_structure(assignment.getSalaryStructure());
+        }
         try {
             while (start_date.compareTo(end_date) <= 0) {
                 try {
