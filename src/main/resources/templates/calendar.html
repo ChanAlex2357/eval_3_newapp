@@ -14,8 +14,15 @@
             document.addEventListener('DOMContentLoaded', function() {
                 var calendarEl = document.getElementById('calendar');
                 var calendar = new FullCalendar.Calendar(calendarEl, {
-                    initialView: 'multiMonthYear'
+                     timeZone: 'UTC',
+    initialView: 'resourceTimeGridFourDay',
+    headerToolbar: {
+      left: 'prev,next',
+      center: 'title',
+      right: 'resourceTimeGridDay,resourceTimeGridFourDay'
+    },
                 });
+                calendar.next();
                 calendar.render();
             });
         </script>
