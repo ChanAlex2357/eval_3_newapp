@@ -18,4 +18,3 @@ ALTER TABLE calendar_event
 ADD CONSTRAINT fk_employee_event FOREIGN KEY (employee_id)
 REFERENCES `tabEmployee`(name)
 ON DELETE SET NULL;
-

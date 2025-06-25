@@ -66,3 +66,57 @@ export function extractFormData(formData){
     });
     return queryParams;
 }
+
+
+export function removeRow(button) {
+    const row = button.closest('tr');
+    const tbody = row.closest('tbody');
+    const rows = tbody.querySelectorAll('tr');
+
+    // Ne pas supprimer la dernière ligne
+    if (rows.length > 1) {
+        row.remove();
+    } else {
+        alert("Impossible de supprimer la dernière ligne.");
+    }
+}
+
+export function dynamiseTableRow(adderId, rowTemplateId) {
+    const rowTemplate = document.getElementById(rowTemplateId);
+    const rowAdder = document.getElementById(adderId);
+
+    if (!rowTemplate || !rowAdder) {
+        console.warn("Element not found:", rowTemplateId, adderId);
+        return;
+    }
+
+    const tbodySelector = rowAdder.getAttribute("data-table-body");
+    const tbody = document.querySelector(tbodySelector);
+
+    if (!tbody) {
+        console.warn("Tbody not found with selector:", tbodySelector);
+        return;
+    }
+
+    rowAdder.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        const newRow = rowTemplate.cloneNode(true);
+        newRow.removeAttribute("id"); // Remove ID to prevent duplicates
+
+        // Reset values of inputs, selects, and textareas
+        newRow.querySelectorAll("input, select, textarea").forEach(el => {
+            if (el.tagName === "SELECT") {
+                el.selectedIndex = 0;
+            } else {
+                el.value = "";
+            }
+        });
+
+        // Optional: remove hidden classes if you're hiding the template
+        newRow.classList.remove("d-none", "template");
+
+
+        tbody.appendChild(newRow);
+    });
+}

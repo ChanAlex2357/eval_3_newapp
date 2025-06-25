@@ -55,6 +55,9 @@
                                                             <option th:each=" comp : ${earnings}" th:value="${comp.name}"><span th:text="${comp.name}"></span></option>
                                                         </select>
                                                     </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -81,6 +84,9 @@
                                                             <option th:each=" comp : ${deductions}" th:value="${comp.name}"><span th:text="${comp.name}"></span></option>
                                                         </select>
                                                     </td>
+                                                                                                                                                        <td class="text-center">
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -94,21 +100,12 @@
             </div>
         </div>
 
-        <script>
-            function dynamiseTableRow(adder_id, row_id){
-                const row = document.getElementById(row_id)
-                const rowAdder = document.getElementById(adder_id);   
-                rowAdder.addEventListener("click",function(e){
-                    e.preventDefault();
-                    const tbody_id = rowAdder.getAttribute("data-table-body")
-                    const tbody = document.querySelector(tbody_id)
-                    tbody.appendChild(row.cloneNode(true));
-                })
-            }
-            dynamiseTableRow("earning-adder","earning-row")
-            dynamiseTableRow("deduction-adder","deduction-row")
-
-
+        <script type="module">
+            import {dynamiseTableRow, removeRow} from '/js/services/utils.js';
+            window.removeRow = removeRow;
+            // Exemple d'utilisation
+            dynamiseTableRow("earning-adder", "earning-row");
+            dynamiseTableRow("deduction-adder", "deduction-row");
         </script>
     </th:block>
 </div>

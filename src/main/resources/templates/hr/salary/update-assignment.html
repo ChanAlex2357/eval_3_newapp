@@ -61,16 +61,16 @@
                                 <option th:each="e : ${employees}" th:value="${e.name}" th:text="${e.firstname + ' ' + e.lastname}"></option>
                             </select>
                         </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
             <div class="container">
                 <div class="row justify-content-spaced-between">
                     <div class="col">
-                        <button type="button" class="btn btn-outline-primary" id="addRowBtn">➕ Ajouter un employé</button>
-                    </div>
-                    <div class="col-2">
-                        <button type="button" class="btn btn-danger btn-sm" onclick="removeRow(this)">🗑</button>
+                        <button type="button" class="btn btn-outline-primary table-row-adder" id="addRowBtn" data-table-body="#employeeBody" title="add-emp"><i class="bi bi-plus"></i></button>
                     </div>
                 </div>
             </div>
@@ -80,19 +80,11 @@
             </div>
         </form>
     </div>
-
-    <script>
-        let employeeIndex = 1;
-        const empRow = document.getElementById("empRow");
-        document.getElementById("addRowBtn").addEventListener("click", function (e){
-            const row  = empRow.cloneNode(true);
-            document.getElementById("employeeBody").appendChild(row);
-            employeeIndex++;
-        })
-
-        function removeRow(btn) {
-            btn.closest('tr').remove();
-        }
+    <script type="module">
+        import {dynamiseTableRow, removeRow} from '/js/services/utils.js';
+        window.removeRow = removeRow;
+        // Exemple d'utilisation
+        dynamiseTableRow("addRowBtn", "empRow");
     </script>
 </th:block>
 </div>
